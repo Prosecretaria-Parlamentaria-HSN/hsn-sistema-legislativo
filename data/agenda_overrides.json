@@ -1,0 +1,200 @@
+{
+  "overrides": [
+    {
+      "fecha": "14/09",
+      "hora": "14:30",
+      "comisiones": [
+        "AMBIENTE Y DESARROLLO SUSTENTABLE"
+      ],
+      "hora_nueva": null,
+      "salon_nuevo": null,
+      "tipo_nuevo": "asesores",
+      "expositores_extra": null,
+      "nota": null,
+      "suspendida": false,
+      "actualizado": "2026-09-10T15:59:44.331Z",
+      "actualizado_por": "Paulina"
+    },
+    {
+      "fecha": "23/09",
+      "hora": "11:30",
+      "comisiones": [
+        "RELACIONES EXTERIORES Y CULTO",
+        "INDUSTRIA Y COMERCIO"
+      ],
+      "hora_nueva": null,
+      "salon_nuevo": null,
+      "tipo_nuevo": null,
+      "temario_extra": null,
+      "expositores_extra": null,
+      "nota": null,
+      "suspendida": true,
+      "actualizado": "2026-09-22T15:43:39.715Z",
+      "actualizado_por": "Paulina"
+    },
+    {
+      "fecha": "23/09",
+      "hora": "16:00",
+      "comisiones": [
+        "ASUNTOS CONSTITUCIONALES",
+        "RELACIONES EXTERIORES Y CULTO"
+      ],
+      "hora_nueva": "11:30",
+      "salon_nuevo": null,
+      "tipo_nuevo": null,
+      "temario_extra": null,
+      "expositores_extra": null,
+      "nota": null,
+      "suspendida": false,
+      "actualizado": "2026-09-22T15:46:21.091Z",
+      "actualizado_por": "Paulina"
+    },
+    {
+      "fecha": "22/09",
+      "hora": "13:30",
+      "comisiones": [
+        "LEGISLACIÓN GENERAL",
+        "POBLACIÓN Y DESARROLLO HUMANO"
+      ],
+      "hora_nueva": null,
+      "salon_nuevo": null,
+      "tipo_nuevo": "asesores",
+      "temario_extra": null,
+      "expositores_extra": null,
+      "nota": null,
+      "suspendida": false,
+      "actualizado": "2026-09-22T16:06:49.570Z",
+      "actualizado_por": "Paulina"
+    },
+    {
+      "fecha": "22/09",
+      "hora": "11:30",
+      "comisiones": [
+        "POBLACIÓN Y DESARROLLO HUMANO"
+      ],
+      "hora_nueva": null,
+      "salon_nuevo": null,
+      "tipo_nuevo": "asesores",
+      "temario_extra": null,
+      "expositores_extra": null,
+      "nota": null,
+      "suspendida": false,
+      "actualizado": "2026-09-22T16:09:08.205Z",
+      "actualizado_por": "Paulina"
+    },
+    {
+      "fecha": "22/09",
+      "hora": "15:00",
+      "comisiones": [
+        "EDUCACIÓN Y CULTURA"
+      ],
+      "hora_nueva": null,
+      "salon_nuevo": null,
+      "tipo_nuevo": "asesores",
+      "temario_extra": null,
+      "expositores_extra": null,
+      "nota": null,
+      "suspendida": false,
+      "actualizado": "2026-09-22T16:09:17.270Z",
+      "actualizado_por": "Paulina"
+    },
+    {
+      "fecha": "23/09",
+      "hora": "14:00",
+      "comisiones": [
+        "BICAMERAL DE REFORMA DEL ESTADO Y DEL SEGUIMIENTO DE LAS",
+        "PRIVATIZACIONES (LEY 23.696)"
+      ],
+      "hora_nueva": "14:00",
+      "salon_nuevo": null,
+      "tipo_nuevo": "senadores",
+      "temario_extra": null,
+      "expositores_extra": null,
+      "nota": null,
+      "suspendida": false,
+      "actualizado": "2026-09-23T03:35:15.756Z",
+      "actualizado_por": "Mariano"
+    },
+    {
+      "fecha": "29/09",
+      "hora": "16:00",
+      "comisiones": [
+        "BICAMERAL MIXTA REVISORA DE CUENTAS"
+      ],
+      "hora_nueva": null,
+      "salon_nuevo": null,
+      "tipo_nuevo": null,
+      "temario_extra": null,
+      "expositores_extra": null,
+      "nota": null,
+      "suspendida": true,
+      "actualizado": "2026-09-28T15:42:41.313Z",
+      "actualizado_por": "Paulina"
+    },
+    {
+      "fecha": "30/09",
+      "hora": "10:00",
+      "comisiones": [
+        "BICAMERAL DE LA DEFENSORÍA DEL PUEBLO"
+      ],
+      "hora_nueva": null,
+      "salon_nuevo": null,
+      "tipo_nuevo": null,
+      "temario_extra": null,
+      "expositores_extra": null,
+      "nota": null,
+      "suspendida": true,
+      "actualizado": "2026-09-30T10:27:16.713Z",
+      "actualizado_por": "Paulina"
+    },
+    {
+      "fecha": "06/10",
+      "hora": "16:00",
+      "comisiones": [
+        "BICAMERAL MIXTA REVISORA DE CUENTAS"
+      ],
+      "hora_nueva": null,
+      "salon_nuevo": null,
+      "tipo_nuevo": null,
+      "temario_extra": null,
+      "expositores_extra": null,
+      "nota": null,
+      "suspendida": true,
+      "actualizado": "2026-10-06T14:42:44.871Z",
+      "actualizado_por": "Paulina"
+    },
+    {
+      "fecha": "13/10",
+      "hora": "14:00",
+      "comisiones": [
+        "BICAMERAL DE FISCALIZACIÓN DE LOS ÓRGANOS Y ACTIVIDADES DE",
+        "SEGURIDAD INTERIOR - LEY 24.059"
+      ],
+      "hora_nueva": null,
+      "salon_nuevo": null,
+      "tipo_nuevo": null,
+      "temario_extra": null,
+      "expositores_extra": "- Subcomisario (R) Daniel Ariel Torales.\n- Suboficial Mayor (R) Alfredo Gatti.\n- Suboficial Auxiliar (R) Jorge Alejandro Herrera.\n- Sra. María Juana Pérez Vargas, familiar de un policía retirado, en representación de los familiares.",
+      "nota": null,
+      "suspendida": false,
+      "actualizado": "2026-10-13T14:44:45.978Z",
+      "actualizado_por": "Paulina"
+    },
+    {
+      "fecha": "26/10",
+      "hora": "13:00",
+      "comisiones": [
+        "RELACIONES EXTERIORES Y CULTO"
+      ],
+      "hora_nueva": null,
+      "salon_nuevo": null,
+      "tipo_nuevo": "asesores",
+      "temario_extra": null,
+      "expositores_extra": null,
+      "nota": null,
+      "suspendida": false,
+      "actualizado": "2026-10-26T13:25:33.891Z",
+      "actualizado_por": "Mariano"
+    }
+  ]
+}
