@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editor de Agenda &middot; HSN</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{
+  --bg:#F5F7FA;
+  --surface:#FFFFFF;
+  --surface-2:#FAFBFD;
+  --border:#D6E4F0;
+  --text:#2C2C2C;
+  --text-muted:#6b7785;
+  --text-faint:#9aacbd;
+  --accent:#1B5EA2;
+  --accent-soft:#EAF0FA;
+  --accent-strong:#0d3f73;
+  --warn:#C2650C;
+  --warn-soft:#FBEADD;
+  --ok:#0d7a4a;
+  --ok-soft:#DCF0E8;
+  --danger:#b42318;
+  --danger-soft:#FBE7E5;
+  --shadow:0 1px 3px rgba(20,40,70,0.06);
+  --shadow-lift:0 10px 30px -14px rgba(20,50,90,0.28);
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 20px 60px}
+
+/* ── Manual (MUY sencillo) ── */
+.manual{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;box-shadow:var(--shadow);margin-bottom:20px}
+.manual h2{font-family:'Poppins',sans-serif;font-size:16px;font-weight:600;color:var(--accent);margin:0 0 14px}
+.manual-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.manual-steps li{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.55}
+.manual-num{font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;color:#fff;background:var(--accent);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.manual-steps b{color:var(--text)}
+.manual-steps a{color:var(--accent);font-weight:600}
+.manual-note{margin-top:14px;padding:10px 14px;background:var(--accent-soft);border-radius:8px;font-size:12.5px;color:var(--accent-strong);line-height:1.5}
+.manual-collapse{margin-top:10px;background:none;border:none;color:var(--text-muted);font-size:12px;font-weight:600;cursor:pointer;padding:4px 0}
+
+/* ── Header ── */
+.topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:18px}
+.brand-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-faint);margin:0 0 4px}
+h1{font-family:'Poppins',sans-serif;font-size:24px;font-weight:700;color:var(--accent);margin:0 0 4px}
+.subtitle{font-size:13px;color:var(--text-muted);margin:0;max-width:60ch}
+
+/* ── Conexión ── */
+.conn-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;box-shadow:var(--shadow);display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-width:280px}
+.conn-dot{width:9px;height:9px;border-radius:50%;background:var(--text-faint);flex-shrink:0}
+.conn-dot.on{background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft)}
+.conn-dot.err{background:var(--danger);box-shadow:0 0 0 3px var(--danger-soft)}
+.conn-text{font-size:12.5px;color:var(--text-muted);flex:1}
+.conn-text b{color:var(--text)}
+.conn-box input[type=password]{flex:1;min-width:180px;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--surface-2);color:var(--text)}
+.conn-box .btn{white-space:nowrap}
+.conn-forget{background:none;border:none;color:var(--text-faint);font-size:11px;text-decoration:underline;cursor:pointer}
+
+/* ── Layout ── */
+.board{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:start}
+@media(max-width:880px){.board{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.panel-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.panel-head h2{font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:var(--text);margin:0;text-transform:uppercase;letter-spacing:.04em}
+.panel-count{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-faint)}
+
+.search-row{padding:12px 14px;border-bottom:1px solid var(--border)}
+.search-row input{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--text);font-family:inherit;font-size:12.5px;outline:none}
+.search-row input:focus{border-color:var(--accent)}
+.rlist{max-height:640px;overflow-y:auto}
+.rgroup-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);padding:12px 16px 6px}
+.ritem{width:100%;text-align:left;background:none;border:none;border-left:3px solid transparent;padding:10px 16px 10px 13px;cursor:pointer;display:flex;flex-direction:column;gap:4px;font-family:inherit;color:var(--text)}
+.ritem:hover{background:var(--surface-2)}
+.ritem.active{background:var(--accent-soft);border-left-color:var(--accent)}
+.ritem-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ritem-hora{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:500;color:var(--text-muted)}
+.ritem.active .ritem-hora{color:var(--accent)}
+.ritem-com{font-size:12.5px;font-weight:600;line-height:1.3}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:2px 7px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.chip-pend{background:var(--warn-soft);color:var(--warn)}
+.chip-ok{background:var(--ok-soft);color:var(--ok)}
+.chip-live{background:var(--accent-soft);color:var(--accent)}
+.chip-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.list-empty{padding:24px 16px;text-align:center;font-size:12.5px;color:var(--text-faint)}
+
+.editor-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.editor-title{font-family:'Poppins',sans-serif;font-size:16px;font-weight:600;color:var(--text);margin:0 0 3px}
+.editor-meta{font-size:12px;color:var(--text-muted)}
+.editor-meta code{font-family:'IBM Plex Mono',monospace;background:var(--surface-2);border:1px solid var(--border);border-radius:5px;padding:1px 6px;font-size:11px}
+.editor-body{padding:18px}
+.editor-placeholder{padding:60px 24px;text-align:center;color:var(--text-faint);font-size:13px}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;margin-bottom:18px}
+@media(max-width:560px){.field-grid{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:6px}
+.field.span2{grid-column:1/-1}
+.field label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);display:flex;align-items:center;gap:6px}
+.field .was{font-family:'IBM Plex Mono',monospace;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-faint);font-size:10.5px}
+.field input[type=text],.field input[type=time],.field textarea,.field select{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--text);font-family:inherit;font-size:13px;outline:none;transition:border-color .15s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent)}
+.field textarea{resize:vertical;min-height:64px;line-height:1.5;font-family:inherit}
+.field-hint{font-size:10.5px;color:var(--text-faint)}
+
+.toggle-row{display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);border:1.5px solid var(--border);border-radius:10px;padding:11px 14px}
+.toggle-row.danger-active{background:var(--danger-soft);border-color:var(--danger)}
+.toggle-label{font-size:13px;font-weight:600}
+.toggle-sub{font-size:11px;color:var(--text-muted);margin-top:2px}
+.switch{position:relative;width:38px;height:22px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.switch-track{position:absolute;inset:0;background:var(--border);border-radius:20px;cursor:pointer;transition:background .15s}
+.switch-track::after{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:var(--surface);border-radius:50%;transition:transform .15s;box-shadow:0 1px 2px rgba(0,0,0,0.25)}
+.switch input:checked+.switch-track{background:var(--danger)}
+.switch input:checked+.switch-track::after{transform:translateX(16px)}
+
+.diff-box{background:var(--surface-2);border:1px dashed var(--border);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12px}
+.diff-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-faint);margin-bottom:8px}
+.diff-row{display:flex;gap:8px;align-items:baseline;padding:3px 0;font-family:'IBM Plex Mono',monospace;font-size:11.5px;flex-wrap:wrap}
+.diff-row .k{color:var(--text-muted);min-width:80px;flex-shrink:0}
+.diff-old{color:var(--danger);text-decoration:line-through;opacity:.75}
+.diff-new{color:var(--ok);font-weight:600}
+.diff-empty{color:var(--text-faint);font-style:italic}
+
+.editor-actions{display:flex;align-items:center;gap:10px;justify-content:flex-end;padding-top:14px;border-top:1px solid var(--border);flex-wrap:wrap}
+.save-status{font-size:12px;color:var(--text-muted);margin-right:auto}
+.save-status.err{color:var(--danger);font-weight:600}
+.save-status.ok{color:var(--ok);font-weight:600}
+.btn{font-family:inherit;font-size:12.5px;font-weight:600;padding:9px 18px;border-radius:8px;cursor:pointer;border:1.5px solid transparent;transition:all .15s}
+.btn-ghost{background:none;border-color:var(--border);color:var(--text-muted)}
+.btn-ghost:hover{border-color:var(--text-faint);color:var(--text)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-strong)}
+.btn-primary:disabled{background:var(--border);color:var(--text-faint);cursor:not-allowed}
+
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--accent-strong);color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:var(--shadow-lift);opacity:0;pointer-events:none;transition:all .25s;display:flex;align-items:center;gap:10px;z-index:50;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.err{background:var(--danger)}
+.toast-dot{width:7px;height:7px;border-radius:50%;background:#8DE38F;flex-shrink:0}
+.toast.err .toast-dot{background:#fff}
+
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-muted);text-decoration:none;margin-bottom:10px}
+.back-link:hover{color:var(--accent)}
+
+/* ── Tabs de sección (Agenda / Comisiones) ── */
+.top-tabs{display:flex;gap:6px;margin-bottom:18px;border-bottom:1.5px solid var(--border)}
+.top-tab{font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:var(--text-muted);background:none;border:none;border-bottom:2.5px solid transparent;padding:10px 4px;margin-bottom:-1.5px;cursor:pointer}
+.top-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* ── Comisiones: roster ── */
+.roster-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 16px;border-bottom:1px solid var(--border-soft,var(--border))}
+.roster-row:last-child{border-bottom:none}
+.roster-nombre{font-size:13px;font-weight:600}
+.roster-meta{font-size:11px;color:var(--text-muted)}
+.roster-dpp{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--text-faint)}
+.roster-actions{display:flex;gap:6px;flex-shrink:0}
+.roster-actions button{font-family:inherit;font-size:11px;font-weight:600;padding:5px 10px;border-radius:6px;border:1.5px solid var(--border);background:var(--surface);color:var(--text-muted);cursor:pointer}
+.roster-actions button:hover{border-color:var(--accent);color:var(--accent)}
+.roster-actions button.danger:hover{border-color:var(--danger);color:var(--danger)}
+.accion-panel{margin:14px 18px;background:var(--surface-2);border:1.5px solid var(--accent);border-radius:10px;padding:16px}
+.accion-panel h3{font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:var(--accent);margin:0 0 12px}
+.accion-panel .field{margin-bottom:12px}
+.accion-panel .field:last-of-type{margin-bottom:0}
+
+/* ── Temario: lista + buscador de expedientes ── */
+.temario-list{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.temario-item-row{display:flex;align-items:flex-start;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 10px}
+.temario-item-num{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);flex-shrink:0;white-space:nowrap}
+.temario-item-extracto{font-size:12px;color:var(--text);line-height:1.4;flex:1}
+.temario-item-rm{background:none;border:none;color:var(--text-faint);cursor:pointer;font-size:15px;line-height:1;flex-shrink:0;padding:2px 4px}
+.temario-item-rm:hover{color:var(--danger)}
+.temario-empty{font-size:11.5px;color:var(--text-faint);font-style:italic;padding:4px 2px}
+.temario-search-wrap{position:relative}
+.temario-search-results{border:1px solid var(--border);border-radius:8px;margin-top:4px;max-height:220px;overflow-y:auto;background:var(--surface)}
+.temario-result{width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--border);padding:8px 10px;cursor:pointer;display:block;font-family:inherit}
+.temario-result:last-child{border-bottom:none}
+.temario-result:hover{background:var(--surface-2)}
+.temario-result .num{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;color:var(--accent)}
+.temario-result .ext{font-size:11.5px;color:var(--text-muted);display:block;margin-top:2px;line-height:1.35;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.temario-manual-row{display:flex;gap:6px;margin-top:8px}
+.temario-manual-row input{flex:1}
+
+/* ── Selector de comisiones (checklist) ── */
+.com-checklist{max-height:200px;overflow-y:auto;border:1.5px solid var(--border);border-radius:8px;background:var(--surface-2)}
+.com-check-item{display:flex;align-items:center;gap:8px;padding:7px 10px;font-size:12.5px;border-bottom:1px solid var(--border)}
+.com-check-item:last-child{border-bottom:none}
+.com-check-item label{cursor:pointer;flex:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back-link" href="index.html">&larr; Volver al sitio</a>
+
+  <div class="topbar">
+    <div>
+      <p class="brand-eyebrow">Sistema Legislativo · HSN</p>
+      <h1 id="page-h1">Editor de Agenda</h1>
+      <p class="subtitle" id="page-subtitle">Correcciones puntuales sobre lo publicado: horario, salón, suspensión, temario ampliado o expositores comunicados después del último boletín.</p>
+    </div>
+    <div class="conn-box" id="conn-box">
+      <span class="conn-dot" id="conn-dot"></span>
+      <span class="conn-text" id="conn-text">Sin conectar &mdash; los cambios no se pueden guardar todavía.</span>
+      <input type="password" id="conn-token" placeholder="Pegá tu clave acá…">
+      <button class="btn btn-primary" id="conn-btn">Conectar</button>
+    </div>
+  </div>
+
+  <details style="margin-bottom:18px">
+    <summary style="cursor:pointer;font-size:12.5px;color:var(--accent);font-weight:600">¿Cómo consigo mi clave? (una sola vez)</summary>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-top:8px;font-size:13px;line-height:1.7">
+      <ol style="margin:0;padding-left:18px">
+        <li>Pedile a Mariano el link para crear tu clave de acceso (o que te la genere y te la pase él mismo — es la forma más simple).</li>
+        <li>Si te toca crearla vos: entrá a <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a> con la cuenta de GitHub de Mariano, elegí "Only select repositories" &rarr; <code>hsn-sistema-legislativo</code>, y en Permissions &rarr; Contents elegí "Read and write". Generá la clave y copiala.</li>
+        <li>Pegala arriba a la derecha, donde dice "Pegá tu clave acá", y tocá Conectar. Queda guardada sólo en este navegador — no se comparte con nadie ni con Claude.</li>
+      </ol>
+    </div>
+  </details>
+
+  <div class="top-tabs">
+    <button class="top-tab active" id="tab-btn-agenda" onclick="mostrarVista('agenda')">&#128197; Agenda</button>
+    <button class="top-tab" id="tab-btn-comisiones" onclick="mostrarVista('comisiones')">&#128101; Comisiones</button>
+  </div>
+
+  <div id="view-agenda">
+
+    <div class="manual" id="manual">
+      <h2>Cómo usar esto (3 pasos)</h2>
+      <ol class="manual-steps">
+        <li><span class="manual-num">1</span><div><b>Conectate una sola vez.</b> Arriba a la derecha decís "Conectar" y pegás tu clave de acceso. Si todavía no tenés una, tocá "¿Cómo consigo mi clave?" y seguí esos pasos — se hace una sola vez por celular o computadora.</div></li>
+        <li><span class="manual-num">2</span><div><b>Elegí la reunión</b> de la lista de la izquierda y corregí sólo lo que cambió: el horario, el salón, si es de senadores o de asesores, si se agregaron expositores, alguna aclaración, o si se suspendió. Si la reunión todavía no figura en ningún boletín, tocá "+ Nueva" para cargarla de cero.</div></li>
+        <li><span class="manual-num">3</span><div><b>Tocá "Guardar y publicar".</b> El sitio se actualiza solo, en menos de un minuto — no hace falta avisarle a nadie.</div></li>
+      </ol>
+      <div class="manual-note">Esto edita <b>solamente</b> la Agenda de reuniones. No toca proyectos, comisiones ni ningún otro dato del sitio.</div>
+      <button class="manual-collapse" id="manual-toggle">Ocultar este manual &uarr;</button>
+    </div>
+
+    <div class="board">
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Reuniones</h2>
+          <span class="panel-count" id="rcount">&hellip;</span>
+        </div>
+        <div class="search-row" style="display:flex;gap:8px;align-items:center">
+          <input type="text" id="rsearch" placeholder="Buscar comisión…" style="flex:1;margin:0">
+          <button class="btn btn-primary" style="white-space:nowrap" onclick="abrirNuevaReunion()">+ Nueva</button>
+        </div>
+        <div class="rlist" id="rlist"><div class="list-empty">Cargando agenda publicada&hellip;</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head editor-head" id="editor-head">
+          <div>
+            <p class="editor-title">Elegí una reunión</p>
+            <p class="editor-meta">de la lista de la izquierda para corregirla</p>
+          </div>
+        </div>
+        <div class="editor-body" id="editor-body">
+          <div class="editor-placeholder">Ninguna reunión seleccionada todavía.</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div id="view-comisiones" style="display:none">
+
+    <div class="manual" id="manual-com">
+      <h2>Cómo usar esto (3 pasos)</h2>
+      <ol class="manual-steps">
+        <li><span class="manual-num">1</span><div><b>Conectate una sola vez</b> (arriba a la derecha) — es la misma clave que para Agenda.</div></li>
+        <li><span class="manual-num">2</span><div><b>Elegí la comisión</b> de la izquierda y, al lado del integrante que cambió, tocá "Reemplazar" o "Dar de baja" — o "Agregar integrante" si es alguien nuevo.</div></li>
+        <li><span class="manual-num">3</span><div><b>Completá el DPP</b> (el decreto/disposición que respalda el cambio, ej. <code>73/26</code>) y su fecha, y guardá. Sin DPP no se puede: es lo que justifica el cambio.</div></li>
+      </ol>
+      <div class="manual-note">Esto edita <b>solamente</b> los integrantes de las comisiones. No toca la Agenda ni ningún otro dato del sitio.</div>
+      <button class="manual-collapse" id="manual-com-toggle">Ocultar este manual &uarr;</button>
+    </div>
+
+    <div class="board">
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Comisiones</h2>
+          <span class="panel-count" id="ccount">&hellip;</span>
+        </div>
+        <div class="search-row">
+          <input type="text" id="csearch" placeholder="Buscar comisión…">
+        </div>
+        <div class="rlist" id="clist"><div class="list-empty">Cargando comisiones publicadas&hellip;</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head editor-head" id="com-editor-head">
+          <div>
+            <p class="editor-title">Elegí una comisión</p>
+            <p class="editor-meta">de la lista de la izquierda para corregir sus integrantes</p>
+          </div>
+        </div>
+        <div class="editor-body" id="com-editor-body" style="padding:0">
+          <div class="editor-placeholder">Ninguna comisión seleccionada todavía.</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"><span class="toast-dot"></span><span id="toast-text"></span></div>
+
+<script>
+var REPO_OWNER = 'bonifaciomariano';
+var REPO_NAME = 'hsn-sistema-legislativo';
+var REPO = REPO_OWNER + '/' + REPO_NAME;
+var RAW_BASE = 'https://raw.githubusercontent.com/' + REPO + '/main/';
+var API_BASE = 'https://api.github.com/repos/' + REPO + '/contents/';
+var TOKEN_KEY = 'hsn_editor_token';
+var AUTOR_KEY = 'hsn_editor_autor';
+
+var reuniones = [];      // crudas, de data/agenda.json
+var overridesData = null; // objeto completo de data/agenda_overrides.json (para reescribir)
+var overridesIdx = {};    // clave -> override
+var seleccion = null;     // reunión cruda seleccionada
+var overridesSha = null;
+var creandoNueva = false;      // true mientras se completa el formulario de "+ Nueva"
+var temarioItemsActual = [];   // [{numero,extracto}] -- del formulario abierto (editar o crear)
+var PROYECTOS_DATA = null;     // data/proyectos.json, se carga recién al abrir el buscador de expedientes
+
+function claveDe(r){ return (r.fecha||'') + '|' + (r.hora||'') + '|' + (r.comisiones||[]).join(','); }
+
+function esc(s){
+  return String(s==null?'':s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+/* raw.githubusercontent.com a veces devuelve un 503 pasajero ante ráfagas
+   de pedidos simultáneos (como los 2-3 fetch en paralelo de cada pestaña) --
+   reintenta con espera creciente antes de darse por vencido. */
+function fetchJsonConReintento(url, opts){
+  opts = opts || {};
+  var intentos = opts.intentos || 3;
+  var espera = 500;
+  function esperar(ms){ return new Promise(function(res){setTimeout(res, ms)}); }
+  function intentar(n){
+    return fetch(url, {cache:'no-store'})
+      .then(function(r){
+        if(r.ok)return r.json();
+        if(r.status===404 && 'fallback' in opts)return opts.fallback;
+        var err = new Error((url.split('/').pop())+': error '+r.status);
+        throw err;
+      })
+      .catch(function(err){
+        if(n>=intentos)throw err;
+        return esperar(espera*n).then(function(){return intentar(n+1)});
+      });
+  }
+  return intentar(1);
+}
+
+/* ── Conexión (token guardado sólo en este navegador) ── */
+function token(){ return localStorage.getItem(TOKEN_KEY) || ''; }
+function setConn(state, text){
+  var dot = document.getElementById('conn-dot');
+  dot.className = 'conn-dot' + (state==='on'?' on':state==='err'?' err':'');
+  document.getElementById('conn-text').textContent = text;
+}
+function refrescarConn(){
+  var box = document.getElementById('conn-box');
+  if(token()){
+    box.querySelector('#conn-token').style.display='none';
+    box.querySelector('#conn-btn').textContent='Olvidar clave';
+    box.querySelector('#conn-btn').className='btn btn-ghost';
+  }else{
+    box.querySelector('#conn-token').style.display='';
+    box.querySelector('#conn-btn').textContent='Conectar';
+    box.querySelector('#conn-btn').className='btn btn-primary';
+    setConn('off','Sin conectar — los cambios no se pueden guardar todavía.');
+  }
+}
+document.getElementById('conn-btn').addEventListener('click', function(){
+  if(token()){
+    localStorage.removeItem(TOKEN_KEY);
+    refrescarConn();
+    return;
+  }
+  var t = document.getElementById('conn-token').value.trim();
+  if(!t)return;
+  setConn('off','Comprobando…');
+  fetch('https://api.github.com/repos/' + REPO, {headers:{Authorization:'Bearer '+t}}).then(function(r){
+    if(!r.ok)throw new Error('bad');
+    localStorage.setItem(TOKEN_KEY, t);
+    refrescarConn();
+    setConn('on','Conectado. Ya podés guardar cambios.');
+  }).catch(function(){
+    setConn('err','Esa clave no funcionó. Revisala e intentá de nuevo.');
+  });
+});
+refrescarConn();
+if(token())setConn('on','Conectado. Ya podés guardar cambios.');
+
+function armarColapsoManual(manualId, toggleId){
+  document.getElementById(toggleId).addEventListener('click', function(){
+    var steps = document.querySelectorAll('#'+manualId+' .manual-steps, #'+manualId+' .manual-note');
+    var hidden = steps[0].style.display==='none';
+    steps.forEach(function(el){el.style.display = hidden?'':'none';});
+    this.textContent = hidden ? 'Ocultar este manual ↑' : 'Mostrar el manual ↓';
+  });
+}
+armarColapsoManual('manual','manual-toggle');
+armarColapsoManual('manual-com','manual-com-toggle');
+
+function mostrarVista(v){
+  document.getElementById('view-agenda').style.display = v==='agenda'?'':'none';
+  document.getElementById('view-comisiones').style.display = v==='comisiones'?'':'none';
+  document.getElementById('tab-btn-agenda').classList.toggle('active', v==='agenda');
+  document.getElementById('tab-btn-comisiones').classList.toggle('active', v==='comisiones');
+  document.getElementById('page-h1').textContent = v==='agenda' ? 'Editor de Agenda' : 'Editor de Comisiones';
+  document.getElementById('page-subtitle').textContent = v==='agenda'
+    ? 'Correcciones puntuales sobre lo publicado: horario, salón, suspensión, temario ampliado o expositores comunicados después del último boletín.'
+    : 'Actualizá los integrantes de una comisión cuando el sitio todavía no refleja el último DPP.';
+  if(v==='comisiones' && !comisionesCargadas)cargarDatosComisiones();
+}
+
+/* ── Carga de datos publicados (lectura pública, sin token) ── */
+function cargarDatos(){
+  Promise.all([
+    fetchJsonConReintento(RAW_BASE + 'data/agenda.json', {fallback:{reuniones:[]}}),
+    fetchJsonConReintento(RAW_BASE + 'data/agenda_overrides.json', {fallback:{overrides:[]}})
+  ]).then(function(res){
+    var agenda = res[0];
+    var base = (agenda && agenda.reuniones) || [];
+    overridesData = res[1] && res[1].overrides ? res[1] : {overrides:[]};
+    overridesIdx = {};
+    overridesData.overrides.forEach(function(o){
+      if(!o.nueva)overridesIdx[claveDe(o)] = o;
+    });
+    // Reuniones cargadas enteramente desde el editor (sin boletín de origen)
+    // se muestran también en la lista, para poder encontrarlas y corregirlas.
+    var manuales = overridesData.overrides.filter(function(o){return o.nueva}).map(function(o){
+      return {
+        fecha:o.fecha, hora:o.hora, dia:o.dia, comisiones:o.comisiones,
+        salon:o.salon_nuevo, tipo:o.tipo_nuevo||'senadores',
+        boletin_numero:'Cargada a mano', _manualId:o.id
+      };
+    });
+    reuniones = base.concat(manuales);
+    renderLista();
+  }).catch(function(err){
+    document.getElementById('rlist').innerHTML = '<div class="list-empty">No se pudo cargar la agenda publicada. Recargá la página.</div>';
+  });
+}
+
+function parseFechaDDMM(fecha){
+  // 'DD/MM' -> Date del año en curso (suficiente para ordenar/agrupar)
+  var p = (fecha||'').split('/');
+  if(p.length!==2)return null;
+  var d = new Date();
+  d.setMonth(parseInt(p[1],10)-1, parseInt(p[0],10));
+  d.setHours(0,0,0,0);
+  return d;
+}
+
+function renderLista(){
+  var q = (document.getElementById('rsearch').value||'').toLowerCase();
+  var hoy = new Date(); hoy.setHours(0,0,0,0);
+  var filtradas = reuniones.filter(function(r){
+    if(!q)return true;
+    var texto = (r.comisiones||[]).join(' ').toLowerCase();
+    return texto.indexOf(q)>=0;
+  });
+  var futuras = [], pasadas = [];
+  filtradas.forEach(function(r){
+    var d = parseFechaDDMM(r.fecha);
+    (d && d<hoy ? pasadas : futuras).push(r);
+  });
+  futuras.sort(function(a,b){
+    var da = parseFechaDDMM(a.fecha), db = parseFechaDDMM(b.fecha);
+    if(da && db && da.getTime()!==db.getTime())return da-db;
+    return (a.hora||'').localeCompare(b.hora||'');
+  });
+  pasadas.sort(function(a,b){
+    var da = parseFechaDDMM(a.fecha), db = parseFechaDDMM(b.fecha);
+    if(da && db && da.getTime()!==db.getTime())return db-da;
+    return (a.hora||'').localeCompare(b.hora||'');
+  });
+  filtradas = futuras.concat(pasadas);
+  document.getElementById('rcount').textContent = filtradas.length + (overridesData?(' · '+overridesData.overrides.length+' editadas'):'');
+
+  var grupos = {};
+  var orden = [];
+  filtradas.forEach(function(r){
+    var d = parseFechaDDMM(r.fecha);
+    var label = d ? (d.getTime()===hoy.getTime() ? 'Hoy · '+r.fecha : (d<hoy ? 'Pasadas' : r.fecha)) : 'Sin fecha';
+    if(!grupos[label]){grupos[label]=[];orden.push(label);}
+    grupos[label].push(r);
+  });
+
+  var html = '';
+  if(!filtradas.length)html = '<div class="list-empty">Sin resultados.</div>';
+  orden.forEach(function(label){
+    html += '<div class="rgroup-label">'+esc(label)+'</div>';
+    grupos[label].forEach(function(r){
+      var clave = claveDe(r);
+      var o = overridesIdx[clave];
+      var chip = r._manualId
+        ? '<span class="chip chip-pend"><span class="chip-dot"></span>Manual</span>'
+        : o
+        ? '<span class="chip chip-ok"><span class="chip-dot"></span>Editada</span>'
+        : '<span class="chip chip-live"><span class="chip-dot"></span>Publicada</span>';
+      var activa = seleccion && claveDe(seleccion)===clave;
+      html += '<button class="ritem'+(activa?' active':'')+'" data-clave="'+esc(clave)+'">'
+        +'<div class="ritem-top"><span class="ritem-hora">'+esc(o&&o.hora_nueva?o.hora_nueva:r.hora)+' h</span>'+chip+'</div>'
+        +'<div class="ritem-com">'+esc((r.comisiones||[]).map(function(c){return titleCase(c)}).join(' · '))+'</div>'
+        +'</button>';
+    });
+  });
+  document.getElementById('rlist').innerHTML = html;
+  document.querySelectorAll('.ritem').forEach(function(btn){
+    btn.addEventListener('click', function(){ seleccionar(btn.getAttribute('data-clave')); });
+  });
+}
+document.getElementById('rsearch').addEventListener('input', renderLista);
+
+var TITLECASE_PARTICULAS = {'y':1,'e':1,'de':1,'del':1,'la':1,'las':1,'los':1};
+function titleCase(s){
+  s=(s||'').toLowerCase();
+  return s.split(' ').map(function(w,i){
+    var limpio = w.replace(/[.,;]/g,'');
+    if(i>0 && TITLECASE_PARTICULAS[limpio])return w;
+    return w.charAt(0).toUpperCase()+w.slice(1);
+  }).join(' ');
+}
+
+function seleccionar(clave){
+  seleccion = reuniones.find(function(r){return claveDe(r)===clave});
+  creandoNueva = false;
+  renderLista();
+  if(seleccion && seleccion._manualId){
+    var oManual = overridesData.overrides.find(function(o){return o.id===seleccion._manualId});
+    temarioItemsActual = (oManual && oManual.temario_extra || []).slice();
+    renderEditorNueva(oManual);
+    return;
+  }
+  var o = overridesIdx[claveDe(seleccion)] || {};
+  temarioItemsActual = (o.temario_extra||[]).slice();
+  renderEditor();
+}
+
+function renderEditor(){
+  if(!seleccion){
+    document.getElementById('editor-head').innerHTML = '<div><p class="editor-title">Elegí una reunión</p><p class="editor-meta">de la lista de la izquierda para corregirla</p></div>';
+    document.getElementById('editor-body').innerHTML = '<div class="editor-placeholder">Ninguna reunión seleccionada todavía.</div>';
+    return;
+  }
+  var r = seleccion;
+  var o = overridesIdx[claveDe(r)] || {};
+  var coms = (r.comisiones||[]).map(titleCase).join(' · ');
+
+  document.getElementById('editor-head').innerHTML =
+    '<div><p class="editor-title">'+esc(coms)+'</p>'
+    +'<p class="editor-meta">'+esc(r.dia||'')+' '+esc(r.fecha)+' &middot; publicada en <code>boletín '+esc(r.boletin_numero||'?')+'</code></p></div>';
+
+  var salones = ['AZUL','ILLIA','FRONDIZI - MORENO','EVA PERÓN','C.P.M.'];
+  if(r.salon && salones.indexOf(r.salon)<0)salones.unshift(r.salon);
+  var salonOpts = '<option value="">(sin cambio — '+esc(r.salon||'?')+')</option>'
+    + salones.map(function(s){return '<option value="'+esc(s)+'"'+(o.salon_nuevo===s?' selected':'')+'>'+esc(titleCase(s))+'</option>'}).join('');
+
+  var TIPO_LABEL = {senadores:'Reunión de senadores', asesores:'Reunión de asesores', bicameral:'Reunión bicameral'};
+  var tipoActual = r.tipo || 'senadores';
+  var tipoOpts = '<option value="">(sin cambio — '+esc(TIPO_LABEL[tipoActual]||tipoActual)+')</option>'
+    + Object.keys(TIPO_LABEL).map(function(t){return '<option value="'+t+'"'+(o.tipo_nuevo===t?' selected':'')+'>'+TIPO_LABEL[t]+'</option>'}).join('');
+
+  document.getElementById('editor-body').innerHTML =
+    '<div class="field-grid">'
+    +'<div class="field"><label>Hora <span class="was">— publicada: '+esc(r.hora)+'</span></label>'
+    +'<input type="time" id="f-hora" value="'+esc(o.hora_nueva||'')+'"></div>'
+    +'<div class="field"><label>Salón <span class="was">— publicado: '+esc(titleCase(r.salon||'?'))+'</span></label>'
+    +'<select id="f-salon">'+salonOpts+'</select></div>'
+    +'<div class="field span2"><label>Tipo de reunión <span class="was">— errores comunes: el boletín a veces mezcla filas y una reunión de asesores queda cargada como de senadores</span></label>'
+    +'<select id="f-tipo">'+tipoOpts+'</select></div>'
+    +'<div class="field span2"><label>Expositores agregados después del boletín</label>'
+    +'<textarea id="f-exp" placeholder="Ej.: Lic. Nombre Apellido, cargo…">'+esc(o.expositores_extra||'')+'</textarea>'
+    +'<span class="field-hint">Se agrega debajo de lo publicado, no lo reemplaza.</span></div>'
+    +'<div class="field span2"><label>Expedientes agregados al temario</label>'
+    +renderTemarioBuilderHtml()
+    +'<span class="field-hint">Se agregan al temario ya publicado, no lo reemplazan.</span></div>'
+    +'<div class="field span2"><label>Aclaración / otro texto</label>'
+    +'<textarea id="f-nota" placeholder="Texto libre que se muestra como aviso arriba del temario…">'+esc(o.nota||'')+'</textarea></div>'
+    +'<div class="field span2"><div class="toggle-row" id="susp-row">'
+    +'<div><div class="toggle-label">Marcar como suspendida</div>'
+    +'<div class="toggle-sub">Se muestra tachada y no cuenta como reunión del día</div></div>'
+    +'<label class="switch"><input type="checkbox" id="f-susp"'+(o.suspendida?' checked':'')+'><span class="switch-track"></span></label>'
+    +'</div></div>'
+    +'</div>'
+    +'<div class="diff-box"><div class="diff-title">Se va a publicar</div><div id="diff-list"></div></div>'
+    +'<div class="editor-actions">'
+    +'<span class="save-status" id="save-status"></span>'
+    +'<button class="btn btn-ghost" id="btn-cancel">Descartar cambios</button>'
+    +'<button class="btn btn-primary" id="btn-save">Guardar y publicar</button>'
+    +'</div>';
+
+  document.getElementById('susp-row').classList.toggle('danger-active', !!o.suspendida);
+  ['f-hora','f-salon','f-tipo','f-exp','f-nota','f-susp'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', actualizarDiff);
+    document.getElementById(id).addEventListener('change', function(){
+      if(id==='f-susp')document.getElementById('susp-row').classList.toggle('danger-active', this.checked);
+      actualizarDiff();
+    });
+  });
+  document.getElementById('btn-cancel').addEventListener('click', function(){ renderEditor(); });
+  document.getElementById('btn-save').addEventListener('click', guardar);
+  wireTemarioBuilder(actualizarDiff);
+  actualizarDiff();
+}
+
+function leerFormulario(){
+  return {
+    hora_nueva: document.getElementById('f-hora').value || null,
+    salon_nuevo: document.getElementById('f-salon').value || null,
+    tipo_nuevo: document.getElementById('f-tipo').value || null,
+    temario_extra: temarioItemsActual.length ? temarioItemsActual.slice() : null,
+    expositores_extra: document.getElementById('f-exp').value.trim() || null,
+    nota: document.getElementById('f-nota').value.trim() || null,
+    suspendida: document.getElementById('f-susp').checked
+  };
+}
+
+function actualizarDiff(){
+  var r = seleccion, f = leerFormulario();
+  var TIPO_LABEL = {senadores:'Reunión de senadores', asesores:'Reunión de asesores', bicameral:'Reunión bicameral'};
+  var rows = [];
+  if(f.hora_nueva && f.hora_nueva!==r.hora)rows.push(diffRow('hora', r.hora, f.hora_nueva));
+  if(f.salon_nuevo && f.salon_nuevo!==r.salon)rows.push(diffRow('salón', titleCase(r.salon), titleCase(f.salon_nuevo)));
+  if(f.tipo_nuevo && f.tipo_nuevo!==(r.tipo||'senadores'))rows.push(diffRow('tipo', TIPO_LABEL[r.tipo]||r.tipo, TIPO_LABEL[f.tipo_nuevo]));
+  if(f.temario_extra)rows.push('<div class="diff-row"><span class="k">temario</span><span class="diff-new">+ '+f.temario_extra.length+' expediente(s) agregado(s)</span></div>');
+  if(f.expositores_extra)rows.push('<div class="diff-row"><span class="k">expositores</span><span class="diff-new">+ texto agregado</span></div>');
+  if(f.nota)rows.push('<div class="diff-row"><span class="k">nota</span><span class="diff-new">+ aclaración agregada</span></div>');
+  if(f.suspendida)rows.push('<div class="diff-row"><span class="k">estado</span><span class="diff-new" style="color:var(--danger)">&rarr; suspendida</span></div>');
+  document.getElementById('diff-list').innerHTML = rows.length ? rows.join('') : '<div class="diff-empty">Sin cambios todavía</div>';
+  document.getElementById('btn-save').disabled = !rows.length;
+}
+function diffRow(k,oldV,newV){
+  return '<div class="diff-row"><span class="k">'+esc(k)+'</span><span class="diff-old">'+esc(oldV)+'</span><span class="diff-new">&rarr; '+esc(newV)+'</span></div>';
+}
+
+/* ── Temario: buscador de expedientes (compartido entre editar y crear) ── */
+function cargarProyectosLazy(){
+  if(PROYECTOS_DATA)return Promise.resolve(PROYECTOS_DATA);
+  return fetchJsonConReintento(RAW_BASE + 'data/proyectos.json').then(function(d){
+    PROYECTOS_DATA = d;
+    return d;
+  });
+}
+function expNumero(p){ return p.origen + '-' + p.nro + '/' + String(p.anio).slice(-2); }
+function normBuscar(s){
+  return String(s||'').toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+}
+function renderTemarioBuilderHtml(){
+  return '<div id="temario-builder">'
+    +'<div class="temario-list" id="temario-list"></div>'
+    +'<div class="temario-search-wrap">'
+    +'<input type="text" id="temario-search" placeholder="Buscar expediente por n&uacute;mero o texto (ej.: S-123/26, o &ldquo;presupuesto&rdquo;)&hellip;">'
+    +'<div class="temario-search-results" id="temario-search-results" hidden></div>'
+    +'</div>'
+    +'<div class="temario-manual-row">'
+    +'<input type="text" id="temario-manual-num" placeholder="N&uacute;mero (opcional)" style="max-width:140px">'
+    +'<input type="text" id="temario-manual-ext" placeholder="Texto libre, para &iacute;tems sin expediente&hellip;">'
+    +'<button class="btn btn-ghost" type="button" id="temario-manual-add">+ Agregar</button>'
+    +'</div>'
+    +'</div>';
+}
+function renderTemarioLista(){
+  var el = document.getElementById('temario-list');
+  if(!el)return;
+  if(!temarioItemsActual.length){
+    el.innerHTML = '<div class="temario-empty">Sin expedientes agregados todavía.</div>';
+    return;
+  }
+  el.innerHTML = temarioItemsActual.map(function(it,i){
+    return '<div class="temario-item-row">'
+      +(it.numero?'<span class="temario-item-num">'+esc(it.numero)+'</span>':'')
+      +'<span class="temario-item-extracto">'+esc(it.extracto||'')+'</span>'
+      +'<button class="temario-item-rm" type="button" data-i="'+i+'" title="Quitar">&times;</button>'
+      +'</div>';
+  }).join('');
+  el.querySelectorAll('.temario-item-rm').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      temarioItemsActual.splice(parseInt(btn.getAttribute('data-i'),10), 1);
+      renderTemarioLista();
+      if(window.__temarioOnChange)window.__temarioOnChange();
+    });
+  });
+}
+function wireTemarioBuilder(onChange){
+  window.__temarioOnChange = onChange || null;
+  renderTemarioLista();
+  var search = document.getElementById('temario-search');
+  var results = document.getElementById('temario-search-results');
+  var buscando = false;
+  search.addEventListener('input', function(){
+    var q = search.value.trim();
+    if(q.length < 2){ results.hidden = true; results.innerHTML = ''; return; }
+    if(!PROYECTOS_DATA){
+      if(!buscando){
+        buscando = true;
+        results.hidden = false;
+        results.innerHTML = '<div class="temario-result">Cargando expedientes&hellip;</div>';
+        cargarProyectosLazy().then(function(){ buscando = false; search.dispatchEvent(new Event('input')); });
+      }
+      return;
+    }
+    var qn = normBuscar(q);
+    var qNum = q.replace(/\s+/g,'').toUpperCase();
+    var out = [];
+    for(var i=0; i<PROYECTOS_DATA.length && out.length<20; i++){
+      var p = PROYECTOS_DATA[i];
+      var num = expNumero(p);
+      if(num.toUpperCase().indexOf(qNum)>=0 || normBuscar(p.extracto).indexOf(qn)>=0)out.push(p);
+    }
+    if(!out.length){
+      results.innerHTML = '<div class="temario-result">Sin resultados.</div>';
+      results.hidden = false;
+      return;
+    }
+    results.innerHTML = out.map(function(p,i){
+      return '<button type="button" class="temario-result" data-i="'+i+'">'
+        +'<span class="num">'+esc(expNumero(p))+'</span>'
+        +'<span class="ext">'+esc(p.extracto||'')+'</span>'
+        +'</button>';
+    }).join('');
+    results.hidden = false;
+    results.querySelectorAll('.temario-result').forEach(function(btn){
+      var p = out[parseInt(btn.getAttribute('data-i'),10)];
+      btn.addEventListener('click', function(){
+        if(!temarioItemsActual.some(function(it){return it.numero===expNumero(p)})){
+          temarioItemsActual.push({numero: expNumero(p), extracto: p.extracto||''});
+          renderTemarioLista();
+          if(window.__temarioOnChange)window.__temarioOnChange();
+        }
+        search.value = '';
+        results.hidden = true;
+        results.innerHTML = '';
+      });
+    });
+  });
+  document.getElementById('temario-manual-add').addEventListener('click', function(){
+    var num = document.getElementById('temario-manual-num').value.trim();
+    var ext = document.getElementById('temario-manual-ext').value.trim();
+    if(!ext)return;
+    temarioItemsActual.push({numero: num || null, extracto: ext});
+    document.getElementById('temario-manual-num').value = '';
+    document.getElementById('temario-manual-ext').value = '';
+    renderTemarioLista();
+    if(window.__temarioOnChange)window.__temarioOnChange();
+  });
+}
+
+function b64EncodeUtf8(str){
+  return btoa(unescape(encodeURIComponent(str)));
+}
+function b64DecodeUtf8(str){
+  return decodeURIComponent(escape(atob(str)));
+}
+
+function guardar(){
+  if(!token()){
+    mostrarToast('Conectate primero (arriba a la derecha) para poder guardar.', true);
+    return;
+  }
+  var r = seleccion, f = leerFormulario();
+  var statusEl = document.getElementById('save-status');
+  var btn = document.getElementById('btn-save');
+  btn.disabled = true;
+  statusEl.textContent = 'Guardando…';
+  statusEl.className = 'save-status';
+
+  var headers = {Authorization:'Bearer '+token(), Accept:'application/vnd.github+json'};
+
+  fetch(API_BASE + 'data/agenda_overrides.json', {headers:headers, cache:'no-store'})
+    .then(function(resp){
+      if(!resp.ok)throw new Error('No se pudo leer el archivo actual (' + resp.status + ')');
+      return resp.json();
+    })
+    .then(function(file){
+      var actual = JSON.parse(b64DecodeUtf8(file.content.replace(/\n/g,'')));
+      var clave = claveDe(r);
+      var nuevos = actual.overrides.filter(function(o){ return claveDe(o)!==clave; });
+      var autor = localStorage.getItem(AUTOR_KEY) || prompt('¿Tu nombre? (para dejar registro de quién corrigió esto)') || 'Sin identificar';
+      localStorage.setItem(AUTOR_KEY, autor);
+      nuevos.push({
+        fecha: r.fecha, hora: r.hora, comisiones: r.comisiones,
+        hora_nueva: f.hora_nueva, salon_nuevo: f.salon_nuevo, tipo_nuevo: f.tipo_nuevo,
+        temario_extra: f.temario_extra,
+        expositores_extra: f.expositores_extra, nota: f.nota,
+        suspendida: f.suspendida,
+        actualizado: new Date().toISOString(),
+        actualizado_por: autor
+      });
+      actual.overrides = nuevos;
+      var contenido = JSON.stringify(actual, null, 2) + '\n';
+      var coms = (r.comisiones||[]).map(titleCase).join(' · ');
+      return fetch(API_BASE + 'data/agenda_overrides.json', {
+        method:'PUT', headers: Object.assign({'Content-Type':'application/json'}, headers),
+        body: JSON.stringify({
+          message: 'Editor de agenda: ' + coms + ' (' + r.fecha + ' ' + r.hora + ')',
+          content: b64EncodeUtf8(contenido),
+          sha: file.sha,
+          branch: 'main'
+        })
+      });
+    })
+    .then(function(resp){
+      if(!resp.ok)return resp.json().then(function(e){throw new Error(e.message||('Error ' + resp.status))});
+      statusEl.textContent = 'Guardado.';
+      statusEl.className = 'save-status ok';
+      mostrarToast('Guardado — el sitio se actualiza solo en menos de un minuto.', false);
+      cargarDatos();
+    })
+    .catch(function(err){
+      statusEl.textContent = 'No se pudo guardar: ' + err.message;
+      statusEl.className = 'save-status err';
+      mostrarToast('No se pudo guardar. ' + err.message, true);
+    })
+    .finally(function(){ btn.disabled = false; });
+}
+
+function mostrarToast(msg, esError){
+  var t = document.getElementById('toast');
+  document.getElementById('toast-text').textContent = msg;
+  t.className = 'toast show' + (esError?' err':'');
+  setTimeout(function(){ t.className = 'toast' + (esError?' err':''); }, 4200);
+}
+
+/* ── Agenda: crear una reunión desde cero (sin boletín de origen) ── */
+var DIAS_SEMANA = ['DOMINGO','LUNES','MARTES','MIÉRCOLES','JUEVES','VIERNES','SÁBADO'];
+function diaDeFecha(fechaIso){
+  var d = new Date(fechaIso+'T12:00:00');
+  return DIAS_SEMANA[d.getDay()];
+}
+function comisionRawFromNombre(n){
+  return String(n||'').toUpperCase().replace(/^DE\s+/,'');
+}
+function abrirNuevaReunion(){
+  seleccion = null;
+  creandoNueva = true;
+  temarioItemsActual = [];
+  renderLista();
+  renderEditorNueva(null);
+}
+function renderEditorNueva(existente){
+  var editandoManual = !!(existente && existente.id);
+  document.getElementById('editor-head').innerHTML = editandoManual
+    ? '<div><p class="editor-title">Editar reunión cargada a mano</p><p class="editor-meta">No tiene boletín de origen</p></div>'
+    : '<div><p class="editor-title">Nueva reunión</p><p class="editor-meta">Se carga a mano, sin boletín de origen -- usalo sólo si la reunión todavía no salió en ningún boletín</p></div>';
+
+  var salones = ['AZUL','ILLIA','FRONDIZI - MORENO','EVA PERÓN','C.P.M.'];
+  var salonActual = existente ? existente.salon_nuevo : null;
+  if(salonActual && salones.indexOf(salonActual)<0)salones.unshift(salonActual);
+  var salonOpts = '<option value="">-- Elegir --</option>' + salones.map(function(s){
+    return '<option value="'+esc(s)+'"'+(salonActual===s?' selected':'')+'>'+esc(titleCase(s))+'</option>';
+  }).join('');
+
+  var TIPO_LABEL = {senadores:'Reunión de senadores', asesores:'Reunión de asesores', bicameral:'Reunión bicameral'};
+  var tipoActual = (existente && existente.tipo_nuevo) || 'senadores';
+  var tipoOpts = Object.keys(TIPO_LABEL).map(function(t){
+    return '<option value="'+t+'"'+(t===tipoActual?' selected':'')+'>'+TIPO_LABEL[t]+'</option>';
+  }).join('');
+
+  var fechaIsoVal = '';
+  if(existente && existente.fecha){
+    var p = existente.fecha.split('/'); // DD/MM
+    var anio = new Date().getFullYear();
+    fechaIsoVal = anio+'-'+p[1]+'-'+p[0];
+  }
+
+  document.getElementById('editor-body').innerHTML =
+    '<div class="field-grid">'
+    +'<div class="field"><label>Fecha</label><input type="date" id="nr-fecha" value="'+esc(fechaIsoVal)+'"></div>'
+    +'<div class="field"><label>Hora</label><input type="time" id="nr-hora" value="'+esc(existente?existente.hora:'')+'"></div>'
+    +'<div class="field"><label>Salón</label><select id="nr-salon">'+salonOpts+'</select></div>'
+    +'<div class="field"><label>Tipo de reunión</label><select id="nr-tipo">'+tipoOpts+'</select></div>'
+    +'<div class="field span2"><label>Comisión / comisiones <span class="was">— varias = reunión plenaria</span></label>'
+    +'<div class="com-checklist" id="nr-com-checklist"><div class="list-empty">Cargando comisiones&hellip;</div></div></div>'
+    +'<div class="field span2"><label>Temario</label>'
+    +renderTemarioBuilderHtml()
+    +'</div>'
+    +'<div class="field span2"><label>Expositores / invitados</label>'
+    +'<textarea id="nr-exp" placeholder="Ej.: Lic. Nombre Apellido, cargo…">'+esc(existente?existente.expositores_extra:'')+'</textarea></div>'
+    +'<div class="field span2"><label>Aclaración</label>'
+    +'<textarea id="nr-nota" placeholder="Texto libre, opcional…">'+esc(existente?existente.nota:'')+'</textarea></div>'
+    +'</div>'
+    +'<div class="editor-actions">'
+    +'<span class="save-status" id="save-status"></span>'
+    +'<button class="btn btn-ghost" id="btn-cancel">Cancelar</button>'
+    +'<button class="btn btn-primary" id="btn-save" disabled>'+(editandoManual?'Guardar cambios':'Crear y publicar')+'</button>'
+    +'</div>';
+
+  wireTemarioBuilder(null);
+  document.getElementById('btn-cancel').addEventListener('click', function(){
+    creandoNueva = false;
+    seleccion = null;
+    renderLista();
+    renderEditor();
+  });
+  document.getElementById('btn-save').addEventListener('click', function(){ guardarNuevaReunion(existente); });
+  ['nr-fecha','nr-hora'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', validarNuevaReunion);
+  });
+
+  if(!comisionesCargadas)cargarDatosComisiones();
+  renderComChecklistNueva(existente ? existente.comisiones : null);
+}
+function renderComChecklistNueva(marcadas){
+  var el = document.getElementById('nr-com-checklist');
+  if(!el)return;
+  if(!comisionesCargadas){ el.innerHTML = '<div class="list-empty">Cargando comisiones&hellip;</div>'; return; }
+  var marcadasSet = {};
+  (marcadas||[]).forEach(function(c){ marcadasSet[String(c).toUpperCase()] = true; });
+  var coms = comisionesBase.slice().sort(function(a,b){return a.nombre.localeCompare(b.nombre)});
+  el.innerHTML = coms.map(function(c,i){
+    var raw = comisionRawFromNombre(c.nombre);
+    var checked = marcadasSet[raw];
+    return '<div class="com-check-item"><input type="checkbox" id="nr-com-'+i+'" value="'+esc(c.nombre)+'"'+(checked?' checked':'')+'>'
+      +'<label for="nr-com-'+i+'">'+esc(titleCase(c.nombre))+'</label></div>';
+  }).join('');
+  el.querySelectorAll('input[type=checkbox]').forEach(function(cb){ cb.addEventListener('change', validarNuevaReunion); });
+  validarNuevaReunion();
+}
+function validarNuevaReunion(){
+  var fechaEl = document.getElementById('nr-fecha'), horaEl = document.getElementById('nr-hora');
+  if(!fechaEl)return;
+  var comChecked = document.querySelectorAll('#nr-com-checklist input:checked').length;
+  document.getElementById('btn-save').disabled = !(fechaEl.value && horaEl.value && comChecked>0);
+}
+function guardarNuevaReunion(existente){
+  if(!token()){
+    mostrarToast('Conectate primero (arriba a la derecha) para poder guardar.', true);
+    return;
+  }
+  var fechaIso = document.getElementById('nr-fecha').value; // YYYY-MM-DD
+  var hora = document.getElementById('nr-hora').value;
+  var salon = document.getElementById('nr-salon').value || null;
+  var tipo = document.getElementById('nr-tipo').value || 'senadores';
+  var comisionesSel = Array.from(document.querySelectorAll('#nr-com-checklist input:checked')).map(function(cb){
+    return comisionRawFromNombre(cb.value);
+  });
+  var expositores = document.getElementById('nr-exp').value.trim() || null;
+  var nota = document.getElementById('nr-nota').value.trim() || null;
+
+  var partes = fechaIso.split('-'); // YYYY-MM-DD
+  var fecha = partes[2]+'/'+partes[1];
+  var anio2 = partes[0].slice(-2);
+  var dia = diaDeFecha(fechaIso);
+
+  var statusEl = document.getElementById('save-status');
+  var btn = document.getElementById('btn-save');
+  btn.disabled = true;
+  statusEl.textContent = 'Guardando…';
+  statusEl.className = 'save-status';
+
+  var headers = {Authorization:'Bearer '+token(), Accept:'application/vnd.github+json'};
+
+  fetch(API_BASE + 'data/agenda_overrides.json', {headers:headers, cache:'no-store'})
+    .then(function(resp){
+      if(!resp.ok)throw new Error('No se pudo leer el archivo actual (' + resp.status + ')');
+      return resp.json();
+    })
+    .then(function(file){
+      var actual = JSON.parse(b64DecodeUtf8(file.content.replace(/\n/g,'')));
+      var autor = localStorage.getItem(AUTOR_KEY) || prompt('¿Tu nombre? (para dejar registro de quién cargó esto)') || 'Sin identificar';
+      localStorage.setItem(AUTOR_KEY, autor);
+      var id = (existente && existente.id) || ('manual_' + Date.now());
+      actual.overrides = (actual.overrides||[]).filter(function(o){ return o.id!==id; });
+      actual.overrides.push({
+        nueva: true,
+        id: id,
+        fecha: fecha, hora: hora, dia: dia,
+        comisiones: comisionesSel,
+        salon_nuevo: salon, tipo_nuevo: tipo,
+        temario_extra: temarioItemsActual.length ? temarioItemsActual.slice() : null,
+        expositores_extra: expositores, nota: nota,
+        suspendida: false,
+        boletin_numero: 'manual/'+anio2,
+        actualizado: new Date().toISOString(),
+        actualizado_por: autor
+      });
+      var contenido = JSON.stringify(actual, null, 2) + '\n';
+      var comsTxt = comisionesSel.map(titleCase).join(' · ');
+      return fetch(API_BASE + 'data/agenda_overrides.json', {
+        method:'PUT', headers: Object.assign({'Content-Type':'application/json'}, headers),
+        body: JSON.stringify({
+          message: 'Editor de agenda: ' + (existente?'edita':'crea') + ' reunión manual ' + comsTxt + ' (' + fecha + ' ' + hora + ')',
+          content: b64EncodeUtf8(contenido),
+          sha: file.sha,
+          branch: 'main'
+        })
+      });
+    })
+    .then(function(resp){
+      if(!resp.ok)return resp.json().then(function(e){throw new Error(e.message||('Error ' + resp.status))});
+      statusEl.textContent = 'Guardado.';
+      statusEl.className = 'save-status ok';
+      mostrarToast('Guardado — el sitio se actualiza solo en menos de un minuto.', false);
+      creandoNueva = false;
+      cargarDatos();
+    })
+    .catch(function(err){
+      statusEl.textContent = 'No se pudo guardar: ' + err.message;
+      statusEl.className = 'save-status err';
+      mostrarToast('No se pudo guardar. ' + err.message, true);
+    })
+    .finally(function(){ btn.disabled = false; });
+}
+
+/* ══════════════════════════ COMISIONES ══════════════════════════════ */
+var comisionesCargadas = false;
+var comisionesBase = [];   // data/comisiones.json crudo
+var dppCambiosData = null; // objeto completo de data/dpp_cambios.json (para reescribir)
+var senadoresData = {};    // data/senadores.json crudo
+var rosterPorComision = {}; // com_norm -> [{nombre,dpp}]
+var comSeleccion = null;    // objeto de comisionesBase seleccionado
+var accionActual = null;    // 'add'|'replace'|'remove'
+
+function normCom2(s){
+  s=(s||'').toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  s=s.replace(/^DE\s+/,'');
+  s=s.replace(/[^A-Z0-9, ]/g,'');
+  return s;
+}
+function normNombre2(s){
+  return (s||'').toUpperCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+}
+function construirDppState(cambios){
+  var state={}, rewritesPend={};
+  cambios.forEach(function(c){
+    var com=normCom2(c.comision);
+    var senOrig=c.senador||'';
+    var sen=normNombre2(senOrig);
+    if(!state[com])state[com]={};
+    if(c.tipo==='rewrite'){
+      var pr=rewritesPend[com];
+      if(!pr||pr.dpp!==c.dpp){
+        if(pr)state[com]=pr.members;
+        pr={dpp:c.dpp,members:{}};
+        rewritesPend[com]=pr;
+      }
+      pr.members[sen]={nombre:senOrig,dpp:c.dpp};
+    }else{
+      if(rewritesPend[com]){
+        state[com]=Object.assign({},rewritesPend[com].members);
+        delete rewritesPend[com];
+      }
+      var d=state[com];
+      if(c.tipo==='add'){
+        d[sen]={nombre:senOrig,dpp:c.dpp};
+      }else if(c.tipo==='replace'){
+        var rem=normNombre2(c.reemplaza||'');
+        delete d[rem];
+        d[sen]={nombre:senOrig,dpp:c.dpp};
+      }else if(c.tipo==='remove'){
+        delete d[sen];
+      }
+    }
+  });
+  Object.keys(rewritesPend).forEach(function(com){state[com]=rewritesPend[com].members;});
+  var out={};
+  Object.keys(state).forEach(function(com){
+    out[com]=Object.keys(state[com]).map(function(k){return state[com][k]});
+  });
+  return out;
+}
+
+var comisionesCargaId = 0;
+function cargarDatosComisiones(){
+  document.getElementById('clist').innerHTML = '<div class="list-empty">Cargando comisiones publicadas…</div>';
+  var miCarga = ++comisionesCargaId;
+  Promise.all([
+    fetchJsonConReintento(RAW_BASE + 'data/comisiones.json'),
+    fetchJsonConReintento(RAW_BASE + 'data/dpp_cambios.json'),
+    fetchJsonConReintento(RAW_BASE + 'data/senadores.json')
+  ]).then(function(res){
+    if(miCarga!==comisionesCargaId)return; // superada por una carga más nueva
+    comisionesBase = res[0] || [];
+    dppCambiosData = res[1] || {fechas:{},cambios:[]};
+    senadoresData = res[2] || {};
+    rosterPorComision = construirDppState(dppCambiosData.cambios || []);
+    comisionesCargadas = true;
+    renderListaComisiones();
+    if(document.getElementById('nr-com-checklist')){
+      var marcadas = seleccion && seleccion._manualId
+        ? (overridesData.overrides.find(function(o){return o.id===seleccion._manualId})||{}).comisiones
+        : null;
+      renderComChecklistNueva(marcadas);
+    }
+  }).catch(function(err){
+    if(miCarga!==comisionesCargaId)return;
+    document.getElementById('clist').innerHTML = '<div class="list-empty">No se pudieron cargar las comisiones ('+esc(err.message)+'). Recargá la página.</div>';
+  });
+}
+
+function rosterDe(com){
+  var estado = rosterPorComision[normCom2(com.nombre)];
+  if(estado && estado.length)return estado;
+  // Sin cambios de DPP registrados todavía para esta comisión: se muestra
+  // el roster tal como está publicado en el sitio (sin DPP de respaldo).
+  return (com.miembros||[]).map(function(m){return {nombre:m.nombre, dpp:null};});
+}
+
+function renderListaComisiones(){
+  var q = (document.getElementById('csearch').value||'').toLowerCase();
+  var filtradas = comisionesBase.filter(function(c){
+    return !q || c.nombre.toLowerCase().indexOf(q)>=0;
+  }).slice().sort(function(a,b){return a.nombre.localeCompare(b.nombre)});
+  document.getElementById('ccount').textContent = filtradas.length + ' comisiones';
+  var html = filtradas.length ? '' : '<div class="list-empty">Sin resultados.</div>';
+  filtradas.forEach(function(c){
+    var n = rosterDe(c).length;
+    var activa = comSeleccion && comSeleccion.nombre===c.nombre;
+    html += '<button class="ritem'+(activa?' active':'')+'" data-com="'+esc(c.nombre)+'">'
+      +'<div class="ritem-top"><span class="ritem-hora">'+n+' / '+c.cupo+'</span></div>'
+      +'<div class="ritem-com">'+esc(titleCase(c.nombre))+'</div>'
+      +'</button>';
+  });
+  document.getElementById('clist').innerHTML = html;
+  document.querySelectorAll('#clist .ritem').forEach(function(btn){
+    btn.addEventListener('click', function(){ seleccionarComision(btn.getAttribute('data-com')); });
+  });
+}
+document.getElementById('csearch').addEventListener('input', renderListaComisiones);
+
+function seleccionarComision(nombre){
+  comSeleccion = comisionesBase.find(function(c){return c.nombre===nombre});
+  accionActual = null;
+  renderListaComisiones();
+  renderComEditor();
+}
+
+function senadoresVigentesOrdenados(){
+  return Object.keys(senadoresData)
+    .filter(function(k){return senadoresData[k].vigente})
+    .sort(function(a,b){return a.localeCompare(b)});
+}
+function nombreLindo(nombreMayus){
+  var partes = nombreMayus.split(',');
+  var apellido = (partes[0]||'').trim();
+  var resto = (partes[1]||'').trim();
+  return apellido + (resto ? ', ' + titleCase(resto) : '');
+}
+
+function renderComEditor(){
+  if(!comSeleccion){
+    document.getElementById('com-editor-head').innerHTML = '<div><p class="editor-title">Elegí una comisión</p><p class="editor-meta">de la lista de la izquierda para corregir sus integrantes</p></div>';
+    document.getElementById('com-editor-body').innerHTML = '<div class="editor-placeholder">Ninguna comisión seleccionada todavía.</div>';
+    return;
+  }
+  var c = comSeleccion;
+  var roster = rosterDe(c).slice().sort(function(a,b){return a.nombre.localeCompare(b.nombre)});
+  document.getElementById('com-editor-head').innerHTML =
+    '<div><p class="editor-title">'+esc(titleCase(c.nombre))+'</p>'
+    +'<p class="editor-meta">'+roster.length+' de '+c.cupo+' cupos ocupados</p></div>'
+    +'<button class="btn btn-primary" onclick="abrirAccionCom(\'add\',null)">+ Agregar integrante</button>';
+
+  var filas = roster.map(function(m){
+    return '<div class="roster-row"><div>'
+      +'<div class="roster-nombre">'+esc(nombreLindo(m.nombre))+'</div>'
+      +'<div class="roster-dpp">'+(m.dpp?'DPP-'+esc(m.dpp):'sin DPP registrado')+'</div>'
+      +'</div><div class="roster-actions">'
+      +'<button onclick="abrirAccionCom(\'replace\',\''+esc(m.nombre).replace(/'/g,"\\'")+'\')">Reemplazar</button>'
+      +'<button class="danger" onclick="abrirAccionCom(\'remove\',\''+esc(m.nombre).replace(/'/g,"\\'")+'\')">Dar de baja</button>'
+      +'</div></div>';
+  }).join('') || '<div class="editor-placeholder">Sin integrantes registrados.</div>';
+
+  document.getElementById('com-editor-body').innerHTML = filas + '<div id="accion-panel-wrap"></div>';
+  if(accionActual)renderAccionPanel();
+}
+
+function abrirAccionCom(tipo, nombreSaliente){
+  accionActual = {tipo:tipo, saliente:nombreSaliente};
+  renderAccionPanel();
+  document.getElementById('accion-panel-wrap').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function renderAccionPanel(){
+  var wrap = document.getElementById('accion-panel-wrap');
+  if(!accionActual){wrap.innerHTML='';return;}
+  var a = accionActual;
+  var yaEnComision = {};
+  rosterDe(comSeleccion).forEach(function(m){yaEnComision[normNombre2(m.nombre)]=true;});
+  var candidatos = senadoresVigentesOrdenados().filter(function(k){
+    return a.tipo==='remove' || !yaEnComision[normNombre2(k)] || k===a.saliente;
+  });
+  var hoy = new Date().toISOString().slice(0,10);
+
+  var titulo = a.tipo==='add' ? 'Agregar integrante' : a.tipo==='replace' ? 'Reemplazar a ' + nombreLindo(a.saliente) : 'Dar de baja a ' + nombreLindo(a.saliente);
+  var html = '<div class="accion-panel"><h3>'+esc(titulo)+'</h3>';
+  if(a.tipo!=='remove'){
+    html += '<div class="field"><label>Senador/a</label><select id="acc-senador">'
+      + candidatos.map(function(k){return '<option value="'+esc(k)+'">'+esc(nombreLindo(k))+'</option>'}).join('')
+      + '</select></div>';
+  }
+  html += '<div class="field-grid" style="margin-bottom:0">'
+    +'<div class="field"><label>DPP que lo respalda</label><input type="text" id="acc-dpp" placeholder="Ej.: 73/26"></div>'
+    +'<div class="field"><label>Fecha del DPP</label><input type="date" id="acc-fecha" value="'+hoy+'"></div>'
+    +'</div>'
+    +'<div class="editor-actions" style="border-top:none;padding-top:14px">'
+    +'<span class="save-status" id="acc-status"></span>'
+    +'<button class="btn btn-ghost" onclick="cerrarAccionCom()">Cancelar</button>'
+    +'<button class="btn btn-primary" onclick="guardarAccionCom()">Guardar cambio</button>'
+    +'</div></div>';
+  wrap.innerHTML = html;
+}
+function cerrarAccionCom(){
+  accionActual = null;
+  renderComEditor();
+}
+
+function fechaDppFormato(iso){
+  // '2026-09-09' -> '09-09-2026', igual a la convención ya usada en dpp_cambios.json
+  var p = (iso||'').split('-');
+  return p.length===3 ? (p[2]+'-'+p[1]+'-'+p[0]) : iso;
+}
+
+function guardarAccionCom(){
+  var a = accionActual;
+  if(!token()){
+    mostrarToast('Conectate primero (arriba a la derecha) para poder guardar.', true);
+    return;
+  }
+  var dpp = (document.getElementById('acc-dpp').value||'').trim();
+  var fechaIso = document.getElementById('acc-fecha').value;
+  if(!dpp || !/^\d+\/\d{2}$/.test(dpp)){
+    document.getElementById('acc-status').textContent = 'Escribí el DPP con el formato número/año, ej. 73/26.';
+    document.getElementById('acc-status').className = 'save-status err';
+    return;
+  }
+  if(!fechaIso){
+    document.getElementById('acc-status').textContent = 'Falta la fecha del DPP.';
+    document.getElementById('acc-status').className = 'save-status err';
+    return;
+  }
+  var senadorKey = a.tipo!=='remove' ? document.getElementById('acc-senador').value : null;
+
+  var statusEl = document.getElementById('acc-status');
+  statusEl.textContent = 'Guardando…';
+  statusEl.className = 'save-status';
+
+  var headers = {Authorization:'Bearer '+token(), Accept:'application/vnd.github+json'};
+
+  fetch(API_BASE + 'data/dpp_cambios.json', {headers:headers, cache:'no-store'})
+    .then(function(resp){
+      if(!resp.ok)throw new Error('No se pudo leer el archivo actual (' + resp.status + ')');
+      return resp.json();
+    })
+    .then(function(file){
+      var actual = JSON.parse(b64DecodeUtf8(file.content.replace(/\n/g,'')));
+      actual.fechas = actual.fechas || {};
+      actual.cambios = actual.cambios || [];
+      actual.fechas[dpp] = fechaDppFormato(fechaIso);
+
+      var cambio = {dpp: dpp, comision: comSeleccion.nombre, tipo: a.tipo};
+      if(a.tipo==='add'){
+        cambio.senador = senadorKey;
+      }else if(a.tipo==='replace'){
+        cambio.senador = senadorKey;
+        cambio.reemplaza = a.saliente;
+      }else if(a.tipo==='remove'){
+        cambio.senador = a.saliente;
+      }
+      actual.cambios.push(cambio);
+
+      var contenido = JSON.stringify(actual, null, 2) + '\n';
+      var autor = localStorage.getItem(AUTOR_KEY) || prompt('¿Tu nombre? (para dejar registro de quién hizo este cambio)') || 'Sin identificar';
+      localStorage.setItem(AUTOR_KEY, autor);
+      return fetch(API_BASE + 'data/dpp_cambios.json', {
+        method:'PUT', headers: Object.assign({'Content-Type':'application/json'}, headers),
+        body: JSON.stringify({
+          message: 'Editor de comisiones (' + autor + '): DPP-' + dpp + ' — ' + a.tipo + ' en ' + comSeleccion.nombre,
+          content: b64EncodeUtf8(contenido),
+          sha: file.sha,
+          branch: 'main'
+        })
+      });
+    })
+    .then(function(resp){
+      if(!resp.ok)return resp.json().then(function(e){throw new Error(e.message||('Error ' + resp.status))});
+      mostrarToast('Guardado — el sitio se actualiza solo en menos de un minuto.', false);
+      accionActual = null;
+      cargarDatosComisiones();
+    })
+    .catch(function(err){
+      statusEl.textContent = 'No se pudo guardar: ' + err.message;
+      statusEl.className = 'save-status err';
+      mostrarToast('No se pudo guardar. ' + err.message, true);
+    });
+}
+
+cargarDatos();
+</script>
+</body>
+</html>
