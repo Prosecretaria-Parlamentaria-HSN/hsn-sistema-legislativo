@@ -152,4 +152,4 @@ jobs:
             git commit -m "Actualización automática $(date -u '+%Y-%m-%d %H:%M UTC')"
             git pull --rebase origin ${GITHUB_REF_NAME}
             git push origin HEAD:${GITHUB_REF_NAME}
-          fi
+          fi
