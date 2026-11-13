@@ -2057,31 +2057,180 @@ function renderActiveChips(){
   if(cntEl)cntEl.textContent=secCount?('('+secCount+')'):'';
 }
 
-/* ── Exportar a Excel ──────────────────────────────────────────── */
-function exportarExcel(){
+/* ── Exportar Proyectos (según filtros) a Excel con formato y a PDF ─── */
+function _proyEstado(p){
+  var e=[];
+  if(p.badge_sancionado)e.push(p.badge_sancionado.ley?('Sancionado · '+p.badge_sancionado.ley):'Sancionado');
+  if(p.badge_diputados)e.push('Enviado a Diputados');
+  if(p.od)e.push('OD '+p.od.nro_od+'/'+String(p.od.anio_od).slice(-2));
+  if(p.badge_preferencia)e.push('Preferencia solicitada');
+  if(p.tipo==='AC')e.push(p.dado_cuenta===true?'Dado cuenta':(p.dado_cuenta===false?'Pendiente de dar cuenta':''));
+  return e.filter(Boolean).join(' · ');
+}
+function _proyFilas(){
+  return getFiltered().map(function(p){
+    return {
+      exp:expNroOf(p), url:p.url||null, tipo:p.tipo_label||p.tipo, fecha:p.fecha||'',
+      autores:(p.autores||[]).join('; '), coautores:(p.coautores||[]).join('; '),
+      bloques:(p.bloques||[]).join(', '), extracto:p.extracto||'',
+      giro:(p.comisiones||[]).map(function(c){return comLabel(c)}), estado:_proyEstado(p)
+    };
+  });
+}
+function _proyTextoFiltros(){
+  var f=[];
+  function v(id){var el=document.getElementById(id);return el?el.value:''}
+  if(activeAnio)f.push('Año: '+activeAnio);
+  var t=Object.keys(activeTipos);
+  if(t.length){var lab={};DATA.forEach(function(p){if(p.tipo_label)lab[p.tipo]=p.tipo_label});f.push('Tipo: '+t.map(function(k){return lab[k]||k}).join(', '));}
+  if(activeOrigen)f.push('Origen: '+activeOrigen);
+  if(activeBloque)f.push('Bloque: '+activeBloque);
+  if(activeProvincia)f.push('Provincia: '+activeProvincia);
+  if(v('com-select-1'))f.push('Comisión: '+comLabel(v('com-select-1')));
+  if(v('autor-select'))f.push('Autor: '+v('autor-select'));
+  if(activeConOD)f.push('Con OD');
+  if(v('search').trim())f.push('Búsqueda: '+v('search').trim());
+  return f.length?f.join('  ·  '):'Sin filtros';
+}
+function _proyNombre(ext){return 'proyectos_'+new Date().toISOString().slice(0,10)+'.'+ext}
+function _proyXlsxBuffer(filas,textoFiltros,hoy){
+  var AZUL='FF1B5EA2',AZUL_CL='FFD6E4F0',ZEBRA='FFF4F7FB';
+  var cols=[{h:'Expte N°',w:15},{h:'Tipo de proyecto',w:22},{h:'Fecha',w:12},{h:'Autor/es',w:32},{h:'Coautores',w:32},
+    {h:'Bloque/s',w:26},{h:'Extracto',w:70},{h:'Giro a comisiones',w:36},{h:'Estado',w:24}];
+  var N=cols.length;
+  var wb=new ExcelJS.Workbook();wb.creator='Prosecretaría Parlamentaria';wb.created=new Date();
+  var ws=wb.addWorksheet('Proyectos',{views:[{state:'frozen',ySplit:4}],
+    pageSetup:{orientation:'landscape',paperSize:9,fitToPage:true,fitToWidth:1,fitToHeight:0,margins:{left:0.4,right:0.4,top:0.5,bottom:0.5,header:0.2,footer:0.2}}});
+  ws.columns=cols.map(function(c){return {width:c.w}});
+  var b={style:'thin',color:{argb:AZUL_CL}},bordes={top:b,left:b,bottom:b,right:b};
+  ws.mergeCells(1,1,1,N);var c1=ws.getCell(1,1);
+  c1.value='SENADO DE LA NACIÓN ARGENTINA  ·  PROSECRETARÍA PARLAMENTARIA';
+  c1.font={bold:true,size:10,color:{argb:'FFFFFFFF'}};c1.fill={type:'pattern',pattern:'solid',fgColor:{argb:AZUL}};
+  c1.alignment={vertical:'middle',indent:1};ws.getRow(1).height=22;
+  ws.mergeCells(2,1,2,N);var c2=ws.getCell(2,1);c2.value='Proyectos  ·  '+hoy;
+  c2.font={bold:true,size:15,color:{argb:AZUL}};c2.alignment={vertical:'middle',indent:1};ws.getRow(2).height=28;
+  ws.mergeCells(3,1,3,N);var c3=ws.getCell(3,1);c3.value=filas.length+' proyectos  ·  '+textoFiltros;
+  c3.font={italic:true,size:10,color:{argb:'FF6B7788'}};c3.alignment={vertical:'middle',indent:1};ws.getRow(3).height=18;
+  var hr=ws.getRow(4);
+  cols.forEach(function(c,i){var cell=hr.getCell(i+1);cell.value=c.h;
+    cell.font={bold:true,size:10,color:{argb:'FFFFFFFF'}};cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:AZUL}};
+    cell.alignment={vertical:'middle',horizontal:'center',wrapText:true};cell.border=bordes;});
+  hr.height=30;
+  filas.forEach(function(f,i){
+    var r=ws.getRow(5+i);
+    var vals=[f.exp,f.tipo,f.fecha,f.autores,f.coautores,f.bloques,f.extracto,f.giro.join('\n'),f.estado];
+    vals.forEach(function(v,j){
+      var cell=r.getCell(j+1);
+      if(j===0&&f.url&&v){cell.value={text:v,hyperlink:f.url};cell.font={size:10,bold:true,color:{argb:AZUL},underline:true};}
+      else{cell.value=v;cell.font={size:10,color:{argb:'FF1F2933'},bold:(j===3)};}
+      cell.alignment={vertical:'top',wrapText:true,horizontal:(j===0||j===2)?'center':'left'};
+      cell.border=bordes;
+      if(i%2===1)cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:ZEBRA}};
+    });
+  });
+  ws.autoFilter={from:{row:4,column:1},to:{row:4+Math.max(filas.length,1),column:N}};
+  ws.pageSetup.printTitlesRow='4:4';
+  ws.headerFooter={oddFooter:'&L&8Prosecretaría Parlamentaria · Senado de la Nación Argentina&C&8Página &P de &N&R&8'+hoy};
+  return wb.xlsx.writeBuffer();
+}
+function _exportarExcelSimple(){
   var filtered=getFiltered();
-  if(!filtered.length){alert('No hay datos para exportar.');return}
   var headers=['Tipo','Nro','Origen','Fecha','Bloque','Autor','Coautor','Extracto','Giro 1','Giro 2','Giro 3'];
   var rows=[headers],urls=[];
   filtered.forEach(function(p){
-    rows.push([
-      p.tipo,p.nro+'/'+String(p.anio).slice(-2),p.origen,p.fecha,
-      p.bloques.join('; '),p.autores.join('; '),(p.coautores||[]).join('; '),
-      p.extracto,p.comisiones[0]||'',p.comisiones[1]||'',p.comisiones[2]||''
-    ]);
+    rows.push([p.tipo,p.nro+'/'+String(p.anio).slice(-2),p.origen,p.fecha,p.bloques.join('; '),p.autores.join('; '),(p.coautores||[]).join('; '),
+      p.extracto,p.comisiones[0]||'',p.comisiones[1]||'',p.comisiones[2]||'']);
     urls.push(p.url||'');
   });
-  var wb=XLSX.utils.book_new();
-  var ws=XLSX.utils.aoa_to_sheet(rows);
-  for(var i=0;i<filtered.length;i++){
-    if(urls[i]){
-      var cellRef=XLSX.utils.encode_cell({r:i+1,c:1});
-      if(ws[cellRef]){ws[cellRef].l={Target:urls[i]}}
-    }
-  }
+  var wb=XLSX.utils.book_new();var ws=XLSX.utils.aoa_to_sheet(rows);
+  for(var i=0;i<filtered.length;i++){if(urls[i]){var ref=XLSX.utils.encode_cell({r:i+1,c:1});if(ws[ref]){ws[ref].l={Target:urls[i]}}}}
   ws['!cols']=[{wch:6},{wch:10},{wch:8},{wch:12},{wch:28},{wch:35},{wch:35},{wch:60},{wch:30},{wch:30},{wch:30}];
   XLSX.utils.book_append_sheet(wb,ws,'Proyectos');
   XLSX.writeFile(wb,'proyectos_filtrados.xlsx');
+}
+function exportarExcel(){
+  var filas=_proyFilas();
+  if(!filas.length){alert('No hay datos para exportar.');return}
+  _amCargarExcelJS(function(){
+    _proyXlsxBuffer(filas,_proyTextoFiltros(),_amHoyLargo()).then(function(buf){
+      _amDescargar(new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),_proyNombre('xlsx'));
+    }).catch(function(){_exportarExcelSimple()});
+  },function(){_exportarExcelSimple()});
+}
+function exportarProyectosPdf(){
+  var filas=_proyFilas();
+  if(!filas.length){alert('No hay datos para exportar.');return}
+  if(filas.length>1500&&!confirm('Vas a exportar '+filas.length+' proyectos a PDF. Puede tardar y salir muy largo. ¿Querés seguir? (Conviene filtrar antes)'))return;
+  var lib=window.jspdf;
+  if(!lib){alert('Error: jsPDF no cargó correctamente.');return}
+  var doc=new lib.jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+  loadFuentePdf(doc);
+  var W=297,H=210,ML=12,MR=12;
+  var BLUE=[27,94,162],BLUE_LT=[214,228,240],GRAY=[74,74,74],WHITE=[255,255,255],ZEBRA=[244,247,251];
+  var hoy=_amHoyLargo();
+  var cols=[{t:'EXPTE N°',w:23},{t:'TIPO',w:24},{t:'FECHA',w:18},{t:'AUTOR/ES',w:40},{t:'BLOQUE/S',w:30},
+    {t:'EXTRACTO',w:84},{t:'GIRO A COMISIONES',w:34},{t:'ESTADO',w:20}];
+  var xs=[],acc=ML;cols.forEach(function(c){xs.push(acc);acc+=c.w;});
+  var TW=acc-ML,BOTTOM=H-14,y=0;
+  function drawHeader(){
+    doc.setFillColor(BLUE[0],BLUE[1],BLUE[2]);doc.rect(0,0,W,16,'F');
+    doc.setTextColor(255,255,255);doc.setFont('Montserrat','normal');doc.setFontSize(7);
+    doc.text('SENADO DE LA NACIÓN ARGENTINA',ML,6);
+    doc.setFont('Montserrat','bold');doc.setFontSize(9.5);doc.text('PROSECRETARÍA PARLAMENTARIA',ML,12);
+    doc.setFont('Montserrat','normal');doc.setFontSize(7);
+    doc.text('PROYECTOS',W-MR,6,{align:'right'});doc.text(hoy,W-MR,12,{align:'right'});
+    doc.setFillColor(BLUE_LT[0],BLUE_LT[1],BLUE_LT[2]);doc.rect(0,16,W,0.8,'F');
+  }
+  function drawFooter(n,total){
+    doc.setDrawColor(BLUE_LT[0],BLUE_LT[1],BLUE_LT[2]);doc.setLineWidth(0.3);doc.line(ML,H-9,W-MR,H-9);
+    doc.setFont('Montserrat','normal');doc.setFontSize(7);doc.setTextColor(150,150,150);
+    doc.text('Prosecretaría Parlamentaria · Senado de la Nación Argentina',ML,H-5);
+    doc.text('Página '+n+' de '+total,W/2,H-5,{align:'center'});
+    doc.text('Documento generado automáticamente',W-MR,H-5,{align:'right'});
+  }
+  function drawTableHeader(){
+    doc.setFillColor(BLUE[0],BLUE[1],BLUE[2]);doc.rect(ML,y,TW,7,'F');
+    doc.setFont('Montserrat','bold');doc.setFontSize(6.8);doc.setTextColor(255,255,255);
+    cols.forEach(function(c,i){doc.text(c.t,xs[i]+2,y+4.6);});y+=7;
+  }
+  function nuevaPagina(){doc.addPage();drawHeader();y=22;drawTableHeader();}
+  drawHeader();y=26;
+  doc.setFont('Montserrat','bold');doc.setFontSize(14);doc.setTextColor(BLUE[0],BLUE[1],BLUE[2]);doc.text('Proyectos',ML,y);y+=5.5;
+  doc.setFont('Montserrat','normal');doc.setFontSize(8);doc.setTextColor(GRAY[0],GRAY[1],GRAY[2]);
+  doc.splitTextToSize(filas.length+' proyectos  ·  '+_proyTextoFiltros(),TW).forEach(function(l){doc.text(l,ML,y);y+=4;});
+  y+=2;drawTableHeader();
+  var LH=3.3;
+  filas.forEach(function(f,idx){
+    doc.setFont('Montserrat','normal');doc.setFontSize(7.2);
+    var lExp=doc.splitTextToSize(f.exp,cols[0].w-4),lTipo=doc.splitTextToSize(f.tipo,cols[1].w-4),
+        lFec=doc.splitTextToSize(f.fecha,cols[2].w-3),lBlq=doc.splitTextToSize(f.bloques,cols[4].w-4),
+        lExt=doc.splitTextToSize(f.extracto,cols[5].w-4),lGiro=[],lEst=doc.splitTextToSize(f.estado,cols[7].w-3);
+    f.giro.forEach(function(g){doc.splitTextToSize(g,cols[6].w-4).forEach(function(l){lGiro.push(l)})});
+    doc.setFont('Montserrat','bold');var lAut=doc.splitTextToSize(f.autores||'—',cols[3].w-4);
+    var n=Math.max(lExp.length,lTipo.length,lFec.length,lBlq.length,lExt.length,lGiro.length,lEst.length,lAut.length);
+    var rowH=n*LH+3.4;
+    if(y+rowH>BOTTOM)nuevaPagina();
+    if(idx%2===1){doc.setFillColor(ZEBRA[0],ZEBRA[1],ZEBRA[2]);doc.rect(ML,y,TW,rowH,'F');}
+    doc.setDrawColor(BLUE_LT[0],BLUE_LT[1],BLUE_LT[2]);doc.setLineWidth(0.2);doc.line(ML,y+rowH,ML+TW,y+rowH);
+    var ty=y+4.2;
+    doc.setFont('Montserrat','bold');doc.setTextColor(BLUE[0],BLUE[1],BLUE[2]);
+    lExp.forEach(function(l,i){doc.text(l,xs[0]+2,ty+i*LH);});
+    if(f.url)doc.link(xs[0]+1,y+1,cols[0].w-2,LH*lExp.length+1.5,{url:f.url});
+    doc.setFont('Montserrat','normal');doc.setTextColor(GRAY[0],GRAY[1],GRAY[2]);
+    lTipo.forEach(function(l,i){doc.text(l,xs[1]+2,ty+i*LH);});
+    lFec.forEach(function(l,i){doc.text(l,xs[2]+2,ty+i*LH);});
+    doc.setFont('Montserrat','bold');doc.setTextColor(30,40,55);
+    lAut.forEach(function(l,i){doc.text(l,xs[3]+2,ty+i*LH);});
+    doc.setFont('Montserrat','normal');doc.setTextColor(GRAY[0],GRAY[1],GRAY[2]);
+    lBlq.forEach(function(l,i){doc.text(l,xs[4]+2,ty+i*LH);});
+    doc.setTextColor(30,40,55);lExt.forEach(function(l,i){doc.text(l,xs[5]+2,ty+i*LH);});
+    doc.setTextColor(GRAY[0],GRAY[1],GRAY[2]);lGiro.forEach(function(l,i){doc.text(l,xs[6]+2,ty+i*LH);});
+    doc.setTextColor(150,70,20);lEst.forEach(function(l,i){doc.text(l,xs[7]+2,ty+i*LH);});
+    y+=rowH;
+  });
+  var total=doc.getNumberOfPages();
+  for(var p=1;p<=total;p++){doc.setPage(p);drawFooter(p,total);}
+  doc.save(_proyNombre('pdf'));
 }
 
 /* ── Comisiones ────────────────────────────────────────────────── */
@@ -3231,7 +3380,7 @@ function buildAmCard(d,idx){
   var comision=comLabel(d.comisionCabecera||(d.comisiones&&d.comisiones[0])||'');
   return '<div class="am-card" onclick="amOpenStory('+idx+')">'
     +'<div class="am-card-top">'+amCardBadge(d)+'<span class="am-exp-num am-od-num">'+(d.pendienteCuenta?esc(d.expedientes[0].codigo):'OD '+esc(d.numero)+'/'+esc(String(d.periodo).slice(-2)))+'</span>'+(d.minoria?'<span class="am-minoria-tag">Con minor&iacute;a</span>':'')+'</div>'
-    +(d.autor?'<div class="am-autor">'+esc(d.autor)+'</div>':'')
+    +'<div class="am-autor">'+esc(_amAutorTxt(d))+'</div>'
     +'<p class="am-desc">'+esc(d.descripcion)+'</p>'
     +'<div class="am-card-bottom"><span class="am-comision">'+esc(comision)+'</span><span class="am-read-hint">Ver ficha &rarr;</span></div>'
     +'</div>';
@@ -3343,6 +3492,14 @@ function _exportarAmXlsLegacy(){
    CONTENIDO por separado, comisión, fecha, minoría, firmantes y disidencias.
    El Excel usa ExcelJS (se carga recién al exportar). Si no se puede cargar,
    se baja la planilla simple de antes (.xls). */
+function _amAutorTxt(d){
+  if(d.autor)return d.autor;
+  var o=d.origen||'';
+  if(o==='Poder Ejecutivo')return 'Poder Ejecutivo';
+  if(o==='Cámara de Diputados')return 'Cámara de Diputados';
+  if(String(o).toLowerCase()==='ov')return 'Nota de un particular';
+  return 'Senado (sin autor individual)';
+}
 function _filasAyudaMemoria(){
   var filas=[];
   amFiltered.forEach(function(d){
@@ -3360,7 +3517,7 @@ function _filasAyudaMemoria(){
       filas.push({
         od:odNum, odUrl:d.odLink||null,
         exp:e.codigo||'', expUrl:e.url||null,
-        tipo:d.categoria||'', autor:d.autor||'', contenido:d.descripcion||'',
+        tipo:d.categoria||'', autor:_amAutorTxt(d), contenido:d.descripcion||'',
         comision:comision, fecha:d.fechaDictamen||'', minoria:!!d.minoria,
         firmantes:firmantes, disidencias:disid
       });
@@ -5992,7 +6149,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       <div class="results-panel">
         <div class="results-header">
           <span class="results-count" id="results-count"></span>
-          <button class="btn-export" onclick="exportarExcel()">&#128196; Exportar Excel</button>
+          <div class="am-export-btns"><button class="btn-export" onclick="exportarExcel()">&#128202; Exportar Excel</button><button class="btn-export" onclick="exportarProyectosPdf()">&#128196; Exportar PDF</button></div>
         </div>
         <div id="list" class="cards-grid"></div>
         <div class="pagination" id="pagination"></div>

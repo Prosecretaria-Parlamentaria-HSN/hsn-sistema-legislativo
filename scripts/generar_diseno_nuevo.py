@@ -704,16 +704,19 @@ BORRAR_JS = r"""<script>
   };
   function boton(fn){var b=document.createElement('button');b.type='button';b.className='bf-btn';
     b.innerHTML='&#10005; Borrar filtros';b.onclick=fn;return b;}
-  function poner(selector,fn,antes){
-    var ref=document.querySelector(selector); if(!ref||ref.parentNode.querySelector(':scope > .bf-btn[data-bf="'+selector+'"]'))return;
+  function poner(selector,fn,antes,afuera){
+    var ref=document.querySelector(selector); if(!ref)return;
+    var cont=ref.parentNode;
+    if(afuera&&cont.parentNode){ref=cont;cont=cont.parentNode;}
+    if(cont.querySelector(':scope > .bf-btn[data-bf="'+selector+'"]'))return;
     var b=boton(fn);b.setAttribute('data-bf',selector);
-    if(antes)ref.parentNode.insertBefore(b,ref);else ref.parentNode.insertBefore(b,ref.nextSibling);
+    if(antes)cont.insertBefore(b,ref);else cont.insertBefore(b,ref.nextSibling);
   }
   function init(){
     poner('#main-proyectos .filters-primary .checkbox-filter',ACC.proyectos);
     poner('#com-search',ACC.comisiones);
     poner('#agenda-comision-select',ACC.agenda,false);
-    poner('#am-bloque-select',ACC.ayuda,false);
+    poner('#am-bloque-select',ACC.ayuda,false,true);
     poner('#sanc-search',ACC.sanciones);
     poner('#sen-cnt',ACC.senadores,true);
     var pj=document.getElementById('pj-btn-clear');
@@ -731,6 +734,11 @@ VOLVER_CSS = """
 .vb-fab svg{width:26px;height:26px}
 @media (max-width:700px){.vb-fab{right:14px;bottom:18px;width:50px;height:50px}}
 @media print{.vb-fab,.bf-btn{display:none!important}}
+.am-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+.am-controls .search-box{flex:2 1 260px;min-width:220px;height:40px;margin:0;box-sizing:border-box}
+.am-controls .select-wrapper{flex:1 1 170px;width:auto;min-width:160px;max-width:none;margin:0}
+.am-controls .select-wrapper .filter-select{height:40px;width:100%;box-sizing:border-box}
+.am-controls .bf-btn{margin:0;height:40px;box-sizing:border-box;flex:0 0 auto;justify-content:center}
 """
 
 VOLVER_JS = r"""<script>
