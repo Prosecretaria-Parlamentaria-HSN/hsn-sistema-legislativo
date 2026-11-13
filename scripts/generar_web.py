@@ -40,7 +40,7 @@ TIPOS = {
 
 CSS = """
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Poppins',Calibri,sans-serif;background:#F5F7FA;color:#4A4A4A;font-size:15px;line-height:1.5}
+body{font-family:'Montserrat','Poppins',Calibri,sans-serif;background:#F5F7FA;color:#4A4A4A;font-size:15px;line-height:1.5}
 
 /* ── Topbar: header + navegación principal (sticky en bloque) ──────────── */
 .topbar{position:sticky;top:0;z-index:100}
@@ -552,6 +552,7 @@ table.cross-table tr:last-child td{border-bottom:none}
 .am-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}
 .am-count{font-size:12px;color:#9aacbd}
 .am-count-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.am-export-btns{display:flex;gap:8px;flex-wrap:wrap}
 .am-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
 .am-card{background:#fff;border:1px solid #D6E4F0;border-radius:10px;padding:14px 16px 12px;cursor:pointer;transition:all .15s;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
 .am-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px -12px rgba(27,94,162,0.35);border-color:#1B5EA2}
@@ -2579,27 +2580,27 @@ function exportProyPdf(){
   var rows=document.querySelectorAll('#proyTableBody tr[id^="proy-row-"]');
   if(!rows.length){alert('No hay integrantes para exportar.');return;}
   var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-  loadPoppins(doc);
+  loadFuentePdf(doc);
   var W=210,H=297,ML=15,MR=15;
   var BLUE=[27,94,162];var BLUE_LT=[214,228,240];var WHITE=[255,255,255];
   var d=new Date();
   var TODAY=d.getDate()+' de '+MESES_LARGO[d.getMonth()]+' de '+d.getFullYear();
   doc.setFillColor(BLUE[0],BLUE[1],BLUE[2]);doc.rect(0,0,W,18,'F');
   doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);
-  doc.setFont('Poppins','normal');doc.setFontSize(7);
+  doc.setFont('Montserrat','normal');doc.setFontSize(7);
   doc.text('SENADO DE LA NACIÓN',ML,6.5);
-  doc.setFont('Poppins','bold');doc.setFontSize(9.5);
+  doc.setFont('Montserrat','bold');doc.setFontSize(9.5);
   doc.text('PROSECRETARÍA PARLAMENTARIA',ML,13);
-  doc.setFont('Poppins','normal');doc.setFontSize(7);
+  doc.setFont('Montserrat','normal');doc.setFontSize(7);
   doc.text('PROYECCIÓN DE VOTACIÓN',W-MR,6.5,{align:'right'});
   doc.text(TODAY,W-MR,13,{align:'right'});
   doc.setFillColor(BLUE_LT[0],BLUE_LT[1],BLUE_LT[2]);doc.rect(0,18,W,0.8,'F');
   var y=26;
-  doc.setFont('Poppins','bold');doc.setFontSize(12);doc.setTextColor(BLUE[0],BLUE[1],BLUE[2]);
+  doc.setFont('Montserrat','bold');doc.setFontSize(12);doc.setTextColor(BLUE[0],BLUE[1],BLUE[2]);
   var titleLines=doc.splitTextToSize(nombreCom(c.nombre),180);
   titleLines.forEach(function(l){doc.text(l,ML,y);y+=6;});
   y+=2;
-  doc.setFont('Poppins','normal');doc.setFontSize(9);doc.setTextColor(74,74,74);
+  doc.setFont('Montserrat','normal');doc.setFontSize(9);doc.setTextColor(74,74,74);
   doc.text('Tema: '+tema,ML,y);y+=5;
   var vals=Object.values(PROY_VOTOS);
   var total=vals.length;
@@ -2613,14 +2614,14 @@ function exportProyPdf(){
   var dictColor=hayDictamen?[6,95,70]:[153,27,27];
   var dictBg=hayDictamen?[209,250,229]:[254,226,226];
   doc.setFillColor(dictBg[0],dictBg[1],dictBg[2]);doc.rect(ML,y-5,W-ML-MR,10,'F');
-  doc.setFont('Poppins','bold');doc.setFontSize(13);doc.setTextColor(dictColor[0],dictColor[1],dictColor[2]);
+  doc.setFont('Montserrat','bold');doc.setFontSize(13);doc.setTextColor(dictColor[0],dictColor[1],dictColor[2]);
   doc.text(hayDictamen?'HAY DICTAMEN':'NO HAY DICTAMEN',W/2,y+1,{align:'center'});
   y+=9;
-  doc.setFont('Poppins','normal');doc.setFontSize(9);doc.setTextColor(74,74,74);
+  doc.setFont('Montserrat','normal');doc.setFontSize(9);doc.setTextColor(74,74,74);
   doc.text(nMayoria+' mayoría · '+nMayoriaDis+' may. c/ disidencia · '+nMinoria+' minoría · '+nSin+' sin definir · '+total+' total',W/2,y,{align:'center'});
   y+=8;
   doc.setFillColor(BLUE[0],BLUE[1],BLUE[2]);doc.rect(ML,y,W-ML-MR,6,'F');
-  doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);doc.setFont('Poppins','bold');doc.setFontSize(7.5);
+  doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);doc.setFont('Montserrat','bold');doc.setFontSize(7.5);
   doc.text('NOMBRE',ML+2,y+4);doc.text('BLOQUE',ML+75,y+4);doc.text('CARGO',ML+130,y+4);doc.text('POSICIÓN',W-MR-2,y+4,{align:'right'});
   y+=8;
   var idx=0;
@@ -2629,12 +2630,12 @@ function exportProyPdf(){
     if(!row)break;
     if(y>H-20){
       doc.setDrawColor(BLUE_LT[0],BLUE_LT[1],BLUE_LT[2]);doc.setLineWidth(0.3);doc.line(ML,H-9,W-MR,H-9);
-      doc.setFont('Poppins','normal');doc.setFontSize(7);doc.setTextColor(150,150,150);
+      doc.setFont('Montserrat','normal');doc.setFontSize(7);doc.setTextColor(150,150,150);
       doc.text('Prosecretaría Parlamentaria',ML,H-5);doc.text(TODAY,W-MR,H-5,{align:'right'});
       doc.addPage();
       y=22;
       doc.setFillColor(BLUE[0],BLUE[1],BLUE[2]);doc.rect(ML,y,W-ML-MR,6,'F');
-      doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);doc.setFont('Poppins','bold');doc.setFontSize(7.5);
+      doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);doc.setFont('Montserrat','bold');doc.setFontSize(7.5);
       doc.text('NOMBRE',ML+2,y+4);doc.text('BLOQUE',ML+75,y+4);doc.text('CARGO',ML+130,y+4);doc.text('POSICIÓN',W-MR-2,y+4,{align:'right'});
       y+=8;
     }
@@ -2646,16 +2647,16 @@ function exportProyPdf(){
     var nombre=cells[1]?cells[1].textContent.trim():'';
     var bloque=cells[2]?cells[2].textContent.trim():'';
     var cargo=cells[3]?cells[3].textContent.trim():'';
-    doc.setFont('Poppins','normal');doc.setFontSize(8);doc.setTextColor(74,74,74);
+    doc.setFont('Montserrat','normal');doc.setFontSize(8);doc.setTextColor(74,74,74);
     doc.text(nombre.substring(0,40),ML+2,y+1);
     doc.text(bloque.substring(0,28),ML+75,y+1);
     doc.text(cargo.substring(0,20),ML+130,y+1);
-    doc.setTextColor(votoColor[0],votoColor[1],votoColor[2]);doc.setFont('Poppins','bold');
+    doc.setTextColor(votoColor[0],votoColor[1],votoColor[2]);doc.setFont('Montserrat','bold');
     doc.text(votoLabel,W-MR-2,y+1,{align:'right'});
     y+=6;idx++;
   }
   doc.setDrawColor(BLUE_LT[0],BLUE_LT[1],BLUE_LT[2]);doc.setLineWidth(0.3);doc.line(ML,H-9,W-MR,H-9);
-  doc.setFont('Poppins','normal');doc.setFontSize(7);doc.setTextColor(150,150,150);
+  doc.setFont('Montserrat','normal');doc.setFontSize(7);doc.setTextColor(150,150,150);
   doc.text('Prosecretaría Parlamentaria',ML,H-5);doc.text(TODAY,W-MR,H-5,{align:'right'});
   doc.save('proyeccion-'+nombreCom(c.nombre).replace(/[^a-zA-Z0-9]/g,'-').substring(0,30)+'.pdf');
 }
@@ -2750,11 +2751,11 @@ function mostrarDppHistDirecto(nombre,i){
 }
 /* ── Exportar integrantes de la comisión abierta a PDF (diseño del
       repo comisiones-senado, adaptado a una sola comisión) ──────── */
-function loadPoppins(doc){
-  doc.addFileToVFS('Poppins-Regular.ttf',FONT_POPPINS_REGULAR);
-  doc.addFont('Poppins-Regular.ttf','Poppins','normal');
-  doc.addFileToVFS('Poppins-Bold.ttf',FONT_POPPINS_BOLD);
-  doc.addFont('Poppins-Bold.ttf','Poppins','bold');
+function loadFuentePdf(doc){
+  doc.addFileToVFS('Montserrat-Regular.ttf',FONT_PDF_REGULAR);
+  doc.addFont('Montserrat-Regular.ttf','Montserrat','normal');
+  doc.addFileToVFS('Montserrat-Bold.ttf',FONT_PDF_BOLD);
+  doc.addFont('Montserrat-Bold.ttf','Montserrat','bold');
 }
 function exportarComisionPdf(){
   var c=comisionAbierta;
@@ -2763,7 +2764,7 @@ function exportarComisionPdf(){
   if(!jsPDFLib){alert('Error: jsPDF no cargó correctamente.');return}
   var jsPDF=jsPDFLib.jsPDF;
   var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-  loadPoppins(doc);
+  loadFuentePdf(doc);
   var W=210,H=297,ML=15,MR=15,pageW=180;
   var BLUE=[27,94,162],BLUE_LT=[214,228,240],GRAY=[74,74,74],WHITE=[255,255,255];
   var d=new Date();
@@ -2775,11 +2776,11 @@ function exportarComisionPdf(){
     doc.setFillColor(BLUE[0],BLUE[1],BLUE[2]);
     doc.rect(0,0,W,18,'F');
     doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);
-    doc.setFont('Poppins','normal');doc.setFontSize(7);
+    doc.setFont('Montserrat','normal');doc.setFontSize(7);
     doc.text('SENADO DE LA NACIÓN ARGENTINA',ML,6.5);
-    doc.setFont('Poppins','bold');doc.setFontSize(9.5);
+    doc.setFont('Montserrat','bold');doc.setFontSize(9.5);
     doc.text('PROSECRETARÍA PARLAMENTARIA',ML,13);
-    doc.setFont('Poppins','normal');doc.setFontSize(7);
+    doc.setFont('Montserrat','normal');doc.setFontSize(7);
     doc.text('INTEGRACIÓN DE COMISIONES · PERÍODO 2026',W-MR,6.5,{align:'right'});
     doc.text(TODAY,W-MR,13,{align:'right'});
     doc.setFillColor(BLUE_LT[0],BLUE_LT[1],BLUE_LT[2]);
@@ -2788,7 +2789,7 @@ function exportarComisionPdf(){
   function drawFooter(n,total){
     doc.setDrawColor(BLUE_LT[0],BLUE_LT[1],BLUE_LT[2]);doc.setLineWidth(0.3);
     doc.line(ML,H-9,W-MR,H-9);
-    doc.setFont('Poppins','normal');doc.setFontSize(7);doc.setTextColor(150,150,150);
+    doc.setFont('Montserrat','normal');doc.setFontSize(7);doc.setTextColor(150,150,150);
     doc.text('Prosecretaría Parlamentaria · Senado de la Nación Argentina',ML,H-5);
     doc.text('Página '+n+' de '+total,W/2,H-5,{align:'center'});
     doc.text('Documento generado automáticamente',W-MR,H-5,{align:'right'});
@@ -2803,11 +2804,11 @@ function exportarComisionPdf(){
 
   doc.setFillColor(BLUE[0],BLUE[1],BLUE[2]);
   doc.rect(ML,y,pageW,13,'F');
-  doc.setFont('Poppins','bold');doc.setFontSize(11);
+  doc.setFont('Montserrat','bold');doc.setFontSize(11);
   doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);
   var nameLines=doc.splitTextToSize(c.nombre,pageW-30);
   doc.text(nameLines[0],ML+3,y+8.5);
-  doc.setFont('Poppins','normal');doc.setFontSize(8);
+  doc.setFont('Montserrat','normal');doc.setFontSize(8);
   doc.setTextColor(BLUE_LT[0],BLUE_LT[1],BLUE_LT[2]);
   var vacantes=Math.max(0,(c.cupo||0)-c.integrantes.length);
   var totalTxt=vacantes>0
@@ -2818,7 +2819,7 @@ function exportarComisionPdf(){
 
   doc.setFillColor(BLUE_LT[0],BLUE_LT[1],BLUE_LT[2]);
   doc.rect(ML,y,pageW,6.5,'F');
-  doc.setFont('Poppins','bold');doc.setFontSize(7.5);
+  doc.setFont('Montserrat','bold');doc.setFontSize(7.5);
   doc.setTextColor(BLUE[0],BLUE[1],BLUE[2]);
   doc.text('SENADOR/A',ML+8,y+4.5);
   doc.text('BLOQUE',ML+80,y+4.5);
@@ -2832,7 +2833,7 @@ function exportarComisionPdf(){
     if(m.vacante){
       doc.setDrawColor(176,186,197);doc.setLineWidth(0.3);
       doc.circle(ML+4.5,y+ROW_H/2,1.4,'S');
-      doc.setFont('Poppins','normal');doc.setFontSize(8.5);
+      doc.setFont('Montserrat','normal');doc.setFontSize(8.5);
       doc.setTextColor(154,161,166);
       doc.text('Vacante',ML+8,y+ROW_H/2+1.3);
       doc.setDrawColor(241,245,249);doc.setLineWidth(0.2);
@@ -2844,25 +2845,25 @@ function exportarComisionPdf(){
     var hex=bc.dot.replace('#','');
     doc.setFillColor(parseInt(hex.substring(0,2),16),parseInt(hex.substring(2,4),16),parseInt(hex.substring(4,6),16));
     doc.circle(ML+4.5,y+ROW_H/2,1.4,'F');
-    doc.setFont('Poppins','normal');doc.setFontSize(8.5);
+    doc.setFont('Montserrat','normal');doc.setFontSize(8.5);
     doc.setTextColor(GRAY[0],GRAY[1],GRAY[2]);
     doc.text(m.nombre,ML+8,y+ROW_H/2+1.3);
     doc.setFontSize(7.5);doc.setTextColor(100,100,100);
     var bname=m.bloque||'';
     doc.text(bname.length>26?bname.substring(0,24)+'…':bname,ML+80,y+ROW_H/2+1.3);
-    doc.setFont('Poppins','bold');doc.setFontSize(7.5);
+    doc.setFont('Montserrat','bold');doc.setFontSize(7.5);
     if(m.rol==='Presidente'){doc.setTextColor(30,64,175);doc.text('Presidente/a',ML+133,y+ROW_H/2+1.3);}
     else if(m.rol==='Vicepresidente'){doc.setTextColor(124,58,237);doc.text('Vicepresidente/a',ML+133,y+ROW_H/2+1.3);}
     else if(m.rol==='Secretario'){doc.setTextColor(6,95,70);doc.text('Secretario/a',ML+133,y+ROW_H/2+1.3);}
     else{doc.setTextColor(150,150,150);doc.text('Vocal',ML+133,y+ROW_H/2+1.3);}
-    doc.setFont('Poppins','normal');doc.setTextColor(GRAY[0],GRAY[1],GRAY[2]);
+    doc.setFont('Montserrat','normal');doc.setTextColor(GRAY[0],GRAY[1],GRAY[2]);
     if(m.dpp){
       doc.setFillColor(255,243,205);
       doc.roundedRect(W-MR-19,y+1.5,17,4,1,1,'F');
-      doc.setFont('Poppins','bold');doc.setFontSize(6.5);
+      doc.setFont('Montserrat','bold');doc.setFontSize(6.5);
       doc.setTextColor(122,82,0);
       doc.text('DPP-'+m.dpp,W-MR-10.5,y+ROW_H/2+0.8,{align:'center'});
-      doc.setFont('Poppins','normal');doc.setTextColor(GRAY[0],GRAY[1],GRAY[2]);
+      doc.setFont('Montserrat','normal');doc.setTextColor(GRAY[0],GRAY[1],GRAY[2]);
     }
     doc.setDrawColor(241,245,249);doc.setLineWidth(0.2);
     doc.line(ML,y+ROW_H,W-MR,y+ROW_H);
@@ -3324,7 +3325,7 @@ function _construirXmlAyudaMemoria(){
   xml+='</Table></Worksheet></Workbook>';
   return xml;
 }
-function exportarAyudaMemoria(){
+function _exportarAmXlsLegacy(){
   if(!amFiltered.length){alert('No hay expedientes para exportar con el filtro actual.');return}
   var xml=_construirXmlAyudaMemoria();
   var blob=new Blob([xml],{type:'application/vnd.ms-excel'});
@@ -3336,6 +3337,271 @@ function exportarAyudaMemoria(){
   a.click();
   document.body.removeChild(a);
   setTimeout(function(){URL.revokeObjectURL(url);},1000);
+}
+/* ── Ayuda Memoria: exportar (según filtros) a Excel con formato (.xlsx) y a PDF ──
+   Una fila por expediente. Columnas: OD, expediente, TIPO DE PROYECTO, AUTOR/ES y
+   CONTENIDO por separado, comisión, fecha, minoría, firmantes y disidencias.
+   El Excel usa ExcelJS (se carga recién al exportar). Si no se puede cargar,
+   se baja la planilla simple de antes (.xls). */
+function _filasAyudaMemoria(){
+  var filas=[];
+  amFiltered.forEach(function(d){
+    var firmantes=(d.firmantesMayoria||[]).join('; ');
+    var disid=[];
+    (d.disidencias||[]).forEach(function(ds){
+      if(!ds.firmantes||!ds.firmantes.length)return;
+      var lab=ds.tipo==='parcial'?'En disidencia parcial':ds.tipo==='total'?'En disidencia total':'En disidencia';
+      disid.push(lab+': '+ds.firmantes.join('; '));
+    });
+    var comision=comLabel(d.comisionCabecera||(d.comisiones&&d.comisiones[0])||'');
+    var odNum=d.pendienteCuenta?'Para dar cuenta':d.numero+'/'+String(d.periodo).slice(-2)+(d.tipoOD==='ANEXO'?' (Anexo)':'');
+    var exps=(d.expedientes&&d.expedientes.length)?d.expedientes:[{codigo:'',url:null}];
+    exps.forEach(function(e){
+      filas.push({
+        od:odNum, odUrl:d.odLink||null,
+        exp:e.codigo||'', expUrl:e.url||null,
+        tipo:d.categoria||'', autor:d.autor||'', contenido:d.descripcion||'',
+        comision:comision, fecha:d.fechaDictamen||'', minoria:!!d.minoria,
+        firmantes:firmantes, disidencias:disid
+      });
+    });
+  });
+  return filas;
+}
+function _amTextoFiltros(){
+  var p=[];
+  if(amCat!=='Todos')p.push(amCat);
+  if(amComision)p.push('Comisión: '+comLabel(amComision));
+  if(amAutor)p.push('Autor: '+amAutor);
+  if(amBloque)p.push('Bloque (autor): '+amBloque);
+  if(amSearch)p.push('Búsqueda: '+amSearch);
+  return p.length?p.join('  ·  '):'Sin filtros';
+}
+function _amHoyLargo(){
+  var d=new Date();
+  return d.getDate()+' de '+MESES_LARGO[d.getMonth()]+' de '+d.getFullYear();
+}
+function _amNombreArchivo(ext){
+  return 'ayuda_memoria_'+new Date().toISOString().slice(0,10)+'.'+ext;
+}
+function _amDescargar(blob,nombre){
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download=nombre;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(url);},1000);
+}
+function _amCargarExcelJS(ok,fallo){
+  if(window.ExcelJS){ok();return}
+  var s=document.createElement('script');
+  s.src='https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js';
+  s.onload=ok;s.onerror=fallo;
+  document.head.appendChild(s);
+}
+function _amXlsxBuffer(filas,textoFiltros,hoy){
+  var AZUL='FF1B5EA2',AZUL_CL='FFD6E4F0',ZEBRA='FFF4F7FB';
+  var cols=[
+    {h:'OD N°',w:13},{h:'Expte N°',w:15},{h:'Tipo de proyecto',w:20},{h:'Autor/es',w:28},
+    {h:'Contenido',w:62},{h:'Comisión cabecera',w:28},{h:'Fecha de dictamen',w:13},
+    {h:'Dictamen en minoría',w:12},{h:'Firmantes de mayoría',w:48},{h:'Disidencias',w:34}
+  ];
+  var N=cols.length;
+  var wb=new ExcelJS.Workbook();
+  wb.creator='Prosecretaría Parlamentaria';wb.created=new Date();
+  var ws=wb.addWorksheet('Ayuda Memoria',{
+    views:[{state:'frozen',ySplit:4}],
+    pageSetup:{orientation:'landscape',paperSize:9,fitToPage:true,fitToWidth:1,fitToHeight:0,
+      margins:{left:0.4,right:0.4,top:0.5,bottom:0.5,header:0.2,footer:0.2}}
+  });
+  ws.columns=cols.map(function(c){return {width:c.w}});
+  var borde={style:'thin',color:{argb:AZUL_CL}};
+  var bordes={top:borde,left:borde,bottom:borde,right:borde};
+
+  ws.mergeCells(1,1,1,N);
+  var c1=ws.getCell(1,1);
+  c1.value='SENADO DE LA NACIÓN ARGENTINA  ·  PROSECRETARÍA PARLAMENTARIA';
+  c1.font={bold:true,size:10,color:{argb:'FFFFFFFF'}};
+  c1.fill={type:'pattern',pattern:'solid',fgColor:{argb:AZUL}};
+  c1.alignment={vertical:'middle',indent:1};
+  ws.getRow(1).height=22;
+
+  ws.mergeCells(2,1,2,N);
+  var c2=ws.getCell(2,1);
+  c2.value='Ayuda Memoria  ·  '+hoy;
+  c2.font={bold:true,size:15,color:{argb:AZUL}};
+  c2.alignment={vertical:'middle',indent:1};
+  ws.getRow(2).height=28;
+
+  ws.mergeCells(3,1,3,N);
+  var c3=ws.getCell(3,1);
+  c3.value=filas.length+' expedientes  ·  '+textoFiltros;
+  c3.font={italic:true,size:10,color:{argb:'FF6B7788'}};
+  c3.alignment={vertical:'middle',indent:1};
+  ws.getRow(3).height=18;
+
+  var hr=ws.getRow(4);
+  cols.forEach(function(c,i){
+    var cell=hr.getCell(i+1);
+    cell.value=c.h;
+    cell.font={bold:true,size:10,color:{argb:'FFFFFFFF'}};
+    cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:AZUL}};
+    cell.alignment={vertical:'middle',horizontal:'center',wrapText:true};
+    cell.border=bordes;
+  });
+  hr.height=32;
+
+  filas.forEach(function(f,i){
+    var r=ws.getRow(5+i);
+    var vals=[f.od,f.exp,f.tipo,f.autor,f.contenido,f.comision,f.fecha,f.minoria?'Sí':'No',f.firmantes,f.disidencias.join('\n')];
+    vals.forEach(function(v,j){
+      var cell=r.getCell(j+1);
+      var url=j===0?f.odUrl:(j===1?f.expUrl:null);
+      if(url&&v){
+        cell.value={text:v,hyperlink:url};
+        cell.font={size:10,color:{argb:AZUL},underline:true};
+      }else{
+        cell.value=v;
+        cell.font={size:10,color:{argb:'FF1F2933'},bold:(j===0)};
+      }
+      cell.alignment={vertical:'top',wrapText:true,horizontal:(j===0||j===1||j===6||j===7)?'center':'left'};
+      cell.border=bordes;
+      if(i%2===1)cell.fill={type:'pattern',pattern:'solid',fgColor:{argb:ZEBRA}};
+    });
+  });
+  ws.autoFilter={from:{row:4,column:1},to:{row:4+Math.max(filas.length,1),column:N}};
+  ws.pageSetup.printTitlesRow='4:4';
+  ws.headerFooter={oddFooter:'&L&8Prosecretaría Parlamentaria · Senado de la Nación Argentina&C&8Página &P de &N&R&8'+hoy};
+  return wb.xlsx.writeBuffer();
+}
+function exportarAyudaMemoria(){
+  if(!amFiltered.length){alert('No hay expedientes para exportar con el filtro actual.');return}
+  _amCargarExcelJS(function(){
+    _amXlsxBuffer(_filasAyudaMemoria(),_amTextoFiltros(),_amHoyLargo()).then(function(buf){
+      _amDescargar(new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),_amNombreArchivo('xlsx'));
+    }).catch(function(){_exportarAmXlsLegacy()});
+  },function(){_exportarAmXlsLegacy()});
+}
+function exportarAyudaMemoriaPdf(){
+  if(!amFiltered.length){alert('No hay expedientes para exportar con el filtro actual.');return}
+  var jsPDFLib=window.jspdf;
+  if(!jsPDFLib){alert('Error: jsPDF no cargó correctamente.');return}
+  var filas=_filasAyudaMemoria();
+  var doc=new jsPDFLib.jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+  loadFuentePdf(doc);
+  var W=297,H=210,ML=12,MR=12;
+  var BLUE=[27,94,162],BLUE_LT=[214,228,240],GRAY=[74,74,74],WHITE=[255,255,255],ZEBRA=[244,247,251];
+  var hoy=_amHoyLargo();
+  var cols=[
+    {t:'OD N°',w:20},{t:'EXPTE N°',w:26},{t:'TIPO',w:24},{t:'AUTOR/ES',w:36},
+    {t:'CONTENIDO Y FIRMANTES',w:111},{t:'COMISIÓN CABECERA',w:34},{t:'DICTAMEN',w:22}
+  ];
+  var xs=[],acc=ML;
+  cols.forEach(function(c){xs.push(acc);acc+=c.w;});
+  var TW=acc-ML,BOTTOM=H-14,y=0;
+
+  function drawHeader(){
+    doc.setFillColor(BLUE[0],BLUE[1],BLUE[2]);doc.rect(0,0,W,16,'F');
+    doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);
+    doc.setFont('Montserrat','normal');doc.setFontSize(7);
+    doc.text('SENADO DE LA NACIÓN ARGENTINA',ML,6);
+    doc.setFont('Montserrat','bold');doc.setFontSize(9.5);
+    doc.text('PROSECRETARÍA PARLAMENTARIA',ML,12);
+    doc.setFont('Montserrat','normal');doc.setFontSize(7);
+    doc.text('AYUDA MEMORIA',W-MR,6,{align:'right'});
+    doc.text(hoy,W-MR,12,{align:'right'});
+    doc.setFillColor(BLUE_LT[0],BLUE_LT[1],BLUE_LT[2]);doc.rect(0,16,W,0.8,'F');
+  }
+  function drawFooter(n,total){
+    doc.setDrawColor(BLUE_LT[0],BLUE_LT[1],BLUE_LT[2]);doc.setLineWidth(0.3);
+    doc.line(ML,H-9,W-MR,H-9);
+    doc.setFont('Montserrat','normal');doc.setFontSize(7);doc.setTextColor(150,150,150);
+    doc.text('Prosecretaría Parlamentaria · Senado de la Nación Argentina',ML,H-5);
+    doc.text('Página '+n+' de '+total,W/2,H-5,{align:'center'});
+    doc.text('Documento generado automáticamente',W-MR,H-5,{align:'right'});
+  }
+  function drawTableHeader(){
+    doc.setFillColor(BLUE[0],BLUE[1],BLUE[2]);doc.rect(ML,y,TW,7,'F');
+    doc.setFont('Montserrat','bold');doc.setFontSize(6.8);doc.setTextColor(WHITE[0],WHITE[1],WHITE[2]);
+    cols.forEach(function(c,i){doc.text(c.t,xs[i]+2,y+4.6);});
+    y+=7;
+  }
+  function nuevaPagina(){
+    doc.addPage();drawHeader();y=22;drawTableHeader();
+  }
+
+  drawHeader();
+  y=26;
+  doc.setFont('Montserrat','bold');doc.setFontSize(14);doc.setTextColor(BLUE[0],BLUE[1],BLUE[2]);
+  doc.text('Ayuda Memoria',ML,y);
+  y+=5.5;
+  doc.setFont('Montserrat','normal');doc.setFontSize(8);doc.setTextColor(GRAY[0],GRAY[1],GRAY[2]);
+  var sub=filas.length+' expedientes  ·  '+_amTextoFiltros();
+  doc.splitTextToSize(sub,TW).forEach(function(l){doc.text(l,ML,y);y+=4;});
+  y+=2;
+  drawTableHeader();
+
+  filas.forEach(function(f,idx){
+    var LH=3.3,LH2=2.9;
+    doc.setFont('Montserrat','normal');doc.setFontSize(7.2);
+    var lOD=doc.splitTextToSize(f.od,cols[0].w-4);
+    var lExp=doc.splitTextToSize(f.exp,cols[1].w-4);
+    var lTipo=doc.splitTextToSize(f.tipo,cols[2].w-4);
+    var lCom=doc.splitTextToSize(f.comision,cols[5].w-4);
+    var lFec=doc.splitTextToSize(f.fecha,cols[6].w-3);
+    var lCont=doc.splitTextToSize(f.contenido,cols[4].w-5);
+    doc.setFont('Montserrat','bold');
+    var lAut=doc.splitTextToSize(f.autor||'—',cols[3].w-4);
+    doc.setFont('Montserrat','normal');doc.setFontSize(6.3);
+    var lFir=f.firmantes?doc.splitTextToSize('Firman: '+f.firmantes,cols[4].w-5):[];
+    var lDis=[];
+    f.disidencias.forEach(function(t){doc.splitTextToSize(t,cols[4].w-5).forEach(function(l){lDis.push(l)})});
+    var hCont=lCont.length*LH+(lFir.length+lDis.length?1.2:0)+(lFir.length+lDis.length)*LH2;
+    var hMin=Math.max(lOD.length,lExp.length,lTipo.length,lAut.length,lCom.length,lFec.length+(f.minoria?1:0))*LH;
+    var rowH=Math.max(hCont,hMin)+3.4;
+    if(y+rowH>BOTTOM)nuevaPagina();
+    if(idx%2===1){doc.setFillColor(ZEBRA[0],ZEBRA[1],ZEBRA[2]);doc.rect(ML,y,TW,rowH,'F');}
+    doc.setDrawColor(BLUE_LT[0],BLUE_LT[1],BLUE_LT[2]);doc.setLineWidth(0.2);
+    doc.line(ML,y+rowH,ML+TW,y+rowH);
+    var ty=y+4.2;
+    // OD (con enlace)
+    doc.setFont('Montserrat','bold');doc.setFontSize(7.2);
+    doc.setTextColor(BLUE[0],BLUE[1],BLUE[2]);
+    lOD.forEach(function(l,i){doc.text(l,xs[0]+2,ty+i*LH);});
+    if(f.odUrl)doc.link(xs[0]+1,y+1,cols[0].w-2,LH*lOD.length+1.5,{url:f.odUrl});
+    // Expediente (con enlace)
+    doc.setFont('Montserrat','normal');
+    lExp.forEach(function(l,i){doc.text(l,xs[1]+2,ty+i*LH);});
+    if(f.expUrl)doc.link(xs[1]+1,y+1,cols[1].w-2,LH*lExp.length+1.5,{url:f.expUrl});
+    // Tipo
+    doc.setTextColor(GRAY[0],GRAY[1],GRAY[2]);
+    lTipo.forEach(function(l,i){doc.text(l,xs[2]+2,ty+i*LH);});
+    // Autor/es
+    doc.setFont('Montserrat','bold');doc.setTextColor(30,40,55);
+    lAut.forEach(function(l,i){doc.text(l,xs[3]+2,ty+i*LH);});
+    // Contenido + firmantes
+    doc.setFont('Montserrat','normal');doc.setFontSize(7.2);doc.setTextColor(30,40,55);
+    lCont.forEach(function(l,i){doc.text(l,xs[4]+2,ty+i*LH);});
+    var fy=ty+lCont.length*LH+0.6;
+    doc.setFontSize(6.3);doc.setTextColor(110,120,135);
+    lFir.forEach(function(l,i){doc.text(l,xs[4]+2,fy+i*LH2);});
+    fy+=lFir.length*LH2;
+    doc.setTextColor(150,70,20);
+    lDis.forEach(function(l,i){doc.text(l,xs[4]+2,fy+i*LH2);});
+    // Comisión
+    doc.setFont('Montserrat','normal');doc.setFontSize(7.2);doc.setTextColor(GRAY[0],GRAY[1],GRAY[2]);
+    lCom.forEach(function(l,i){doc.text(l,xs[5]+2,ty+i*LH);});
+    // Fecha y minoría
+    lFec.forEach(function(l,i){doc.text(l,xs[6]+2,ty+i*LH);});
+    if(f.minoria){
+      doc.setFont('Montserrat','bold');doc.setFontSize(6.2);doc.setTextColor(150,70,20);
+      doc.text('Con minoría',xs[6]+2,ty+lFec.length*LH);
+    }
+    y+=rowH;
+  });
+
+  var total=doc.getNumberOfPages();
+  for(var p=1;p<=total;p++){doc.setPage(p);drawFooter(p,total);}
+  doc.save(_amNombreArchivo('pdf'));
 }
 function amBuildPendiente(d){
   var exp=d.expedientes[0];
@@ -6299,7 +6565,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           <div class="am-chips" id="am-chips"></div>
           <div class="am-count-row">
             <div class="am-count" id="am-count"></div>
-            <button class="btn-export" onclick="exportarAyudaMemoria()">&#128190; Exportar (seg&uacute;n filtros)</button>
+            <div class="am-export-btns"><button class="btn-export" onclick="exportarAyudaMemoria()">&#128202; Exportar Excel</button><button class="btn-export" onclick="exportarAyudaMemoriaPdf()">&#128196; Exportar PDF</button></div>
           </div>
           <div class="am-grid" id="am-grid"></div>
         </div>
@@ -6402,6 +6668,8 @@ var FOTOS_SENADORES = {fotos_senadores};
 var PLIEGOS_DATA = {pliegos_data};
 var FONT_POPPINS_REGULAR = "{font_regular}";
 var FONT_POPPINS_BOLD = "{font_bold}";
+var FONT_PDF_REGULAR = "{font_pdf_regular}";
+var FONT_PDF_BOLD = "{font_pdf_bold}";
 {js}
 init();
 if(location.hash&&!window.pjSyncHash()&&!abrirReunionDesdeHash())activateMain(location.hash.slice(1).split('/')[0]);
@@ -7267,7 +7535,7 @@ def _cargar_pliegos_base():
     if os.getenv("PLIEGOS_OFFLINE") != "1":
         try:
             req = urllib.request.Request(PLIEGOS_URL, headers={
-                "User-Agent": "HSN-SistemaLegislativo/1.0 (+https://github.com/bonifaciomariano/hsn-sistema-legislativo)"})
+                "User-Agent": "HSN-SistemaLegislativo/1.0 (+https://github.com/Prosecretaria-Parlamentaria-HSN/hsn-sistema-legislativo)"})
             with urllib.request.urlopen(req, timeout=30) as r:
                 crudo = r.read()
             data = json.loads(crudo.decode("utf-8"))
@@ -7477,6 +7745,8 @@ def main():
     pliegos = cargar_pliegos()
     pliegos_js = json.dumps(pliegos, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     fonts = _cargar("fonts_poppins.json", {})
+    # Fuente de los PDF: Montserrat (data/fonts_montserrat.json); si el archivo falta, se usa Poppins.
+    fonts_pdf = _cargar("fonts_montserrat.json", {}) or fonts
     fecha = datetime.now(timezone.utc).astimezone(timezone(timedelta(hours=-3))).strftime("%d/%m/%Y %H:%M")
 
     html = HTML_TEMPLATE.format(
@@ -7493,6 +7763,8 @@ def main():
         fotos_senadores=fotos_senadores_js,
         font_regular=fonts.get("regular", ""),
         font_bold=fonts.get("bold", ""),
+        font_pdf_regular=fonts_pdf.get("regular", ""),
+        font_pdf_bold=fonts_pdf.get("bold", ""),
         fecha=fecha,
         com_hint=com_hint,
         agenda_hint=agenda_hint,
