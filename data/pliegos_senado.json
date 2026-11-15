@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-14 17:28",
+ "generado": "2026-11-15 18:14",
  "pliegos": {
   "PE-103/26": {
    "archivo": "11/09/2026",
@@ -1866,15 +1866,6 @@
    "sancion": "aprobada",
    "sancion_fecha": "04/06/2026"
   },
-  "PE-282/26": {
-   "archivo": null,
-   "dado_cuenta": "17/09/2026",
-   "dae": "29/26",
-   "ingreso": "28/08/2026",
-   "od": null,
-   "sancion": "",
-   "sancion_fecha": null
-  },
   "PE-283/26": {
    "archivo": null,
    "dado_cuenta": "17/09/2026",
@@ -1885,15 +1876,6 @@
    "sancion_fecha": null
   },
   "PE-284/26": {
-   "archivo": null,
-   "dado_cuenta": "17/09/2026",
-   "dae": "29/26",
-   "ingreso": "28/08/2026",
-   "od": null,
-   "sancion": "",
-   "sancion_fecha": null
-  },
-  "PE-285/26": {
    "archivo": null,
    "dado_cuenta": "17/09/2026",
    "dae": "29/26",
@@ -2514,57 +2496,6 @@
     "provincia": "CABA",
     "rango": "Defensor/a",
     "url": "https://www.senado.gob.ar/parlamentario/comisiones/verExp/351.26/PE/AC"
-   },
-   "od": null,
-   "sancion": "",
-   "sancion_fecha": null
-  },
-  "PE-352/26": {
-   "archivo": null,
-   "dado_cuenta": null,
-   "dae": "33/26",
-   "ingreso": "30/10/2026",
-   "nuevo": {
-    "candidato": "GERARDO DAMIAN SANTICCHIA",
-    "cargo": "VOCAL DE LA CAMARA NACIONAL DE APELACIONES EN LO COMERCIAL DE LA CAPITAL FEDERAL, SALA E",
-    "fuero": "Comercial",
-    "provincia": "CABA",
-    "rango": "Camarista / Vocal de Cámara",
-    "url": "https://www.senado.gob.ar/parlamentario/comisiones/verExp/352.26/PE/AC"
-   },
-   "od": null,
-   "sancion": "",
-   "sancion_fecha": null
-  },
-  "PE-353/26": {
-   "archivo": null,
-   "dado_cuenta": null,
-   "dae": "33/26",
-   "ingreso": "30/10/2026",
-   "nuevo": {
-    "candidato": "HUMBERTO CARLOS GUARDIA MENDONCA",
-    "cargo": "VOCAL DE LA CAMARA NACIONAL DE APELACIONES EN LO CIVIL Y COMERCIAL FEDERAL DE LA CAPITAL FEDERAL, SALA ESPECIALIZADA EN DEFENSA DE LA COMPETENCIA",
-    "fuero": "Comercial",
-    "provincia": "CABA",
-    "rango": "Camarista / Vocal de Cámara",
-    "url": "https://www.senado.gob.ar/parlamentario/comisiones/verExp/353.26/PE/AC"
-   },
-   "od": null,
-   "sancion": "",
-   "sancion_fecha": null
-  },
-  "PE-354/26": {
-   "archivo": null,
-   "dado_cuenta": null,
-   "dae": "33/26",
-   "ingreso": "30/10/2026",
-   "nuevo": {
-    "candidato": "SANTIAGO ROCA",
-    "cargo": "VOCAL DE LA CAMARA NACIONAL DE APELACIONES EN LO CIVIL Y COMERCIAL FEDERAL DE LA CAPITAL FEDERAL, SALA ESPECIALIZADA EN DEFENSA DE LA COMPETENCIA",
-    "fuero": "Comercial",
-    "provincia": "CABA",
-    "rango": "Camarista / Vocal de Cámara",
-    "url": "https://www.senado.gob.ar/parlamentario/comisiones/verExp/354.26/PE/AC"
    },
    "od": null,
    "sancion": "",
