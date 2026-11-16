@@ -54,6 +54,13 @@ jobs:
       - name: Instalar dependencias
         run: pip install -r requirements.txt
 
+      # OCR para leer la fecha/hora/salón de los boletines de agenda (diseño
+      # gráfico desde el boletín 150/26: esa línea es una imagen vectorial).
+      - name: Instalar OCR (tesseract)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-spa
+
       # ── Franja 9:00 ART: DPP + agenda (livianos) ─────────────────────────
       # ── Padrón de senadores (bloques/vigencia) desde el Senado: va ANTES de DPP ──
       - name: Actualizar padrón de senadores (Senado)
