@@ -45,6 +45,10 @@ import re
 import sys
 import time
 import unicodedata
+import datetime
+import shutil
+import subprocess
+import tempfile
 
 try:
     import requests
@@ -68,7 +72,7 @@ URL_BOLETINES = f"{BASE_URL}/parlamentario/boletines/"
 # su JavaScript -- un User-Agent propio y honesto pasa sin problema. Verificado
 # en las 6 fuentes que usa la app y desde 3 redes distintas. NO volver a poner
 # un UA de navegador "para disimular": es exactamente lo que se bloquea.
-HEADERS = {"User-Agent": "HSN-SistemaLegislativo/1.0 (+https://github.com/bonifaciomariano/hsn-sistema-legislativo)"}
+HEADERS = {"User-Agent": "HSN-SistemaLegislativo/1.0 (+https://github.com/Prosecretaria-Parlamentaria-HSN/hsn-sistema-legislativo)"}
 
 DIAS_SEMANA = re.compile(
     r"\b(LUNES|MARTES|MI[EÉ]RCOLES|JUEVES|VIERNES|S[AÁ]BADO|DOMINGO)\b", re.IGNORECASE)
@@ -571,6 +575,181 @@ def parsear_reuniones_texto_libre(texto, comisiones_norm):
     return reuniones
 
 
+
+# ─────────────────────────────── Boletín con diseño gráfico (desde 150/26) ──
+# Desde el boletín 150/26 el PDF es un diseño gráfico: los títulos (sección,
+# comisión, "TEMARIO") y los expedientes son texto con tamaños de letra fijos,
+# pero la "pastilla" con DÍA FECHA | HORA | SALÓN está dibujada como forma
+# vectorial (no tiene texto extraíble). Esa línea se lee con OCR (tesseract).
+TAM_SECCION = 28      # "REUNIONES DE SENADORES / ASESORES" (33 pt)
+TAM_COMISION = 17     # nombre de comisión (20 pt)
+TAM_SUBTITULO = 14.5  # gris, ej. "AUDIENCIA PÚBLICA" (15 pt)
+TAM_TEMARIO = 13      # "TEMARIO" (14 pt)
+TAM_GRUPO = 11        # "PROYECTO DE LEY" (12 pt, negro)
+RE_PASTILLA = re.compile(
+    r"(LUNES|MARTES|MI[EÉ]RCOLES|JUEVES|VIERNES|S[AÁ]BADO|DOMINGO)\s+(\d{1,2})\s+DE\s+([A-ZÁÉÍÓÚÑ]+)\s*[|!Il]?\s*(.+?)\s*[|!Il]\s*(SAL[OÓ]N\s+.+)$",
+    re.IGNORECASE)
+PALABRAS_COLGANTES = {"DE", "DEL", "LA", "LOS", "LAS", "Y", "E", "EN", "PARA", "CON", "A", "AL", "O"}
+
+
+def _es_formato_grafico(pdf):
+    """¿Boletín de diseño gráfico? Tiene líneas "TEMARIO" en tipografía grande
+    (en el formato tabular 'TEMARIO' es sólo el encabezado de una columna)."""
+    for page in pdf.pages[:3]:
+        for ch in page.chars:
+            if ch["size"] >= TAM_TEMARIO and "Roboto" in ch.get("fontname", ""):
+                return True
+    return False
+
+
+def _ocr_pastilla(page, top):
+    """Lee la pastilla de fecha/hora/salón que está justo arriba de la línea
+    'TEMARIO' (ubicada en `top`). Devuelve (dia, fecha 'dd/mm', hora, salon)."""
+    if shutil.which("tesseract") is None:
+        raise RuntimeError("tesseract no está instalado (apt-get install tesseract-ocr tesseract-ocr-spa)")
+    y0 = max(0, top - 66)
+    y1 = max(y0 + 10, top - 2)
+    recorte = page.crop((0, y0, page.width, y1))
+    with tempfile.TemporaryDirectory() as tmp:
+        img = os.path.join(tmp, "p.png")
+        recorte.to_image(resolution=300).save(img, format="PNG")
+        for lang in ("spa", "eng"):
+            for psm in ("6", "7", "11"):
+                r = subprocess.run(["tesseract", img, "-", "-l", lang, "--psm", psm],
+                                   capture_output=True, text=True)
+                for linea in r.stdout.splitlines():
+                    m = RE_PASTILLA.search(linea.strip())
+                    if not m:
+                        continue
+                    dia, dd, mes_txt, hora_txt, salon_txt = m.groups()
+                    mes_num = MESES_NOMBRE.get(unicodedata.normalize("NFC", mes_txt.upper()))
+                    if not mes_num:
+                        continue
+                    hora_txt = hora_txt.strip().upper()
+                    if "CONTINUACI" in hora_txt:
+                        hora = "A continuación"
+                    else:
+                        hm = re.search(r"(\d{1,2})[:.](\d{2})", hora_txt)
+                        if not hm:
+                            continue
+                        hora = f"{int(hm.group(1))}:{hm.group(2)}"
+                    salon_txt = re.sub(r"\s+", " ", salon_txt).strip(" |.")
+                    salon = re.sub(r"^SAL[OÓ]N\s+", "", salon_txt, flags=re.IGNORECASE)
+                    return dia.upper(), f"{int(dd):02d}/{mes_num:02d}", hora, salon.upper(), salon_txt.upper()
+    return None
+
+
+def _unir_titulos(lineas, comisiones_norm):
+    """Junta títulos de comisión partidos en 2 renglones (p.ej. "... DEL" +
+    "SEGUIMIENTO DE ..."); si no se parte, cada renglón es una comisión."""
+    res = []
+    i = 0
+    while i < len(lineas):
+        actual = lineas[i].strip()
+        while i + 1 < len(lineas):
+            sig = lineas[i + 1].strip()
+            ultima = actual.upper().split()[-1] if actual.split() else ""
+            if (ultima in PALABRAS_COLGANTES
+                    or _norm_com(actual + " " + sig) in comisiones_norm):
+                actual = actual + " " + sig
+                i += 1
+            else:
+                break
+        res.append(actual)
+        i += 1
+    return res
+
+
+def parsear_boletin_grafico(pdf, comisiones_norm):
+    """Parsea el diseño gráfico. Devuelve (reuniones, texto)."""
+    # 1) Líneas con tamaño/negrita, en orden de lectura
+    lineas = []
+    for pn, page in enumerate(pdf.pages):
+        for l in page.extract_text_lines(return_chars=True, x_tolerance=3, y_tolerance=3):
+            chars = [c for c in l["chars"] if c["text"].strip() and c["text"] != "\u200b"]
+            if not chars or l["top"] > page.height - 45:   # pie con nº de página
+                continue
+            texto = _limpiar(l["text"].replace("\u200b", ""))
+            if not texto or texto.upper().startswith("*SE ACTUALIZAR"):
+                continue
+            c0 = chars[0]
+            lineas.append({"p": pn, "top": l["top"], "texto": texto, "size": c0["size"],
+                           "bold": "Bold" in c0.get("fontname", "") or "Black" in c0.get("fontname", "")})
+    texto_total = "\n".join(l["texto"] for l in lineas)
+
+    reuniones = []
+    seccion = "senadores"
+    titulos, modalidad = [], ""
+    reunion = None
+    item = None
+
+    def cerrar():
+        nonlocal reunion, item
+        if reunion is not None:
+            reunion["tipo"] = tipo_reunion(reunion["seccion"], reunion["comisiones"])
+            reuniones.append(reunion)
+        reunion, item = None, None
+
+    for l in lineas:
+        t, up, sz = l["texto"], l["texto"].upper(), l["size"]
+        if sz >= TAM_SECCION:
+            cerrar(); titulos, modalidad = [], ""
+            if SEC_ASESORES.search(up):
+                seccion = "asesores"
+            elif SEC_SENADORES.search(up):
+                seccion = "senadores"
+            continue
+        if sz >= TAM_COMISION:                       # título de comisión
+            if reunion is not None:
+                cerrar(); titulos, modalidad = [], ""
+            titulos.append(t)
+            continue
+        if sz >= TAM_TEMARIO and up.startswith("TEMARIO"):
+            if reunion is not None:
+                cerrar()
+            pastilla = _ocr_pastilla(pdf.pages[l["p"]], l["top"])
+            if pastilla is None:
+                raise RuntimeError(f"no se pudo leer la fecha/hora/salón (OCR) en la página {l['p'] + 1}")
+            dia, fecha, hora, salon, salon_txt = pastilla
+            try:  # control de coherencia del OCR: el día de la semana debe coincidir con la fecha
+                dd_, mm_ = int(fecha[:2]), int(fecha[3:])
+                anio_ = datetime.date.today().year
+                esperado = ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO", "DOMINGO"][
+                    datetime.date(anio_, mm_, dd_).weekday()]
+                if unicodedata.normalize("NFD", dia).encode("ascii", "ignore").decode().upper() != esperado:
+                    log.warning(f"    ! revisar OCR: '{dia} {fecha}' no coincide con el día de la semana")
+            except Exception:
+                pass
+            comisiones = _comisiones_desde_buffer(_unir_titulos(titulos, comisiones_norm))
+            reunion = {"seccion": seccion, "dia": dia, "fecha": fecha, "hora": hora,
+                       "modalidad": modalidad.upper(), "comisiones": comisiones,
+                       "salon": salon, "salon_completo": salon_txt, "temario": [], "expositores": None}
+            titulos, modalidad, item = [], "", None
+            continue
+        if sz >= TAM_SUBTITULO:                      # subtítulo gris
+            if reunion is None:
+                modalidad = t
+            continue
+        if reunion is None:
+            continue
+        if sz >= TAM_GRUPO:                          # etiqueta de grupo (PROYECTO DE LEY...)
+            reunion["temario"].append({"numero": "", "extracto": t.rstrip(":")})
+            item = None
+            continue
+        # texto de expedientes (10 pt)
+        m = RE_EXP_TOKEN.match(t)
+        if m and l["bold"]:
+            item = {"numero": m.group(1).upper(), "extracto": t[m.end():].lstrip(" ,:.-").strip()}
+            reunion["temario"].append(item)
+        elif item is not None:
+            item["extracto"] = _limpiar(item["extracto"] + " " + t)
+        else:
+            item = {"numero": "", "extracto": t}
+            reunion["temario"].append(item)
+    cerrar()
+    return reuniones, texto_total
+
+
 # ─────────────────────────────── Orquestación del parseo ─────────────────────
 
 def extraer_tablas_y_texto(contenido_pdf):
@@ -596,6 +775,8 @@ def parsear_boletin(contenido_pdf, comisiones_norm):
     with pdfplumber.open(io.BytesIO(contenido_pdf)) as pdf:
         texto_completo = "\n".join(
             (p.extract_text(x_tolerance=3, y_tolerance=3) or "") for p in pdf.pages)
+        if _es_formato_grafico(pdf):
+            return parsear_boletin_grafico(pdf, comisiones_norm)
         if _es_texto_formato_libre(texto_completo):
             reuniones = parsear_reuniones_texto_libre(texto_completo, comisiones_norm)
         else:
@@ -607,16 +788,21 @@ def parsear_boletin(contenido_pdf, comisiones_norm):
 # ─────────────────────────────── Listado de boletines ────────────────────────
 
 def listar_boletines(session):
-    """Devuelve [{id, numero, url}] ordenados por id descendente."""
+    """Devuelve [{id, numero, url, nuevo}] ordenados por id descendente.
+
+    Hasta oct/2026 el link terminaba en un id interno (descargarBoletinReunion/2410).
+    Desde el boletín 150/26 termina en NÚMERO_AÑO (descargarBoletinReunion/154_2026).
+    Para el segundo caso se arma un id sintético creciente y mayor que cualquier id
+    viejo: (año-2000)*100000 + número (154_2026 -> 2600154)."""
     resp = session.get(URL_BOLETINES, timeout=45)
     resp.raise_for_status()
     soup = BeautifulSoup(resp.text, "html.parser")
     boletines = []
+    vistos = set()
     for a in soup.find_all("a", href=re.compile(r"descargarBoletinReunion/(\d+)", re.I)):
-        m = re.search(r"descargarBoletinReunion/(\d+)", a["href"])
+        m = re.search(r"descargarBoletinReunion/(\d+)(?:_(\d{4}))?", a["href"], re.I)
         if not m:
             continue
-        bid = int(m.group(1))
         href = a["href"]
         url = href if href.startswith("http") else BASE_URL + href
         # Número de boletín desde la fila (columna 1)
@@ -626,7 +812,18 @@ def listar_boletines(session):
             tds = tr.find_all("td")
             if tds:
                 numero = tds[0].get_text(strip=True)
-        boletines.append({"id": bid, "numero": numero, "url": url})
+        if m.group(2):
+            num, anio = int(m.group(1)), int(m.group(2))
+            bid = (anio - 2000) * 100000 + num
+            numero = f"{num}/{anio % 100:02d}"
+            nuevo = True
+        else:
+            bid = int(m.group(1))
+            nuevo = False
+        if bid in vistos:
+            continue
+        vistos.add(bid)
+        boletines.append({"id": bid, "numero": numero, "url": url, "nuevo": nuevo})
     boletines.sort(key=lambda b: b["id"], reverse=True)
     return boletines
 
@@ -723,7 +920,23 @@ def main():
                         f"degradada del sitio — reintentando en 20s...")
             time.sleep(20)
 
-    nuevos = [b for b in boletines if b["id"] > ultimo_id and b["id"] not in procesados]
+    # Boletines con id NÚMERO_AÑO (desde 150/26): se salteán los que ya estaban
+    # cargados con el id viejo (número <= el último boletín ya procesado del año).
+    ultimo_num = {}
+    for r in reuniones_acum:
+        mm = re.match(r"^(\d+)/(\d{2})$", str(r.get("boletin_numero", "")))
+        if mm:
+            a_ = int(mm.group(2))
+            ultimo_num[a_] = max(ultimo_num.get(a_, 0), int(mm.group(1)))
+
+    def _ya_cargado(b):
+        if not b.get("nuevo"):
+            return False
+        n_, a_ = b["id"] % 100000, b["id"] // 100000
+        return n_ <= ultimo_num.get(a_, 0)
+
+    nuevos = [b for b in boletines
+              if b["id"] > ultimo_id and b["id"] not in procesados and not _ya_cargado(b)]
     log.info(f"  → {len(boletines)} boletines listados, {len(nuevos)} nuevos (último_id={ultimo_id})")
 
     nuevas_reuniones = 0
@@ -735,7 +948,10 @@ def main():
         try:
             contenido = descargar_pdf(session, bol["url"])
             reuniones, texto = parsear_boletin(contenido, comisiones_norm)
-            numero_pdf = extraer_numero_boletin(texto) or bol["numero"]
+            numero_pdf = bol["numero"] if bol.get("nuevo") else (extraer_numero_boletin(texto) or bol["numero"])
+            if bol.get("nuevo") and not reuniones:
+                log.warning("    ! el boletín no trajo reuniones; se reintentará en la próxima corrida")
+                continue
             log.info(f"    → {len(reuniones)} reunión(es)")
             marcadas = marcar_suspendidas(reuniones_acum, reuniones, bid)
             if marcadas:
