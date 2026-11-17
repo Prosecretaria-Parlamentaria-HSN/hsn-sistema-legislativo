@@ -10576,8 +10576,8 @@
       ],
       "expositores": null,
       "tipo": "senadores",
-      "boletin_id": 2600154,
-      "boletin_numero": "154/26"
+      "boletin_id": 2600155,
+      "boletin_numero": "155/26"
     },
     {
       "seccion": "senadores",
@@ -10602,8 +10602,8 @@
       ],
       "expositores": null,
       "tipo": "senadores",
-      "boletin_id": 2600154,
-      "boletin_numero": "154/26"
+      "boletin_id": 2600155,
+      "boletin_numero": "155/26"
     },
     {
       "seccion": "senadores",
@@ -10672,8 +10672,8 @@
       ],
       "expositores": null,
       "tipo": "senadores",
-      "boletin_id": 2600154,
-      "boletin_numero": "154/26"
+      "boletin_id": 2600155,
+      "boletin_numero": "155/26"
     },
     {
       "seccion": "senadores",
@@ -10714,8 +10714,8 @@
       ],
       "expositores": null,
       "tipo": "senadores",
-      "boletin_id": 2600154,
-      "boletin_numero": "154/26"
+      "boletin_id": 2600155,
+      "boletin_numero": "155/26"
     },
     {
       "seccion": "senadores",
@@ -10792,8 +10792,8 @@
       ],
       "expositores": null,
       "tipo": "senadores",
-      "boletin_id": 2600154,
-      "boletin_numero": "154/26"
+      "boletin_id": 2600155,
+      "boletin_numero": "155/26"
     },
     {
       "seccion": "senadores",
@@ -10926,8 +10926,8 @@
       ],
       "expositores": null,
       "tipo": "senadores",
-      "boletin_id": 2600154,
-      "boletin_numero": "154/26"
+      "boletin_id": 2600155,
+      "boletin_numero": "155/26"
     },
     {
       "seccion": "senadores",
@@ -11132,8 +11132,8 @@
       ],
       "expositores": null,
       "tipo": "senadores",
-      "boletin_id": 2600154,
-      "boletin_numero": "154/26"
+      "boletin_id": 2600155,
+      "boletin_numero": "155/26"
     },
     {
       "seccion": "senadores",
@@ -11158,8 +11158,8 @@
       ],
       "expositores": null,
       "tipo": "senadores",
-      "boletin_id": 2600154,
-      "boletin_numero": "154/26"
+      "boletin_id": 2600155,
+      "boletin_numero": "155/26"
     },
     {
       "seccion": "asesores",
@@ -11180,8 +11180,8 @@
       ],
       "expositores": null,
       "tipo": "bicameral",
-      "boletin_id": 2600154,
-      "boletin_numero": "154/26"
+      "boletin_id": 2600155,
+      "boletin_numero": "155/26"
     },
     {
       "seccion": "asesores",
@@ -11202,8 +11202,8 @@
       ],
       "expositores": null,
       "tipo": "bicameral",
-      "boletin_id": 2600154,
-      "boletin_numero": "154/26"
+      "boletin_id": 2600155,
+      "boletin_numero": "155/26"
     },
     {
       "seccion": "asesores",
@@ -11243,7 +11243,7 @@
         },
         {
           "numero": "S-1579/26",
-          "extracto": "MARKS: PROYECTO DE DECLARACIÓN QUE DECLARA DE INTERÉS LA DÉCIMA EDICIÓN DE LA EXPOSICIÓN \"EXPO VALLE MEDIO EMPRENDE\", A REALIZARSE EN LA LOC. DE LAMARQUE, PROV. DE RIO NEGRO, EL 7 Y 8 DE NOVIEMBRE DE 2026."
+          "extracto": "MARKS: PROYECTO DE DECLARACIÓN QUE DECLARA DE INTERÉS LA DÉCIMA EDICIÓN DE LA EXPOSICIÓN \"EXPO VALLE MEDIO EMPRENDE\", A REALIZARSE EN LA LOC. DE LAMARQUE, PROV. DE R Í O NEGRO, EL 7 Y 8 DE NOVIEMBRE DE 2026."
         },
         {
           "numero": "S-1184/26",
@@ -11252,8 +11252,58 @@
       ],
       "expositores": null,
       "tipo": "asesores",
-      "boletin_id": 2600154,
-      "boletin_numero": "154/26"
+      "boletin_id": 2600155,
+      "boletin_numero": "155/26"
+    },
+    {
+      "seccion": "senadores",
+      "dia": "MIÉRCOLES",
+      "fecha": "18/11",
+      "hora": "13:00",
+      "modalidad": "",
+      "comisiones": [
+        "ECONOMÍAS REGIONALES, ECONOMÍA SOCIAL, MICRO, PEQUEÑA Y MEDIANA EMPRESA"
+      ],
+      "salon": "ILLIA",
+      "salon_completo": "SALÓN ILLIA",
+      "temario": [
+        {
+          "numero": "",
+          "extracto": "PROYECTOS DE LEY"
+        },
+        {
+          "numero": "S-1902/26",
+          "extracto": "CAPITANICH: PROYECTO DE LEY QUE SUSTITUYE EL ART. 2° DE SU SIMILAR 24.467 - MARCO REGULATORIO PEQUEÑA Y MEDIANA EMPRESA - RESPECTO A LA INCLUSIÓN DE LAS COOPERATIVAS EN EL RÉGIMEN MIPYME."
+        },
+        {
+          "numero": "S-1143/26",
+          "extracto": "ATAUCHE: PROYECTO DE LEY QUE INCORPORA EL INC. C AL ART. 44 DE SU SIMILAR 25.300 - FOMENTO PARA LA MICRO, PEQUEÑA Y MEDIANA EMPRESA -, RESPECTO A LA INTEGRACIÓN DEL CONSEJO FEDERAL."
+        },
+        {
+          "numero": "",
+          "extracto": "PROYECTOS DE DECLARACIÓN"
+        },
+        {
+          "numero": "S-1963/26",
+          "extracto": "HUALA: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO Y RECONOCE A LOS EMPRENDIMIENTOS PAMPEANOS SELECCIONADOS PARA PARTICIPAR EN LA FINAL NACIONAL DEL CONCURSO \"EMPRENDIMIENTO ARGENTINO 2026\", EN CABA, EL 19 Y 20 DE NOVIEMBRE."
+        },
+        {
+          "numero": "S-1722/26",
+          "extracto": "MOISÉS: PROYECTO DE DECLARACIÓN QUE DECLARA DE INTERÉS LA 17° EDICIÓN DE EXPOJUY 2026 A REALIZARSE EN LA CIUDAD CULTURAL DE SAN SALVADOR DE JUJUY, ENTRE EL 9 Y EL 12 DE OCTUBRE DE 2026."
+        },
+        {
+          "numero": "S-1579/26",
+          "extracto": "MARKS: PROYECTO DE DECLARACIÓN QUE DECLARA DE INTERÉS LA DÉCIMA EDICIÓN DE LA EXPOSICIÓN \"EXPO VALLE MEDIO EMPRENDE\", A REALIZARSE EN LA LOC. DE LAMARQUE, PROV. DE RÍO NEGRO, EL 7 Y 8 DE NOVIEMBRE DE 2026."
+        },
+        {
+          "numero": "S-1184/26",
+          "extracto": "LEWANDOWSKI: PROYECTO DE DECLARACIÓN QUE DECLARA DE INTERÉS EL CONGRESO INTERNACIONAL DE COOPERATIVAS Y MUTUALES (CICM) 2026, A REALIZARSE EN LA ESTACIÓN FLUVIAL DE LA CDAD. DE ROSARIO, PROV. DE SANTA FE, EL 25 DE JULIO DE 2026."
+        }
+      ],
+      "expositores": null,
+      "tipo": "senadores",
+      "boletin_id": 2600155,
+      "boletin_numero": "155/26"
     }
   ]
 }
