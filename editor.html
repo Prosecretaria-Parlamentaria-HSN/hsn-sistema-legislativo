@@ -209,8 +209,8 @@ h1{font-family:'Poppins',sans-serif;font-size:24px;font-weight:700;color:var(--a
     <summary style="cursor:pointer;font-size:12.5px;color:var(--accent);font-weight:600">¿Cómo consigo mi clave? (una sola vez)</summary>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-top:8px;font-size:13px;line-height:1.7">
       <ol style="margin:0;padding-left:18px">
-        <li>Pedile a Mariano el link para crear tu clave de acceso (o que te la genere y te la pase él mismo — es la forma más simple).</li>
-        <li>Si te toca crearla vos: entrá a <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a> con la cuenta de GitHub de Mariano, elegí "Only select repositories" &rarr; <code>hsn-sistema-legislativo</code>, y en Permissions &rarr; Contents elegí "Read and write". Generá la clave y copiala.</li>
+        <li>Pedile a quien administra el repositorio el link para crear tu clave de acceso (o que te la genere y te la pase — es la forma más simple).</li>
+        <li>Si te toca crearla vos: entrá a <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a> con una cuenta de GitHub con permiso de escritura sobre el repositorio, elegí "Only select repositories" &rarr; <code>hsn-sistema-legislativo</code>, y en Permissions &rarr; Contents elegí "Read and write". Generá la clave y copiala.</li>
         <li>Pegala arriba a la derecha, donde dice "Pegá tu clave acá", y tocá Conectar. Queda guardada sólo en este navegador — no se comparte con nadie ni con Claude.</li>
       </ol>
     </div>
@@ -311,7 +311,7 @@ h1{font-family:'Poppins',sans-serif;font-size:24px;font-weight:700;color:var(--a
 <div class="toast" id="toast"><span class="toast-dot"></span><span id="toast-text"></span></div>
 
 <script>
-var REPO_OWNER = 'bonifaciomariano';
+var REPO_OWNER = 'Prosecretaria-Parlamentaria-HSN';
 var REPO_NAME = 'hsn-sistema-legislativo';
 var REPO = REPO_OWNER + '/' + REPO_NAME;
 var RAW_BASE = 'https://raw.githubusercontent.com/' + REPO + '/main/';
