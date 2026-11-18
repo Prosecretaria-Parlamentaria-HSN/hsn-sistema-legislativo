@@ -1,0 +1,78 @@
+name: Solo decretos (DPP)
+
+# Corre SOLO el lector de decretos, sin tocar agenda, proyectos ni órdenes del día.
+# Sirve para probar o aplicar decretos nuevos en un par de minutos.
+#
+# Cómo usarlo: pestaña Actions -> "Solo decretos (DPP)" -> Run workflow.
+#   - "publicar" en NO (por defecto): modo prueba. Lee los decretos y muestra en el log qué
+#     aplicaría, pero NO guarda nada en el repo.
+#   - "publicar" en SI: guarda los cambios y vuelve a armar la página (con el diseño nuevo).
+on:
+  workflow_dispatch:
+    inputs:
+      publicar:
+        description: "Guardar los cambios y regenerar la página (si no, es solo una prueba)"
+        type: choice
+        options: ["no", "si"]
+        default: "no"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: solo-dpp
+  cancel-in-progress: false
+
+jobs:
+  dpp:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      # OCR para leer los decretos escaneados (PDF sin texto)
+      - name: Instalar OCR (tesseract)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-spa
+
+      - name: Padrón de senadores (para bloques)
+        continue-on-error: true
+        env:
+          ACTUALIZAR: "1"
+        run: python scripts/scraper_senadores.py
+
+      - name: Leer decretos (DPP)
+        run: python scripts/scraper_dpp.py
+
+      - name: Mostrar qué cambió
+        run: git status --short data/ || true
+
+      - name: Generar web y diseño nuevo
+        if: ${{ github.event.inputs.publicar == 'si' }}
+        run: |
+          python scripts/generar_web.py
+          python scripts/generar_diseno_nuevo.py
+
+      - name: Guardar cambios
+        if: ${{ github.event.inputs.publicar == 'si' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Sin cambios; nada que guardar."
+          else
+            git commit -m "Decretos (DPP) actualizados $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git pull --rebase origin ${GITHUB_REF_NAME}
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
