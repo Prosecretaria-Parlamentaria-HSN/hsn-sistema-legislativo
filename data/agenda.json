@@ -10672,8 +10672,8 @@
       ],
       "expositores": null,
       "tipo": "senadores",
-      "boletin_id": 2600155,
-      "boletin_numero": "155/26"
+      "boletin_id": 2600156,
+      "boletin_numero": "156/26"
     },
     {
       "seccion": "senadores",
@@ -10710,12 +10710,28 @@
         {
           "numero": "PE-324/26",
           "extracto": "MENSAJE N° 286/26 QUE SOLICITA ACUERDO PARA PROMOVER A LA CATEGORÍA “C” MINISTRO PLENIPOTENCIARIO DE SEGUNDA CLASE A FUNCIONARIOS DE LA CATEGORÍA “D” CONSEJERO DE EMBAJADA Y CÓNSUL GENERAL DEL MINISTERIO DE RELACIONES EXTERIORES, COMERCIO INTERNACIONAL Y CULTO. HORACIO LUIS MARÍA LAZZARI MATHIEU. MELINA ERKEKDJIAN. RAFAEL GALETTO. SEBASTIÁN LEONARDO CORONEL. MANRIQUE LUCIO ALTAVISTA. PABLO MARCELO PERILMUTTER. MARTIN VIA. CYNTHIA ALICIA MULVILLE. PEDRO XAVIER ALCHOURRON. JORGE OSCAR ABATE. SANTIAGO RAFAEL MARTINO. MARIANO JOSÉ QUINTANA. JAVIER IGNACIO SANTANDER. MARÍA CAROLINA LINARES. LEOPOLDO JUAN JOSÉ GARADE. GONZALO FABIÁN RODRÍGUEZ NEWBOUND. MARÍA CAROLINA GUNSKI. ALANA PATRICIA LOMONACO BUSTO. MARÍA VICTORIA VINCIGUERRA. SOFÍA ETCHEGARAY. PEDRO JOAQUÍN LÓPEZ GODOY. ALEJANDRA BELÉN BOMBEN. ARIEL DAVID GONZÁLEZ SERAFINI. GONZALO SEBASTIÁN MAZZEO. CAROLA DEL RÍO. PABLO CASTAGNINO. JUAN PABLO PANIEGO."
+        },
+        {
+          "numero": "PE-107/25",
+          "extracto": "MENSAJE N° 20/25 QUE SOLICITA ACUERDO PARA PROMOVER A LA CATEGORÍA “B” MINISTRO PLENIPOTENCIARIO DE PRIMERA CLASE A FUNCIONARIOS DE LA CATEGORÍA “C” MINISTRO PLENIPOTENCIARIO DE SEGUNDA CLASE DEL MINISTERIO DE RELACIONES EXTERIORES, COMERCIO INTERNACIONAL Y CULTO."
+        },
+        {
+          "numero": "PE-108/25",
+          "extracto": "MENSAJE N° 21/25 QUE SOLICITA ACUERDO PARA PROMOVER A LA CATEGORÍA “B” MINISTRO PLENIPOTENCIARIO DE PRIMERA CLASE A FUNCIONARIOS DE LA CATEGORÍA “C” MINISTRO PLENIPOTENCIARIO DE SEGUNDA CLASE DEL MINISTERIO DE RELACIONES EXTERIORES, COMERCIO INTERNACIONAL Y CULTO."
+        },
+        {
+          "numero": "PE-109/25",
+          "extracto": "MENSAJE N° 22/25 QUE SOLICITA ACUERDO PARA PROMOVER A LA CATEGORÍA “C” MINISTRO PLENIPOTENCIARIO DE SEGUNDA CLASE A FUNCIONARIOS DE LA CATEGORÍA “D” CONSEJERO DE EMBAJADA Y CÓNSUL GENERAL DEL MINISTERIO DE RELACIONES EXTERIORES, COMERCIO INTERNACIONAL Y CULTO."
+        },
+        {
+          "numero": "PE-110/25",
+          "extracto": "MENSAJE N° 23/25 QUE SOLICITA ACUERDO PARA PROMOVER A LA CATEGORÍA “C” MINISTRO PLENIPOTENCIARIO DE SEGUNDA CLASE A FUNCIONARIOS DE LA CATEGORÍA “D” CONSEJERO DE EMBAJADA Y CÓNSUL GENERAL DEL MINISTERIO DE RELACIONES EXTERIORES, COMERCIO INTERNACIONAL Y CULTO."
         }
       ],
       "expositores": null,
       "tipo": "senadores",
-      "boletin_id": 2600155,
-      "boletin_numero": "155/26"
+      "boletin_id": 2600156,
+      "boletin_numero": "156/26"
     },
     {
       "seccion": "senadores",
@@ -10792,8 +10808,8 @@
       ],
       "expositores": null,
       "tipo": "senadores",
-      "boletin_id": 2600155,
-      "boletin_numero": "155/26"
+      "boletin_id": 2600156,
+      "boletin_numero": "156/26"
     },
     {
       "seccion": "senadores",
@@ -10927,7 +10943,8 @@
       "expositores": null,
       "tipo": "senadores",
       "boletin_id": 2600155,
-      "boletin_numero": "155/26"
+      "boletin_numero": "155/26",
+      "suspendida": true
     },
     {
       "seccion": "senadores",
@@ -11027,7 +11044,7 @@
         },
         {
           "numero": "S-1512/25",
-          "extracto": "BENSUSÁN: PROYECTO DE DECLARACIÓN QUE DECLARA DE INTERÉS EL PROYECTO \"CONSAGAN (PEQUEÑOS ENVASES, GRANDES CAMBIOS\") ELABORADO POR ESTUDIANTES DEL COLEGIO AGROPECUARIO DE REALICÓ, PROV. DE LA PAMPA."
+          "extracto": "BENSUSÁN: PROYECTO DE DECLARACIÓN QUE DECLARA DE INTERÉS EL PROYECTO \"CONSAGAN (PEQUEÑOS ENVASES, GRANDES CAMBIOS)” ELABORADO POR ESTUDIANTES DEL COLEGIO AGROPECUARIO DE REALICÓ, PROV. DE LA PAMPA."
         },
         {
           "numero": "S-1735/25",
@@ -11075,7 +11092,7 @@
         },
         {
           "numero": "S-1013/26",
-          "extracto": "CORROZA: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO POR LA REALIZACIÓN DEL ENCUENTRO BINACIONAL NEUQUÉN - BÍO BÍO (ARGENTINA - CHILE), EN LA LOC. DE NEUQUÉN, PROV. HOMÓNIMA, EL 10 DE JUNIO DE 2026."
+          "extracto": "CORROZA: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO POR LA REALIZACIÓN DEL ENCUENTRO BINACIONAL NEUQUÉN - BÍO BÍO (ARGENTINA-CHILE), EN LA LOC. DE NEUQUÉN, PROV. HOMÓNIMA, EL 10 DE JUNIO DE 2026."
         },
         {
           "numero": "S-1075/26",
@@ -11132,8 +11149,8 @@
       ],
       "expositores": null,
       "tipo": "senadores",
-      "boletin_id": 2600155,
-      "boletin_numero": "155/26"
+      "boletin_id": 2600156,
+      "boletin_numero": "156/26"
     },
     {
       "seccion": "senadores",
@@ -11158,8 +11175,8 @@
       ],
       "expositores": null,
       "tipo": "senadores",
-      "boletin_id": 2600155,
-      "boletin_numero": "155/26"
+      "boletin_id": 2600156,
+      "boletin_numero": "156/26"
     },
     {
       "seccion": "asesores",
@@ -11235,7 +11252,7 @@
         },
         {
           "numero": "S-1963/26",
-          "extracto": "HUALA: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO Y RECONOCE A LOS EMPRENDIMIENTOS PAMPEANOS SELECCIONADOS PARA PARTICIPAR EN LA FINAL NACIONAL DEL CONCURSO \"EMPRENDIMIENTO ARGENTINO 2026\", EN CABA, EL 19 Y 20 DE NOVIEMBRE ."
+          "extracto": "HUALA: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO Y RECONOCE A LOS EMPRENDIMIENTOS PAMPEANOS SELECCIONADOS PARA PARTICIPAR EN LA FINAL NACIONAL DEL CONCURSO \"EMPRENDIMIENTO ARGENTINO 2026\", EN CABA, EL 19 Y 20 DE NOVIEMBRE."
         },
         {
           "numero": "S-1722/26",
@@ -11252,8 +11269,8 @@
       ],
       "expositores": null,
       "tipo": "asesores",
-      "boletin_id": 2600155,
-      "boletin_numero": "155/26"
+      "boletin_id": 2600156,
+      "boletin_numero": "156/26"
     },
     {
       "seccion": "senadores",
@@ -11303,7 +11320,245 @@
       "expositores": null,
       "tipo": "senadores",
       "boletin_id": 2600155,
-      "boletin_numero": "155/26"
+      "boletin_numero": "155/26",
+      "suspendida": true
+    },
+    {
+      "seccion": "senadores",
+      "dia": "MIÉRCOLES",
+      "fecha": "18/11",
+      "hora": "12:00",
+      "modalidad": "CUARTO INTERMEDIO",
+      "comisiones": [
+        "ASUNTOS CONSTITUCIONALES"
+      ],
+      "salon": "ILLIA",
+      "salon_completo": "SALÓN ILLIA",
+      "temario": [
+        {
+          "numero": "",
+          "extracto": "PROYECTO DE LEY"
+        },
+        {
+          "numero": "PE-102/26",
+          "extracto": "MENSAJE N° 110/26 Y PROYECTO DE LEY DE REFORMA ELECTORAL INTEGRAL."
+        }
+      ],
+      "expositores": null,
+      "tipo": "senadores",
+      "boletin_id": 2600156,
+      "boletin_numero": "156/26"
+    },
+    {
+      "seccion": "senadores",
+      "dia": "MIÉRCOLES",
+      "fecha": "18/11",
+      "hora": "17:00",
+      "modalidad": "",
+      "comisiones": [
+        "ASUNTOS ADMINISTRATIVOS Y MUNICIPALES"
+      ],
+      "salon": "ILLIA",
+      "salon_completo": "SALÓN ILLIA",
+      "temario": [
+        {
+          "numero": "",
+          "extracto": "PROYECTOS DE LEY"
+        },
+        {
+          "numero": "CD-21/26",
+          "extracto": "PROYECTO DE LEY EN REVISIÓN QUE TRANSFIERE A TÍTULO GRATUITO EL INMUEBLE PROPIEDAD DEL ESTADO NACIONAL CORRESPONDIENTE AL CENTRO DE ACOPIO Y EMBARQUE BARRANQUERAS A FAVOR DEL GOBIERNO DE LA PROV. DEL CHACO."
+        },
+        {
+          "numero": "S-20/26",
+          "extracto": "CAPITANICH: PROYECTO DE LEY QUE TRANSFIERE A TÍTULO GRATUITO A LA PROV. DEL CHACO EL DOMINIO Y TODOS LOS DERECHOS Y ACCIONES QUE EL ESTADO NACIONAL POSEE SOBRE EL INMUEBLE DE SU PROPIEDAD, EN LA LOC. DE BARRANQUERAS, EN EL DPTO. SAN FERNANDO."
+        },
+        {
+          "numero": "",
+          "extracto": "PROYECTOS DE DECLARACIÓN"
+        },
+        {
+          "numero": "S-427/26",
+          "extracto": "BEDIA: PROYECTO DE DECLARACIÓN QUE DECLARA DE INTERÉS EL ANIVERSARIO DE LA TERCERA Y DEFINITIVA FUNDACIÓN DE LA CIUDAD DE SAN SALVADOR DE JUJUY, EL 19 DE ABRIL DE 2026."
+        },
+        {
+          "numero": "S-1200/26",
+          "extracto": "SALINO: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO POR EL 137° ANIVERSARIO DE LA FUNDACIÓN DE LA LOC. DE TILISARAO, DPTO. CHACABUCO, PROV. DE SAN LUIS, EL 21 DE SEPTIEMBRE DE 2026."
+        },
+        {
+          "numero": "S-1201/26",
+          "extracto": "SALINO: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO POR EL 432° ANIVERSARIO DE LA FUNDACIÓN DE LA CIUDAD DE SAN LUIS, PROVINCIA HOMÓNIMA, EL 25 DE AGOSTO DE 2026."
+        },
+        {
+          "numero": "S-1321/26",
+          "extracto": "ARRASCAETA: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO POR LA CONMEMORACIÓN DEL 432° ANIVERSARIO DE LA FUNDACIÓN DE LA CIUDAD DE SAN LUIS, EL 25 DE AGOSTO DE 2026."
+        },
+        {
+          "numero": "S-1436/26",
+          "extracto": "ABDALA: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO POR LA CONMEMORACIÓN DEL 432° ANIVERSARIO DE LA FUNDACIÓN DE LA CDAD. DE SAN LUIS, PROV. HOMÓNIMA, EL 25 DE AGOSTO DE 2026."
+        },
+        {
+          "numero": "S-1428/26",
+          "extracto": "MENDOZA: PROYECTO DE DECLARACIÓN QUE RINDE HOMENAJE A LA CDAD. DE MONTEROS, PROV. DE TUCUMÁN, AL CUMPLIRSE UN NUEVO ANIVERSARIO DE SU FUNDACIÓN, EL 28 DE AGOSTO DE 2026."
+        },
+        {
+          "numero": "S-1615/26",
+          "extracto": "SALINO: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO POR EL 193° ANIVERSARIO DE LA FUNDACIÓN DE LA LOC. DE CORTADERAS, PROV. DE SAN LUIS, EL 23 DE OCTUBRE DE 2026."
+        },
+        {
+          "numero": "S-1616/26",
+          "extracto": "SALINO: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO POR EL 258° ANIVERSARIO DE LA FUNDACIÓN DE LA LOC. DE SAN MARTÍN, PROV. DE SAN LUIS, EL 04 DE DICIEMBRE DE 2026."
+        },
+        {
+          "numero": "S-1632/26",
+          "extracto": "MENDOZA: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO POR LA CONMEMORACIÓN DE UN NUEVO ANIVERSARIO DE LA CDAD. DE ALDERETES, PROV. DE TUCUMÁN, EL 24 DE SEPTIEMBRE DE CADA AÑO."
+        },
+        {
+          "numero": "S-1660/26",
+          "extracto": "SCHNEIDER: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO POR LA CONMEMORACIÓN DEL 48° ANIVERSARIO DE LA LOCALIDAD DE FUERTE ESPERANZA, PROV. DEL CHACO, EL 23 DE SEPTIEMBRE DE 2026."
+        },
+        {
+          "numero": "S-1672/26",
+          "extracto": "CAPITANICH: PROYECTO DE DECLARACIÓN QUE DECLARA DE INTERÉS EL 48° ANIVERSARIO DE LA LOC. DE FUERTE ESPERANZA, PROV. DEL CHACO, A CONMEMORARSE EL 23 DE SEPTIEMBRE DE 2026."
+        },
+        {
+          "numero": "S-1683/26",
+          "extracto": "SCHNEIDER: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO POR LA CONMEMORACIÓN DEL 110° ANIVERSARIO DE FONTANA, LOC. DE LA PROV. DEL CHACO, EL 27 DE SEPTIEMBRE DE 2026."
+        },
+        {
+          "numero": "S-1697/26",
+          "extracto": "CAPITANICH: PROYECTO DE DECLARACIÓN QUE DECLARA DE INTERÉS EL 110° ANIVERSARIO LA LOC. DE FONTANA, PROV. DEL CHACO, EL 27 DE SEPTIEMBRE DE 2026."
+        },
+        {
+          "numero": "S-1715/26",
+          "extracto": "SCHNEIDER: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO POR LA CONMEMORACIÓN DEL 86° ANIVERSARIO DE LA FUNDACIÓN DE LA LOC. DE MIRAFLORES, PROV. DEL CHACO, EL 5 DE OCTUBRE DE 2026."
+        },
+        {
+          "numero": "S-1731/26",
+          "extracto": "ROJAS DECUT: PROYECTO DE DECLARACIÓN QUE ADHIERE AL ANIVERSARIO DE LA FUNDACIÓN DE LA CDAD. DE POSADAS, PROV. DE MISIONES, EL 8 DE NOVIEMBRE DE CADA AÑO."
+        },
+        {
+          "numero": "S-1774/26",
+          "extracto": "LÓPEZ C.: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO POR LA CONMEMORACIÓN DEL 142° ANIVERSARIO DE LA FUNDACIÓN DE LA CIUDAD DE USHUAIA, PROV. DE TIERRA DEL FUEGO, A.I.A.S, EL 12 DE OCTUBRE DE 2026."
+        },
+        {
+          "numero": "S-1782/26",
+          "extracto": "COTO: PROYECTO DE DECLARACIÓN QUE ADHIERE A LA CONMEMORACIÓN DEL 142° ANIVERSARIO DE LA FUNDACIÓN DE LA CDAD. DE USHUAIA, PROV. DE TIERRA DEL FUEGO Y A.I.A.S., EL 12 DE OCTUBRE DE 2026."
+        },
+        {
+          "numero": "S-1775/26",
+          "extracto": "LÓPEZ C.: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO POR LA CONMEMORACIÓN DEL 54° ANIVERSARIO DE LA FUNDACIÓN DE LA CIUDAD DE TOLHUIN, PROV. DE TIERRA DEL FUEGO, A.I.A.S, EL 9 DE OCTUBRE DE 2026."
+        },
+        {
+          "numero": "S-1780/26",
+          "extracto": "COTO: PROYECTO DE DECLARACIÓN QUE ADHIERE A LA CONMEMORACIÓN DEL 54° ANIVERSARIO DE LA FUNDACIÓN DE LA CIUDAD DE TOLHUIN, PROV. DE TIERRA DEL FUEGO Y A.I.A.S., EL 9 DE OCTUBRE DE 2026."
+        },
+        {
+          "numero": "S-1807/26",
+          "extracto": "HUALA: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO POR LA CONMEMORACIÓN DEL 120° ANIVERSARIO DE LA LOCALIDAD DE TRENEL, PROV. DE LA PAMPA, EL 20 DE OCTUBRE DE 2026."
+        },
+        {
+          "numero": "S-1874/26",
+          "extracto": "CAPITANICH: PROYECTO DE DECLARACIÓN QUE DECLARA DE INTERÉS EL 115° ANIVERSARIO DEL MUNICIPIO COLONIA ABORIGEN, PROV. DEL CHACO, A CONMEMORARSE EL 27 DE OCTUBRE DE 2026."
+        },
+        {
+          "numero": "S-1929/26",
+          "extracto": "SCHNEIDER: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO POR EL 139° ANIVERSARIO DE LA FUNDACIÓN DE COLONIA POPULAR, PROV. DEL CHACO, EL 24 DE NOVIEMBRE DE 2026."
+        },
+        {
+          "numero": "S-1931/26",
+          "extracto": "SCHNEIDER: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO POR EL 114° ANIVERSARIO DE LA FUNDACIÓN DE LA CDAD. DE QUITILIPI, PROV. DEL CHACO, EL 30 DE NOVIEMBRE DE 2026."
+        },
+        {
+          "numero": "S-1964/26",
+          "extracto": "HUALA: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO AL CONMEMORARSE EL 130° ANIVERSARIO DE LA LOCALIDAD DE INTENDENTE ALVEAR, PROV. DE LA PAMPA, EL 26 DE NOVIEMBRE DE 2026."
+        },
+        {
+          "numero": "S-1965/26",
+          "extracto": "HUALA: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO AL CONMEMORARSE EL ANIVERSARIO 130° DE LA LOCALIDAD DE QUEHUÉ, PROV. DE LA PAMPA, EL 7 DE NOVIEMBRE DE 2026."
+        }
+      ],
+      "expositores": null,
+      "tipo": "senadores",
+      "boletin_id": 2600156,
+      "boletin_numero": "156/26"
+    },
+    {
+      "seccion": "senadores",
+      "dia": "MIÉRCOLES",
+      "fecha": "18/11",
+      "hora": "18:00",
+      "modalidad": "",
+      "comisiones": [
+        "ECONOMÍAS REGIONALES, ECONOMÍA SOCIAL, MICRO, PEQUEÑA Y MEDIANA EMPRESA"
+      ],
+      "salon": "ILLIA",
+      "salon_completo": "SALÓN ILLIA",
+      "temario": [
+        {
+          "numero": "",
+          "extracto": "PROYECTOS DE LEY"
+        },
+        {
+          "numero": "S-1902/26",
+          "extracto": "CAPITANICH: PROYECTO DE LEY QUE SUSTITUYE EL ART. 2° DE SU SIMILAR 24.467 - MARCO REGULATORIO PEQUEÑA Y MEDIANA EMPRESA - RESPECTO A LA INCLUSIÓN DE LAS COOPERATIVAS EN EL RÉGIMEN MIPYME."
+        },
+        {
+          "numero": "S-1143/26",
+          "extracto": "ATAUCHE: PROYECTO DE LEY QUE INCORPORA EL INC. C AL ART. 44 DE SU SIMILAR 25.300 - FOMENTO PARA LA MICRO, PEQUEÑA Y MEDIANA EMPRESA -, RESPECTO A LA INTEGRACIÓN DEL CONSEJO FEDERAL."
+        },
+        {
+          "numero": "",
+          "extracto": "PROYECTOS DE DECLARACIÓN"
+        },
+        {
+          "numero": "S-1963/26",
+          "extracto": "HUALA: PROYECTO DE DECLARACIÓN QUE EXPRESA BENEPLÁCITO Y RECONOCE A LOS EMPRENDIMIENTOS PAMPEANOS SELECCIONADOS PARA PARTICIPAR EN LA FINAL NACIONAL DEL CONCURSO \"EMPRENDIMIENTO ARGENTINO 2026\", EN CABA, EL 19 Y 20 DE NOVIEMBRE."
+        },
+        {
+          "numero": "S-1722/26",
+          "extracto": "MOISÉS: PROYECTO DE DECLARACIÓN QUE DECLARA DE INTERÉS LA 17° EDICIÓN DE EXPOJUY 2026 A REALIZARSE EN LA CIUDAD CULTURAL DE SAN SALVADOR DE JUJUY, ENTRE EL 9 Y EL 12 DE OCTUBRE DE 2026."
+        },
+        {
+          "numero": "S-1579/26",
+          "extracto": "MARKS: PROYECTO DE DECLARACIÓN QUE DECLARA DE INTERÉS LA DÉCIMA EDICIÓN DE LA EXPOSICIÓN \"EXPO VALLE MEDIO EMPRENDE\", A REALIZARSE EN LA LOC. DE LAMARQUE, PROV. DE RÍO NEGRO, EL 7 Y 8 DE NOVIEMBRE DE 2026."
+        },
+        {
+          "numero": "S-1184/26",
+          "extracto": "LEWANDOWSKI: PROYECTO DE DECLARACIÓN QUE DECLARA DE INTERÉS EL CONGRESO INTERNACIONAL DE COOPERATIVAS Y MUTUALES (CICM) 2026, A REALIZARSE EN LA ESTACIÓN FLUVIAL DE LA CDAD. DE ROSARIO, PROV. DE SANTA FE, EL 25 DE JULIO DE 2026."
+        }
+      ],
+      "expositores": null,
+      "tipo": "senadores",
+      "boletin_id": 2600156,
+      "boletin_numero": "156/26"
+    },
+    {
+      "seccion": "senadores",
+      "dia": "MARTES",
+      "fecha": "24/11",
+      "hora": "14:00",
+      "modalidad": "",
+      "comisiones": [
+        "AMBIENTE Y DESARROLLO SUSTENTABLE",
+        "INDUSTRIA Y COMERCIO"
+      ],
+      "salon": "ILLIA",
+      "salon_completo": "SALÓN ILLIA",
+      "temario": [
+        {
+          "numero": "",
+          "extracto": "PROYECTO DE LEY"
+        },
+        {
+          "numero": "S-1842/26",
+          "extracto": "TERENZI: PROYECTO DE LEY QUE ESTABLECE LOS PRESUPUESTOS MÍNIMOS DE GESTIÓN AMBIENTAL DE ENVASES Y EMBALAJES POST CONSUMO MEDIANTE LA RESPONSABILIDAD EXTENDIDA DEL PRODUCTOR."
+        }
+      ],
+      "expositores": null,
+      "tipo": "senadores",
+      "boletin_id": 2600156,
+      "boletin_numero": "156/26"
     }
   ]
 }

@@ -1,5 +1,23 @@
 [
  {
+  "id": 24623,
+  "url": "https://www.senado.gob.ar/prensa/24623/noticias",
+  "fecha": "2026-11-17",
+  "titulo": "CONTINÚA EL DEBATE SOBRE EL PROYECTO DE REFORMA ELECTORAL INTEGRAL",
+  "comisiones": [
+   "ASUNTOS CONSTITUCIONALES"
+  ]
+ },
+ {
+  "id": 24622,
+  "url": "https://www.senado.gob.ar/prensa/24622/noticias",
+  "fecha": "2026-11-17",
+  "titulo": "LA COMISIÓN DE ACUERDOS TRATÓ 21 PLIEGOS EN AUDIENCIA PÚBLICA",
+  "comisiones": [
+   "ACUERDOS"
+  ]
+ },
+ {
   "id": 24618,
   "url": "https://www.senado.gob.ar/prensa/24618/noticias",
   "fecha": "2026-11-17",
@@ -605,20 +623,6 @@
   "url": "https://www.senado.gob.ar/prensa/24421/noticias",
   "fecha": "2026-09-24",
   "titulo": "MUESTRA \"TUCUMÁN: LA BATALLA CONTRA EL DESTINO\"",
-  "comisiones": []
- },
- {
-  "id": 24418,
-  "url": "https://www.senado.gob.ar/prensa/24418/noticias",
-  "fecha": "2026-09-23",
-  "titulo": "EL SENADO SE ILUMINA DE AZUL POR EL DÍA INTERNACIONAL DE LAS LENGUAS DE SEÑAS",
-  "comisiones": []
- },
- {
-  "id": 24416,
-  "url": "https://www.senado.gob.ar/prensa/24416/noticias",
-  "fecha": "2026-09-23",
-  "titulo": "LA BICAMERAL DE REFORMA DEL ESTADO RECIBIÓ AL TITULAR DE LA AGENCIA DE TRANSFORMACIÓN DE EMPRESAS PÚBLICAS",
   "comisiones": []
  }
 ]
