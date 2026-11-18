@@ -58,7 +58,11 @@
     "72/26": "02/09/2026",
     "71/26": "27/08/2026",
     "79/26": "04/11/2026",
-    "80/26": "17-11-2026"
+    "80/26": "17-11-2026",
+    "78/26": "28/10/2026",
+    "77/26": "21/10/2026",
+    "75/26": "13/10/2026",
+    "74/26": "07/10/2026"
   },
   "cambios": [
     {
@@ -4849,6 +4853,72 @@
       "tipo": "replace",
       "senador": "LOPEZ, CLAUDIA CECILIA",
       "reemplaza": "PAGOTTO, Juan Carlos"
+    },
+    {
+      "dpp": "78/26",
+      "comision": "De Asuntos Constitucionales",
+      "tipo": "add",
+      "senador": "ARRASCAETA, Ivanna Marcela"
+    },
+    {
+      "dpp": "77/26",
+      "comision": "De Industria y Comercio",
+      "tipo": "replace",
+      "senador": "ABDALA, Bartolomé Esteban",
+      "reemplaza": "MONTE DE OCA, María Belén"
+    },
+    {
+      "dpp": "77/26",
+      "comision": "De Legislación General",
+      "tipo": "replace",
+      "senador": "ABDALA, Bartolomé Esteban",
+      "reemplaza": "MONTE DE OCA, María Belén"
+    },
+    {
+      "dpp": "75/26",
+      "comision": "De Economías Regionales, Economía Social, Micro, Pequeña y Mediana Empresa",
+      "tipo": "replace",
+      "senador": "CRISTINA, Andrea Marcela",
+      "reemplaza": "HUALA, María Victoria"
+    },
+    {
+      "dpp": "75/26",
+      "comision": "De Industria y Comercio",
+      "tipo": "replace",
+      "senador": "ESPINOLA, Carlos Mauricio",
+      "reemplaza": "VIGO, Alejandra María"
+    },
+    {
+      "dpp": "75/26",
+      "comision": "De Industria y Comercio",
+      "tipo": "replace",
+      "senador": "MONTE DE OCA, María Belén",
+      "reemplaza": "ABDALA, Bartolomé Esteban"
+    },
+    {
+      "dpp": "75/26",
+      "comision": "De Salud",
+      "tipo": "add",
+      "senador": "GUZMÁN CORAITA, Gonzalo"
+    },
+    {
+      "dpp": "75/26",
+      "comision": "De Legislación General",
+      "tipo": "replace",
+      "senador": "MONTE DE 0CA, María Belén",
+      "reemplaza": "ABDALA, Bartolomé Esteban"
+    },
+    {
+      "dpp": "75/26",
+      "comision": "De Población y Desarrollo Humano",
+      "tipo": "add",
+      "senador": "OLIVERA LUCERO, Bruno Antonio"
+    },
+    {
+      "dpp": "74/26",
+      "comision": "De Acuerdos",
+      "tipo": "add",
+      "senador": "FULLONE, Enzo Paolo"
     }
   ]
 }

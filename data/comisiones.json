@@ -1200,11 +1200,6 @@
         "rol": ""
       },
       {
-        "nombre": "ABDALA, Bartolomé Esteban",
-        "bloque": "LA LIBERTAD AVANZA",
-        "rol": ""
-      },
-      {
         "nombre": "VALENZUELA, Mercedes Gabriela",
         "bloque": "UCR - UNIÓN CÍVICA RADICAL",
         "rol": ""
@@ -1252,6 +1247,11 @@
       {
         "nombre": "SALINO, Fernando Aldo",
         "bloque": "JUSTICIA SOCIAL FEDERAL",
+        "rol": ""
+      },
+      {
+        "nombre": "MONTE DE OCA, María Belén",
+        "bloque": "LA LIBERTAD AVANZA",
         "rol": ""
       }
     ],
@@ -1456,11 +1456,6 @@
         "rol": "Vicepresidente"
       },
       {
-        "nombre": "ABDALA, Bartolomé Esteban",
-        "bloque": "LA LIBERTAD AVANZA",
-        "rol": ""
-      },
-      {
         "nombre": "GUZMÁN CORAITA, Gonzalo",
         "bloque": "LA LIBERTAD AVANZA",
         "rol": ""
@@ -1528,6 +1523,11 @@
       {
         "nombre": "SALINO, Fernando Aldo",
         "bloque": "JUSTICIA SOCIAL FEDERAL",
+        "rol": ""
+      },
+      {
+        "nombre": "MONTE DE 0CA, María Belén",
+        "bloque": "Sin datos",
         "rol": ""
       }
     ],

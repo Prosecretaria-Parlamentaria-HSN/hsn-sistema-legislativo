@@ -80,22 +80,26 @@
   "74/26": {
     "fecha": "07-10-2026",
     "tema": "DESIGNANDO AL SENADOR FULLONE EN LA COMISION DE ACUERDOS",
-    "status": "sin_texto"
+    "articulos": 1,
+    "designaciones": 1
   },
   "75/26": {
     "fecha": "13-10-2026",
     "tema": "DESIGNANDO REEMPLAZOS EN DIVERSAS COMISIONES UNICAMERALES",
-    "status": "sin_texto"
+    "articulos": 5,
+    "designaciones": 6
   },
   "77/26": {
     "fecha": "21-10-2026",
     "tema": "DESIGNANDO REEMPLAZOS EN DIVERSAS COMISIONES UNICAMERALES",
-    "status": "sin_texto"
+    "articulos": 2,
+    "designaciones": 2
   },
   "78/26": {
     "fecha": "28-10-2026",
     "tema": "DESIGNANDO A LA SENADORA  ARRASCAETA  EN LA COMISION DE ASUNTOS CONSTITUCIONALES",
-    "status": "sin_texto"
+    "articulos": 1,
+    "designaciones": 1
   },
   "79/26": {
     "fecha": "04-11-2026",
@@ -106,11 +110,12 @@
   "81/26": {
     "fecha": "17-11-2026",
     "tema": "DESIGNANDO A MIEMBROS INTEGRANTES DE LA COMISIÓN NACIONAL DE EVALUACIÓN Y ACREDITACIÓN UNIVERSITARIA (CONEAU)",
-    "status": "sin_texto"
+    "articulos": 0,
+    "designaciones": 0
   },
   "80/26": {
     "fecha": "17-11-2026",
     "tema": "DESIGNANDO A LA SENADORA CLAUDIA CECILIA LÓPEZ EN LA COMISIÓN DE JUSTICIA Y ASUNTOS PENALES",
-    "status": "sin_texto"
+    "status": "manual"
   }
 }
