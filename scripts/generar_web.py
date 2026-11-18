@@ -7417,8 +7417,11 @@ def construir_ayuda_memoria(proyectos=None):
         (p.get("origen"), p.get("nro"), p.get("anio")): p.get("bloques") or []
         for p in (proyectos or [])
     }
+    # Autores PRINCIPALES de cada proyecto (los que firman la carátula). Los
+    # coautores ("... y otros") no cuentan para el bloque de la OD: una OD de
+    # "Moisés y otros" es del bloque de Moisés, no del de sus coautores.
     autores_por_exp = {
-        (p.get("origen"), p.get("nro"), p.get("anio")): (p.get("autores") or []) + (p.get("coautores") or [])
+        (p.get("origen"), p.get("nro"), p.get("anio")): (p.get("autores") or p.get("coautores") or [])
         for p in (proyectos or [])
     }
 
