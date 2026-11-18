@@ -4950,6 +4950,12 @@
       "comision": "De Salud",
       "tipo": "remove",
       "senador": "PAGOTTO, Juan Carlos"
+    },
+    {
+      "dpp": "73/26",
+      "comision": "De Seguridad Interior y Narcotráfico",
+      "tipo": "remove",
+      "senador": "PAGOTTO, Juan Carlos"
     }
   ]
 }
