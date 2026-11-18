@@ -57,7 +57,8 @@
     "67/26": "05/08/2026",
     "72/26": "02/09/2026",
     "71/26": "27/08/2026",
-    "79/26": "04/11/2026"
+    "79/26": "04/11/2026",
+    "80/26": "17-11-2026"
   },
   "cambios": [
     {
@@ -4841,6 +4842,13 @@
       "tipo": "replace",
       "senador": "JURI, Mariana",
       "reemplaza": "LOSADA, Carolina"
+    },
+    {
+      "dpp": "80/26",
+      "comision": "De Justicia y Asuntos Penales",
+      "tipo": "replace",
+      "senador": "LOPEZ, CLAUDIA CECILIA",
+      "reemplaza": "PAGOTTO, Juan Carlos"
     }
   ]
 }
