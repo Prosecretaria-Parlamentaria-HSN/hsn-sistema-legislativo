@@ -62,7 +62,8 @@
     "78/26": "28/10/2026",
     "77/26": "21/10/2026",
     "75/26": "13/10/2026",
-    "74/26": "07/10/2026"
+    "74/26": "07/10/2026",
+    "73/26": "28-10-2026"
   },
   "cambios": [
     {
@@ -4919,6 +4920,12 @@
       "comision": "De Acuerdos",
       "tipo": "add",
       "senador": "FULLONE, Enzo Paolo"
+    },
+    {
+      "dpp": "73/26",
+      "comision": "De Asuntos Constitucionales",
+      "tipo": "remove",
+      "senador": "PAGOTTO, Juan Carlos"
     }
   ]
 }
