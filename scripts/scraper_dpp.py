@@ -51,7 +51,7 @@ URL_DECRETOS = f"{BASE_URL}/parlamentario/parlamentaria/decreto"
 # Ver nota en scraper_agenda.py: un User-Agent de navegador dispara el
 # anti-bots del sitio; uno propio y honesto pasa sin problema. NO cambiarlo
 # por uno de navegador.
-HEADERS = {"User-Agent": "HSN-SistemaLegislativo/1.0 (+https://github.com/bonifaciomariano/hsn-sistema-legislativo)"}
+HEADERS = {"User-Agent": "HSN-SistemaLegislativo/1.0 (+https://github.com/Prosecretaria-Parlamentaria-HSN/hsn-sistema-legislativo)"}
 
 logging.basicConfig(
     level=logging.INFO,
@@ -86,6 +86,10 @@ def nombre_dpp_a_formato(texto):
     El apellido es la secuencia FINAL de tokens en MAYÚSCULAS.
     """
     tokens = texto.split()
+    # Tratamientos y restos de "del/de la" pegados al nombre ("l señor senador Juan Carlos PAGOTTO")
+    _trat = {"senor", "senora", "senador", "senadora", "sr.", "sra.", "dr.", "dra.", "l", "del", "de", "la", "el"}
+    while tokens and sin_tildes(tokens[0]).lower() in _trat:
+        tokens = tokens[1:]
     if not tokens:
         return "", ""
     # Apellido: tokens finales en mayúsculas (token == su versión upper, con tildes)
@@ -159,6 +163,37 @@ def listar_decretos():
     return decretos
 
 
+def _ocr_pdf(contenido):
+    """OCR de un PDF escaneado (sin capa de texto): renderiza cada página y la pasa por el
+    programa `tesseract` (idioma español si está instalado; si no, el que haya).
+    Devuelve "" si tesseract no está disponible o falla: el llamador lo trata como antes."""
+    import shutil
+    import subprocess
+    import tempfile
+    exe = shutil.which("tesseract")
+    if not exe:
+        return ""
+    try:
+        langs = subprocess.run([exe, "--list-langs"], capture_output=True, text=True, timeout=30).stdout
+        lang = "spa" if "spa" in langs.split() else ("eng" if "eng" in langs.split() else None)
+    except Exception:
+        lang = None
+    partes = []
+    try:
+        with pdfplumber.open(io.BytesIO(contenido)) as pdf, tempfile.TemporaryDirectory() as tmp:
+            for i, page in enumerate(pdf.pages[:6]):
+                img = os.path.join(tmp, f"p{i}.png")
+                page.to_image(resolution=220).original.save(img)
+                cmd = [exe, img, "stdout", "--psm", "6"] + (["-l", lang] if lang else [])
+                r = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+                if r.stdout.strip():
+                    partes.append(r.stdout)
+    except Exception as exc:
+        log.warning(f"    ⚠ OCR falló: {exc}")
+        return ""
+    return "\n".join(partes)
+
+
 def descargar_texto_pdf(url):
     resp = requests.get(url, headers=HEADERS, timeout=60)
     resp.raise_for_status()
@@ -168,7 +203,13 @@ def descargar_texto_pdf(url):
             t = page.extract_text()
             if t:
                 partes.append(t)
-    return "\n".join(partes)
+    texto = "\n".join(partes)
+    if len(texto.strip()) < 40:
+        ocr = _ocr_pdf(resp.content)
+        if len(ocr.strip()) >= 40:
+            log.info("    (PDF escaneado: texto obtenido por OCR)")
+            return ocr
+    return texto
 
 
 # ─────────────────────────────── Parseo del DPP ──────────────────────────────
@@ -354,6 +395,16 @@ def aplicar_cambios(comisiones, cambios, padron, indice, numero_dpp):
 
 # ─────────────────────────────── Persistencia ────────────────────────────────
 
+def _es_reciente(fecha_txt, dias):
+    """fecha_txt tipo '13-10-2026' o '13/10/2026'."""
+    import datetime
+    try:
+        d, m, a = [int(x) for x in re.split(r"[-/]", fecha_txt)]
+        return (datetime.date.today() - datetime.date(a, m, d)).days <= dias
+    except Exception:
+        return False
+
+
 def cargar_json(path, default):
     if os.path.exists(path):
         try:
@@ -424,9 +475,19 @@ def main():
     for dec in decretos:
         numero = dec["numero"]
         tema_upper = sin_tildes(dec["tema"]).upper()
-        if numero in procesados:
-            continue
+        previo = procesados.get(numero)
+        if previo is not None:
+            # Los DPP escaneados que antes quedaron "sin_texto" se reintentan (ahora hay OCR),
+            # pero solo los de los últimos 60 días: los viejos ya están reflejados en la integración.
+            if not (previo.get("status") == "sin_texto" and _es_reciente(dec["fecha"], 60)):
+                continue
         if "COMISION" not in tema_upper:
+            continue
+        # Si ese DPP ya fue cargado a mano desde el Editor de Comisiones, no se vuelve a aplicar.
+        if any(str(c.get("dpp", "")).replace("DPP", "").strip(" -") == numero
+               for c in dpp_data.get("cambios", [])):
+            log.info(f"  DPP {numero}: ya cargado a mano en el editor; se deja como está")
+            procesados[numero] = {"fecha": dec["fecha"], "tema": dec["tema"], "status": "manual"}
             continue
         log.info(f"  DPP {numero} — {dec['tema'][:70]}")
         try:
