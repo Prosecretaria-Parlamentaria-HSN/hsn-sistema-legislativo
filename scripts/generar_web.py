@@ -1266,6 +1266,53 @@ body.print-view-active #main-votacion #herr-root { display: none; }
 #main-votacion .reg-frame { display: block; width: 100%; height: 75vh; min-height: 420px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-elevated); }
 #main-votacion .reg-fallback { padding: 0 1rem 1rem; font-size: 0.8rem; color: var(--ink-muted); }
 
+/* ── Plan de sesión (subtab de Herramientas para sesión) ──────────────── */
+#main-votacion .plan-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 0.6rem; }
+#main-votacion .plan-pill { display: inline-block; padding: 0.15rem 0.7rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; background: var(--brand-sky-pale); color: var(--brass-strong); }
+#main-votacion .plan-ses { font-weight: 700; color: var(--vote-negative); }
+#main-votacion .plan-toolbar { display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-soft); background: var(--bg-elevated); align-items: center; }
+#main-votacion .plan-toolbar input[type="search"] { flex: 1 1 240px; min-height: 40px; padding: 0.5rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: #fff; color: var(--ink); font: inherit; }
+#main-votacion .plan-toolbar input[type="search"]:focus-visible { outline: 2px solid var(--brass); outline-offset: 1px; }
+#main-votacion .plan-toolbar button { min-height: 40px; }
+#main-votacion .plan-status { padding: 0.5rem 1rem 0; font-size: 0.82rem; color: var(--ink-muted); }
+#main-votacion .plan-status.err { color: var(--vote-negative); }
+#main-votacion .plan-nav { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0.85rem 1rem 0; margin: 0; list-style: none; }
+#main-votacion .plan-nav a { display: block; padding: 0.2rem 0.65rem; border: 1px solid var(--border); border-radius: 999px; font-size: 0.8rem; color: var(--ink); text-decoration: none; background: #fff; }
+#main-votacion .plan-nav a:hover { border-color: var(--brass); color: var(--brass); }
+#main-votacion .plan-lista { padding: 0.85rem 1rem 1rem; }
+#main-votacion details.plan-item { background: #fff; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 0.6rem; overflow: hidden; }
+#main-votacion details.plan-item > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 0.75rem; padding: 0.8rem 1rem; font-weight: 700; color: var(--ink); }
+#main-votacion details.plan-item > summary::-webkit-details-marker { display: none; }
+#main-votacion details.plan-item > summary::after { content: ""; margin-left: auto; width: 8px; height: 8px; border: solid var(--ink-muted); border-width: 0 2px 2px 0; transform: rotate(45deg); transition: transform 0.15s; flex: none; }
+#main-votacion details.plan-item[open] > summary::after { transform: rotate(-135deg); }
+#main-votacion details.plan-item[open] > summary { border-bottom: 1px solid var(--border); background: var(--brand-sky-pale); }
+#main-votacion .plan-num { flex: none; min-width: 28px; height: 28px; border-radius: 50%; background: var(--brass); color: #fff; display: grid; place-items: center; font-size: 0.85rem; }
+#main-votacion .plan-cnt { font-weight: 500; font-size: 0.75rem; color: var(--ink-muted); border: 1px solid var(--border); border-radius: 999px; padding: 0.05rem 0.55rem; white-space: nowrap; background: #fff; }
+#main-votacion .plan-inner { padding: 0.85rem 1rem; }
+#main-votacion .plan-empty { margin: 0; color: var(--ink-muted); font-style: italic; }
+#main-votacion .plan-grp { margin-bottom: 1.1rem; }
+#main-votacion .plan-grp:last-child { margin-bottom: 0; }
+#main-votacion .plan-grp h3 { font-size: 0.98rem; margin: 0 0 0.5rem; color: var(--brass-strong); }
+#main-votacion .plan-tw { overflow-x: auto; }
+#main-votacion .plan-tw table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+#main-votacion .plan-tw th, #main-votacion .plan-tw td { border: 1px solid var(--border); padding: 0.5rem 0.65rem; vertical-align: top; text-align: left; }
+#main-votacion .plan-tw th { background: var(--brand-sky-pale); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--brass-strong); }
+#main-votacion .plan-tw tbody tr:nth-child(even) { background: var(--bg-elevated); }
+#main-votacion .plan-tw td.c-od, #main-votacion .plan-tw td.c-exp { white-space: nowrap; width: 1%; }
+#main-votacion .plan-tw a { color: var(--brass); }
+#main-votacion .plan-sep { color: var(--ink-muted); }
+#main-votacion .plan-tw tr.plan-hide { display: none; }
+#main-votacion .plan-nores { display: none; text-align: center; color: var(--ink-muted); padding: 0.5rem; }
+#main-votacion .plan-toolbar select { min-height: 40px; padding: 0.45rem 0.6rem; border: 1px solid var(--border); border-radius: 8px; background: #fff; color: var(--ink); font: inherit; max-width: 100%; }
+#main-votacion .plan-pv-head { text-align: center; margin-bottom: 1rem; }
+#main-votacion .plan-pv-badge { font-weight: 700; letter-spacing: 0.08em; text-decoration: underline; }
+#main-votacion .plan-pv-ses { font-weight: 700; margin-top: 0.2rem; }
+#main-votacion .print-view .plan-pv-item { font-family: var(--font-display); font-size: 0.95rem; text-transform: uppercase; margin: 1.1rem 0 0.4rem; color: var(--brand-deep); break-after: avoid; }
+#main-votacion .print-view .plan-pv-grp { font-size: 0.88rem; margin: 0.7rem 0 0.3rem; break-after: avoid; }
+#main-votacion .print-view td a { color: inherit; text-decoration: none; }
+#main-votacion .plan-pv-foot { margin-top: 1rem; font-size: 0.72rem; color: #555; text-align: center; }
+#main-votacion .plan-foot { padding: 0 1rem 1rem; font-size: 0.8rem; color: var(--ink-muted); text-align: center; }
+
 """
 
 # ── JavaScript (vanilla) ───────────────────────────────────────────────────────
@@ -2297,6 +2344,209 @@ function switchHerrVista(id){
   root.querySelector('[data-herrvista="'+id+'"]').classList.add('active');
   document.getElementById('herr-vista-'+id).classList.add('active');
 }
+/* ── Plan de sesión ─────────────────────────────────────────────────────
+   Lee el HTML del plan de labor (el que arma la Prosecretaría), lo muestra con el
+   diseño de la web y ordena las OD de menor a mayor. Sólo se copian textos, negritas
+   y links al sitio del Senado: el resto del HTML cargado se descarta. */
+var PLAN_HOST='https://www.senado.gob.ar/';
+var planModel=null;
+function planTxt(el){return el?el.textContent.replace(/\s+/g,' ').trim():''}
+function planLimpiar(origen,destino){
+  origen.childNodes.forEach(function(n){
+    if(n.nodeType===3){destino.appendChild(document.createTextNode(n.nodeValue));return}
+    if(n.nodeType!==1)return;
+    var t=n.tagName;
+    if(t==='A'){
+      var h=n.getAttribute('href')||'';
+      if(h.indexOf(PLAN_HOST)===0){var a=document.createElement('a');a.href=h;a.target='_blank';a.rel='noopener';a.textContent=n.textContent;destino.appendChild(a)}
+      else destino.appendChild(document.createTextNode(n.textContent));
+    }else if(t==='STRONG'||t==='B'){var s=document.createElement('strong');s.textContent=n.textContent;destino.appendChild(s)}
+    else if(t==='SPAN'&&n.classList.contains('sep')){var sp=document.createElement('span');sp.className='plan-sep';sp.textContent=n.textContent;destino.appendChild(sp)}
+    else destino.appendChild(document.createTextNode(n.textContent));
+  });
+}
+function planClaveOd(celda){
+  var m=planTxt(celda).match(/(\d+)\s*\/\s*(\d{2,4})/);
+  if(!m)return null;
+  var y=parseInt(m[2],10);if(y<100)y+=2000;
+  return y*100000+parseInt(m[1],10);
+}
+function planTabla(titulo,tabla){
+  var g={titulo:titulo,cols:[],filas:[],reordenado:false};
+  tabla.querySelectorAll('thead th').forEach(function(th){g.cols.push(planTxt(th))});
+  tabla.querySelectorAll('tbody tr').forEach(function(tr,i){
+    var celdas=[];tr.querySelectorAll('td').forEach(function(td){celdas.push({cls:td.className||'',nodo:td})});
+    var iod=-1;celdas.forEach(function(c,j){if(c.cls.indexOf('c-od')>=0)iod=j});
+    g.filas.push({celdas:celdas,clave:iod>=0?planClaveOd(celdas[iod].nodo):null,pos:i});
+  });
+  if(g.filas.some(function(f){return f.clave!==null})){
+    var antes=g.filas.map(function(f){return f.pos}).join();
+    g.filas.sort(function(a,b){
+      var ka=a.clave===null?Infinity:a.clave,kb=b.clave===null?Infinity:b.clave;
+      if(ka===kb)return a.pos-b.pos;return ka<kb?-1:1;
+    });
+    g.reordenado=g.filas.map(function(f){return f.pos}).join()!==antes;
+  }
+  return g;
+}
+function planParsear(html){
+  var doc=new DOMParser().parseFromString(html,'text/html');
+  var m={badge:planTxt(doc.querySelector('.badge')),titulo:planTxt(doc.querySelector('h1')),sesion:planTxt(doc.querySelector('.ses')),items:[]};
+  doc.querySelectorAll('details.item').forEach(function(d,i){
+    var inner=d.querySelector('.inner');
+    var it={num:planTxt(d.querySelector('.num'))||String(i+1),titulo:planTxt(d.querySelector('.ttl')),cnt:planTxt(d.querySelector('.cnt')),grupos:[]};
+    if(inner){
+      var secs=inner.querySelectorAll('section.grp');
+      if(secs.length){secs.forEach(function(sec){var t=sec.querySelector('table');if(t)it.grupos.push(planTabla(planTxt(sec.querySelector('h3')),t))})}
+      else{var t0=inner.querySelector('table');if(t0)it.grupos.push(planTabla('',t0))}
+    }
+    m.items.push(it);
+  });
+  return m;
+}
+function planEstado(txt,error){
+  var el=document.getElementById('plan-status');if(!el)return;
+  el.textContent=txt||'';el.className='plan-status'+(error?' err':'');
+}
+function planRender(m){
+  planModel=m;
+  var meta=document.getElementById('plan-meta');meta.textContent='';
+  if(m.badge){var b=document.createElement('span');b.className='plan-pill';b.textContent=m.badge;meta.appendChild(b)}
+  if(m.sesion){var s=document.createElement('span');s.className='plan-ses';s.textContent=m.sesion;meta.appendChild(s)}
+  var nav=document.getElementById('plan-nav');nav.textContent='';
+  var lista=document.getElementById('plan-lista');lista.textContent='';
+  var reord=0;
+  m.items.forEach(function(it,i){
+    var id='plan-item-'+(i+1);
+    var li=document.createElement('li'),a=document.createElement('a');
+    a.href='#'+id;a.textContent=it.num+'. '+it.titulo;
+    a.addEventListener('click',function(e){e.preventDefault();var d=document.getElementById(id);d.open=true;d.scrollIntoView({behavior:'smooth',block:'start'})});
+    li.appendChild(a);nav.appendChild(li);
+    var d=document.createElement('details');d.className='plan-item';d.id=id;
+    var sm=document.createElement('summary');
+    var n=document.createElement('span');n.className='plan-num';n.textContent=it.num;
+    var t=document.createElement('span');t.className='plan-ttl';t.textContent=it.titulo;
+    sm.appendChild(n);sm.appendChild(t);
+    if(it.cnt){var c=document.createElement('span');c.className='plan-cnt';c.textContent=it.cnt;sm.appendChild(c)}
+    d.appendChild(sm);
+    var inn=document.createElement('div');inn.className='plan-inner';
+    if(!it.grupos.length){var p=document.createElement('p');p.className='plan-empty';p.textContent='Sin expedientes ni órdenes del día detallados en el plan de labor.';inn.appendChild(p)}
+    it.grupos.forEach(function(g){
+      if(g.reordenado)reord++;
+      var sec=document.createElement('section');sec.className='plan-grp';
+      if(g.titulo){var h=document.createElement('h3');h.textContent=g.titulo;sec.appendChild(h)}
+      var w=document.createElement('div');w.className='plan-tw';
+      var tb=document.createElement('table'),th=document.createElement('thead'),trh=document.createElement('tr');
+      g.cols.forEach(function(c){var x=document.createElement('th');x.textContent=c;trh.appendChild(x)});
+      th.appendChild(trh);tb.appendChild(th);
+      var body=document.createElement('tbody');
+      g.filas.forEach(function(f){
+        var tr=document.createElement('tr');
+        f.celdas.forEach(function(c){var td=document.createElement('td');if(c.cls)td.className=c.cls;planLimpiar(c.nodo,td);tr.appendChild(td)});
+        body.appendChild(tr);
+      });
+      tb.appendChild(body);w.appendChild(tb);sec.appendChild(w);inn.appendChild(sec);
+    });
+    d.appendChild(inn);lista.appendChild(d);
+  });
+  var q=document.getElementById('plan-q');if(q)q.value='';
+  document.getElementById('plan-nores').style.display='none';
+  var hay=m.items.length>0;
+  ['plan-toolbar-botones'].forEach(function(x){var e=document.getElementById(x);if(e)e.style.display=hay?'':'none'});
+  document.getElementById('plan-foot').style.display=hay?'':'none';
+  planEstado(hay?(reord?('Se ordenaron de menor a mayor las órdenes del día de '+reord+(reord===1?' grupo.':' grupos.')):''):'No se encontró ningún ítem en ese archivo. Usá el HTML del plan de labor.',!hay);
+}
+function planFiltrar(){
+  var t=document.getElementById('plan-q').value.trim().toLowerCase(),alguno=false;
+  document.querySelectorAll('#plan-lista details.plan-item').forEach(function(d){
+    var hit=0;
+    d.querySelectorAll('.plan-grp').forEach(function(g){
+      var h3=g.querySelector('h3');
+      var porTitulo=!!t&&!!h3&&h3.textContent.toLowerCase().indexOf(t)>=0;
+      g.querySelectorAll('tbody tr').forEach(function(r){
+        var ok=!t||porTitulo||r.textContent.toLowerCase().indexOf(t)>=0;
+        r.classList.toggle('plan-hide',!ok);if(ok)hit++;
+      });
+      g.style.display=(!t||g.querySelector('tbody tr:not(.plan-hide)'))?'':'none';
+    });
+    var ttl=d.querySelector('.plan-ttl').textContent.toLowerCase().indexOf(t)>=0;
+    var ver=!t||hit>0||ttl;d.style.display=ver?'':'none';
+    if(t&&hit>0)d.open=true;
+    if(ver)alguno=true;
+  });
+  document.getElementById('plan-nores').style.display=alguno?'none':'block';
+}
+function planAbrirTodo(v){document.querySelectorAll('#plan-lista details.plan-item').forEach(function(d){d.open=v})}
+var planLista=[];
+function planEtiqueta(id,html){
+  var doc=new DOMParser().parseFromString(html,'text/html');
+  var ses=planTxt(doc.querySelector('.ses'));
+  var m=String(id).match(/^(\d{4})-(\d{2})-(\d{2})/);
+  var f=m?(m[3]+'/'+m[2]+'/'+m[1]):'';
+  return ses||(f?('Sesión '+f):String(id));
+}
+function planArmarSelector(sel){
+  var s=document.getElementById('plan-sel');s.textContent='';
+  planLista.forEach(function(x,i){var o=document.createElement('option');o.value=String(i);o.textContent=x.etiqueta;s.appendChild(o)});
+  s.value=String(sel||0);
+  s.style.display=planLista.length>1?'':'none';
+}
+function planElegir(i){
+  var x=planLista[i];if(!x)return;
+  try{planRender(planParsear(x.html));if(x.local){var e=document.getElementById('plan-status');planEstado('Mostrando "'+x.id+'" (cargado sólo en este navegador). '+e.textContent,e.classList.contains('err'))}}
+  catch(e){planEstado('No se pudo leer ese plan.',true)}
+}
+function planCargarArchivo(inp){
+  var f=inp.files&&inp.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(){
+    var html=String(r.result);
+    planLista=planLista.filter(function(x){return !x.local});
+    planLista.push({id:f.name,html:html,etiqueta:'Archivo cargado: '+f.name,local:true});
+    var k=planLista.length-1;planArmarSelector(k);planElegir(k);inp.value='';
+  };
+  r.readAsText(f,'utf-8');
+}
+function planEsc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function planAbrirPdf(){
+  var m=planModel;if(!m||!m.items.length)return;
+  var pv=document.getElementById('planPrintView');
+  var h='<div class="pv-toolbar no-print"><button id="planPrintNow" class="btn-brass">Imprimir / Guardar como PDF</button><button id="planPrintBack" class="btn-neutral">Volver al plan</button><p class="pv-hint">Se va a abrir el diálogo de impresión del navegador. Elegí <strong>“Guardar como PDF”</strong> como destino.</p></div>';
+  h+='<div class="plan-pv-head">'+(m.badge?'<div class="plan-pv-badge">'+planEsc(m.badge)+'</div>':'')+'<h1>'+planEsc(m.titulo||'Plan de labor')+'</h1>'+(m.sesion?'<div class="plan-pv-ses">'+planEsc(m.sesion)+'</div>':'')+'</div>';
+  m.items.forEach(function(it){
+    h+='<h2 class="plan-pv-item">'+planEsc(it.num)+'. '+planEsc(it.titulo)+'</h2>';
+    it.grupos.forEach(function(g){
+      if(g.titulo)h+='<h3 class="plan-pv-grp">'+planEsc(g.titulo)+'</h3>';
+      h+='<table><thead><tr>'+g.cols.map(function(c){return '<th>'+planEsc(c)+'</th>'}).join('')+'</tr></thead><tbody>';
+      g.filas.forEach(function(f){
+        h+='<tr>'+f.celdas.map(function(c){var tmp=document.createElement('div');planLimpiar(c.nodo,tmp);return '<td>'+tmp.innerHTML+'</td>'}).join('')+'</tr>';
+      });
+      h+='</tbody></table>';
+    });
+  });
+  h+='<p class="plan-pv-foot">Dentro de cada ítem, las órdenes del día figuran de menor a mayor.</p>';
+  pv.innerHTML=h;pv.hidden=false;
+  document.body.classList.add('print-view-active');
+  document.getElementById('planPrintNow').addEventListener('click',function(){window.print()});
+  document.getElementById('planPrintBack').addEventListener('click',planCerrarPdf);
+  window.scrollTo(0,0);
+}
+function planCerrarPdf(){
+  document.body.classList.remove('print-view-active');
+  var pv=document.getElementById('planPrintView');pv.hidden=true;pv.textContent='';
+}
+function planInit(){
+  var src=document.getElementById('plan-src');if(!src)return;
+  var arr=[];try{arr=JSON.parse(src.textContent)||[]}catch(e){}
+  planLista=arr.map(function(x){return {id:x.id,html:x.html,etiqueta:planEtiqueta(x.id,x.html)}});
+  if(!planLista.length){
+    planRender({badge:'',titulo:'',sesion:'',items:[]});
+    planEstado('Todavía no hay un plan publicado. Cargá el HTML del plan de labor con el botón de arriba.');
+    return;
+  }
+  planArmarSelector(0);planElegir(0);
+}
+planInit();
 function switchComVista(id){
   var root=document.getElementById('com-nivel1');
   root.querySelectorAll(':scope > .sub-nav .sub-btn').forEach(function(b){b.classList.remove('active')});
@@ -6369,6 +6619,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     <button class="sub-btn" data-herrvista="dostercios" onclick="switchHerrVista('dostercios')">C&aacute;lculo 2/3</button>
     <button class="sub-btn" data-herrvista="tiempos" onclick="switchHerrVista('tiempos')">C&aacute;lculo de tiempos</button>
     <button class="sub-btn" data-herrvista="reglamento" onclick="switchHerrVista('reglamento')">Reglamento HSN</button>
+    <button class="sub-btn" data-herrvista="plan" onclick="switchHerrVista('plan')">Plan de sesi&oacute;n</button>
   </div>
 
   <!-- SUB: CONTADOR DE QUÓRUM -->
@@ -6683,10 +6934,43 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   </div>
   </div>
 
+  <!-- SUB: PLAN DE SESIÓN -->
+  <div id="herr-vista-plan" class="sub-content">
+  <div class="page">
+    <header class="masthead">
+      <div class="eyebrow">Congreso de la Nación Argentina · Cámara de Senadores</div>
+      <h1>Plan de sesión</h1>
+      <p class="subhead">Plan de labor de la sesión, con los expedientes y órdenes del día enlazados al sitio del Senado.</p>
+      <div class="plan-meta" id="plan-meta"></div>
+    </header>
+
+    <div class="card">
+      <div class="plan-toolbar">
+        <select id="plan-sel" aria-label="Elegir sesión" style="display:none" onchange="planElegir(parseInt(this.value,10))"></select>
+        <input type="search" id="plan-q" placeholder="Buscar expediente, orden del día o texto…" aria-label="Buscar en el plan" oninput="planFiltrar()">
+        <span id="plan-toolbar-botones" style="display:contents">
+          <button type="button" class="btn-neutral" onclick="planAbrirTodo(true)">Expandir todo</button>
+          <button type="button" class="btn-neutral" onclick="planAbrirTodo(false)">Contraer todo</button>
+        </span>
+        <button type="button" class="btn-brass" onclick="planAbrirPdf()">Descargar PDF</button>
+        <button type="button" class="btn-neutral" onclick="document.getElementById('plan-file').click()">Cargar otro plan (HTML)</button>
+        <input type="file" id="plan-file" accept=".html,.htm,text/html" hidden onchange="planCargarArchivo(this)">
+      </div>
+      <div class="plan-status" id="plan-status"></div>
+      <ol class="plan-nav" id="plan-nav" aria-label="Ítems del plan"></ol>
+      <div class="plan-lista" id="plan-lista"></div>
+      <p class="plan-nores" id="plan-nores">Sin resultados.</p>
+      <p class="plan-foot" id="plan-foot">Dentro de cada ítem, las órdenes del día figuran de menor a mayor.</p>
+    </div>
+  </div>
+  <script id="plan-src" type="application/json">{plan_sesion}</script>
+  </div>
+
 </div>
 
 <div id="printView" class="print-view" hidden></div>
 <div id="quorumPrintView" class="print-view" hidden></div>
+<div id="planPrintView" class="print-view" hidden></div>
 </div>
 
 <!-- ====================== MAIN: AYUDA MEMORIA ====================== -->
@@ -7910,6 +8194,18 @@ def main():
     fotos_senadores_js = json.dumps(fotos_por_nombre_norm, ensure_ascii=False)
     pliegos = cargar_pliegos()
     pliegos_js = json.dumps(pliegos, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    # Plan de sesión: un HTML por sesión en data/planes/ (AAAA-MM-DD.html), el más reciente primero.
+    planes = []
+    carpeta_planes = os.path.join(DATA_DIR, "planes")
+    if os.path.isdir(carpeta_planes):
+        for nombre in sorted(os.listdir(carpeta_planes), reverse=True):
+            if nombre.lower().endswith((".html", ".htm")):
+                try:
+                    with open(os.path.join(carpeta_planes, nombre), encoding="utf-8") as f:
+                        planes.append({"id": os.path.splitext(nombre)[0], "html": f.read()})
+                except OSError:
+                    pass
+    plan_sesion_js = json.dumps(planes, ensure_ascii=False).replace("</", "<\\/").replace("<!--", "\\u003c!--")
     fonts = _cargar("fonts_poppins.json", {})
     # Fuente de los PDF: Montserrat (data/fonts_montserrat.json); si el archivo falta, se usa Poppins.
     fonts_pdf = _cargar("fonts_montserrat.json", {}) or fonts
@@ -7920,6 +8216,7 @@ def main():
         js=JS + _leer_asset_pliegos("pliegos.js"),
         pliegos_html=_leer_asset_pliegos("pliegos.html"),
         pliegos_data=pliegos_js,
+        plan_sesion=plan_sesion_js,
         datos=datos_js,
         comisiones=comisiones_js,
         agenda=agenda_js,
