@@ -4974,6 +4974,65 @@ function irASanciones(expediente){
 
 /* ── Tablero de Votación (artefacto) ─────────────────────────────────── */
 
+/* ── Compartir por enlace (votación y cálculo de tiempos) ──────────────────
+   El enlace lleva el escenario adentro, en la parte "#..." de la dirección: no se sube a ningún
+   servidor y no hace falta clave. Los senadores viajan por nombre (no por número de banca). */
+window.HSNShare = (function () {
+  var PUBLICA = "https://prosecretaria-parlamentaria-hsn.github.io/hsn-sistema-legislativo/";
+  function b64enc(str) {
+    var bytes = new TextEncoder().encode(str), bin = "";
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin).split("+").join("-").split("/").join("_").split("=").join("");
+  }
+  function b64dec(str) {
+    str = str.split("-").join("+").split("_").join("/");
+    while (str.length % 4) str += "=";
+    var bin = atob(str), bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+  function baseUrl() {
+    return location.protocol === "file:" ? PUBLICA : location.origin + location.pathname + location.search;
+  }
+  function build(kind, obj) { return baseUrl() + "#votacion/" + kind + "/" + b64enc(JSON.stringify(obj)); }
+  function read(kind) {
+    var prefix = "#votacion/" + kind + "/";
+    if (location.hash.indexOf(prefix) !== 0) return null;
+    try {
+      var obj = JSON.parse(b64dec(location.hash.slice(prefix.length)));
+      return obj && typeof obj === "object" ? obj : null;
+    } catch (e) { return null; }
+  }
+  function strip(str) { return String(str).normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase().trim(); }
+  // Clave estable de un senador: APELLIDO_NOMBRE (el apellido son las palabras finales en mayúsculas).
+  function key(nombre) {
+    var toks = String(nombre).trim().split(/\s+/), i = toks.length, sur = [];
+    while (i > 0 && toks[i - 1] === toks[i - 1].toUpperCase() && /[A-ZÁÉÍÓÚÜÑ]/i.test(toks[i - 1])) { sur.unshift(toks[i - 1]); i--; }
+    return strip(sur.join(" ")) + "_" + strip(i > 0 ? toks[0] : "");
+  }
+  function copy(url, done) {
+    function fallback() { window.prompt("Copiá este enlace (Ctrl+C) y pegalo en un mensaje:", url); done(false); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function () { done(true); }, fallback);
+    } else { fallback(); }
+  }
+  function fechaHora(d) {
+    function z(n) { return (n < 10 ? "0" : "") + n; }
+    return z(d.getDate()) + "-" + z(d.getMonth() + 1) + "-" + d.getFullYear() + " " + z(d.getHours()) + ":" + z(d.getMinutes());
+  }
+  // Si se abrió un enlace compartido, mostrar la herramienta correspondiente al terminar de cargar.
+  function mostrar(vista) {
+    window.addEventListener("load", function () {
+      try {
+        if (typeof activateMain === "function") activateMain("votacion");
+        if (typeof switchHerrVista === "function") switchHerrVista(vista);
+        history.replaceState(null, "", "#votacion");
+      } catch (e) { /* ignorar */ }
+    });
+  }
+  return { build: build, read: read, key: key, copy: copy, fechaHora: fechaHora, mostrar: mostrar };
+})();
+
 (function () {
   "use strict";
 
@@ -5814,6 +5873,76 @@ function irASanciones(expediente){
 
   buildChamber();
   render();
+
+  /* ── Compartir escenario por enlace ── */
+  var VOTE_CHAR = { positive: "p", negative: "n", abstention: "a", absent: "x" };
+  var CHAR_VOTE = { p: "positive", n: "negative", a: "abstention", x: "absent" };
+  var shareScenarioBtn = document.getElementById("shareScenarioBtn");
+
+  function activeScenarioName() {
+    var sc = getScenarios().filter(function (s) { return s.id === activeScenarioId; })[0];
+    return sc ? sc.name : "Escenario";
+  }
+
+  shareScenarioBtn.addEventListener("click", function () {
+    var parts = [];
+    SENATORS.forEach(function (s) {
+      var c = VOTE_CHAR[votes[s.banca - 1]];
+      if (c) parts.push(HSNShare.key(s.nombre) + ":" + c);
+    });
+    if (!parts.length) {
+      scenarioStatus.textContent = "No hay votos cargados para compartir.";
+      return;
+    }
+    var url = HSNShare.build("v", { n: activeScenarioName(), m: selectedMajority, v: parts.join(",") });
+    HSNShare.copy(url, function (ok) {
+      scenarioStatus.textContent = ok
+        ? "Enlace copiado. Pegalo en un mensaje: quien lo abra va a ver este escenario."
+        : "Copiá el enlace de la ventana y pegalo en un mensaje.";
+    });
+  });
+
+  function aplicarEscenarioCompartido(sh) {
+    if (typeof sh.v !== "string") return;
+    var porClave = {};
+    SENATORS.forEach(function (s) { porClave[HSNShare.key(s.nombre)] = s.banca - 1; });
+    var nuevos = SENATORS.map(function () { return "pending"; });
+    var faltan = 0;
+    sh.v.split(",").forEach(function (par) {
+      var k = par.split(":");
+      var idx = porClave[k[0]];
+      if (idx === undefined || !CHAR_VOTE[k[1]]) { if (k[0]) faltan++; return; }
+      nuevos[idx] = CHAR_VOTE[k[1]];
+    });
+    // Si había trabajo sin guardar, se resguarda como escenario para no perderlo.
+    var hayTrabajo = votes.some(function (v) { return v !== "pending"; });
+    var actual = getScenarios().filter(function (s) { return s.id === activeScenarioId; })[0];
+    var yaGuardado = actual && actual.votes.join() === votes.join();
+    var respaldo = "";
+    if (hayTrabajo && !yaGuardado) {
+      respaldo = "Trabajo anterior (" + HSNShare.fechaHora(new Date()) + ")";
+      var lista = getScenarios();
+      lista.push({ id: Date.now().toString(36) + "r" + Math.random().toString(36).slice(2, 6), name: respaldo,
+        votes: votes.slice(), selectedMajority: selectedMajority, updatedAt: Date.now() });
+      saveScenarios(lista);
+    }
+    votes = nuevos;
+    var valida = MAJORITY_OPTIONS.some(function (o) { return o.value === sh.m; });
+    if (valida) selectedMajority = sh.m;
+    majoritySelect.value = selectedMajority;
+    var nombre = String(sh.n || "Escenario").slice(0, 80) + " (compartido)";
+    createScenario(nombre);
+    render();
+    scenarioStatus.textContent = "Escenario compartido cargado y guardado en tu lista como “" + nombre + "”." +
+      (respaldo ? " Tu trabajo anterior quedó guardado como “" + respaldo + "”." : "") +
+      (faltan ? " " + faltan + " voto(s) de senadores que ya no están en la lista no se cargaron." : "");
+  }
+
+  var compartido = HSNShare.read("v");
+  if (compartido) {
+    aplicarEscenarioCompartido(compartido);
+    HSNShare.mostrar("votacion");
+  }
 })();
 
 /* ── Contador de Quórum (subtab de Herramientas para sesión) ──────────── */
@@ -6728,9 +6857,58 @@ function irASanciones(expediente){
   });
 
   loadState();
+
+  /* ── Compartir tema por enlace ── */
+  var shareTemaBtn = document.getElementById("shareTemaBtn");
+  shareTemaBtn.addEventListener("click", function () {
+    var tema = getActiveTema();
+    if (!tema) return;
+    if (!tema.oradores.length) { importPdfStatus.textContent = "No hay oradores para compartir."; return; }
+    aplicarRoles(tema);
+    var url = HSNShare.build("t", {
+      n: tema.nombre, h: tema.horaInicio || "", i: tema.nInf || 0, c: tema.nCierre || 0,
+      o: tema.oradores.map(function (o) {
+        return [o.senadorNombre, o.bloque, o.minutos, o.minutosManual ? 1 : 0, o.rolManual || "",
+          o.estado === "hablo" ? "h" : (o.estado === "no_habla" ? "n" : "p")];
+      })
+    });
+    HSNShare.copy(url, function (ok) {
+      importPdfStatus.textContent = ok
+        ? "Enlace copiado. Pegalo en un mensaje: quien lo abra va a recibir este tema."
+        : "Copiá el enlace de la ventana y pegalo en un mensaje.";
+    });
+  });
+
+  var temaCompartido = HSNShare.read("t");
+  var mensajeCompartido = "";
+  if (temaCompartido && Array.isArray(temaCompartido.o)) {
+    var tc = defaultTema(temas.length + 1);
+    tc.nombre = String(temaCompartido.n || "Tema").slice(0, 80) + " (compartido)";
+    tc.horaInicio = /^\d{2}:\d{2}$/.test(temaCompartido.h || "") ? temaCompartido.h : "";
+    tc.nInf = Math.max(0, parseInt(temaCompartido.i, 10) || 0);
+    tc.nCierre = Math.max(0, parseInt(temaCompartido.c, 10) || 0);
+    temaCompartido.o.slice(0, 200).forEach(function (r) {
+      if (!Array.isArray(r) || !r[0]) return;
+      var nombre = String(r[0]).slice(0, 120);
+      var sen = SENATORS.filter(function (x) { return x.nombre === nombre; })[0];
+      var min = Math.max(1, Math.min(120, parseInt(r[2], 10) || TIEMPOS_ROL.orador));
+      var o = { senadorNombre: nombre, bloque: sen ? sen.bloque : String(r[1] || "").slice(0, 80),
+        minutos: min, minutosManual: !!r[3], estado: r[5] === "h" ? "hablo" : (r[5] === "n" ? "no_habla" : "pendiente") };
+      if (ROL_LABEL[r[4]]) o.rolManual = r[4];
+      tc.oradores.push(o);
+    });
+    clampCortes(tc);
+    temas.push(tc);
+    activeTemaId = tc.id;
+    saveState();
+    mensajeCompartido = "Tema compartido cargado y guardado en tu lista como “" + tc.nombre + "”.";
+    HSNShare.mostrar("tiempos");
+  }
+
   fillOradorSelect();
   renderTemaSelect();
   render();
+  if (mensajeCompartido) importPdfStatus.textContent = mensajeCompartido;
 })();
 
 
@@ -7358,6 +7536,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <div class="scenario-actions">
           <button id="newScenarioBtn" class="btn-neutral">Nuevo escenario</button>
           <button id="saveScenarioBtn" class="btn-neutral">Guardar</button>
+          <button id="shareScenarioBtn" class="btn-neutral" title="Copia un enlace para pasarle este escenario a otra persona">Compartir</button>
           <button id="deleteScenarioBtn" class="btn-neutral">Eliminar</button>
         </div>
         <span id="scenarioStatus" class="scenario-status"></span>
@@ -7470,6 +7649,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <div class="scenario-actions">
           <button id="newTemaBtn" class="btn-neutral">Nuevo tema</button>
           <button id="renameTemaBtn" class="btn-neutral">Renombrar</button>
+          <button id="shareTemaBtn" class="btn-neutral" title="Copia un enlace para pasarle este tema a otra persona">Compartir</button>
           <button id="deleteTemaBtn" class="btn-neutral">Eliminar</button>
         </div>
       </div>
