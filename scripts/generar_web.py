@@ -1258,6 +1258,12 @@ body.print-view-active #main-votacion #herr-root { display: none; }
 #main-votacion .orador-cross.on { background: var(--vote-negative); color: #fff; border-color: var(--vote-negative); }
 #main-votacion .orador-remove { background: transparent; border: none; color: var(--ink-faint); min-height: 32px; padding: 0.2rem; }
 #main-votacion .orador-remove:hover { color: var(--vote-negative); }
+#main-votacion .orador-rol { min-height: 26px; padding: 0.15rem 0.55rem; font-size: 0.68rem; font-weight: 700; border-radius: 999px; border: 1px solid var(--border); background: var(--panel); color: var(--ink-muted); cursor: pointer; white-space: nowrap; }
+#main-votacion .orador-rol.rol-informante { background: #e8f0fa; color: #1B5EA2; border-color: #1B5EA2; }
+#main-votacion .orador-rol.rol-cierre { background: #fdf3e0; color: var(--brass-strong); border-color: var(--brass-strong); }
+#main-votacion .orador-barra { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 0.3rem 0.6rem; border-top: 2px dashed var(--brass-strong); border-radius: 4px; font-size: 0.72rem; font-weight: 700; color: var(--brass-strong); cursor: grab; user-select: none; }
+#main-votacion .orador-barra .orador-barra-txt { flex: 1 1 200px; }
+#main-votacion .orador-barra button { min-height: 28px; min-width: 28px; padding: 0 0.4rem; font-size: 0.75rem; background: var(--panel); color: var(--brass-strong); border: 1px solid var(--border); }
 
 /* ── Reglamento HSN (PDF) ─────────────────────────────────────────────── */
 #main-votacion .reg-toolbar { display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-soft); background: var(--bg-elevated); }
@@ -6247,7 +6253,32 @@ function irASanciones(expediente){
   var dragIndex = null;
 
   function uid() { return "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
-  function defaultTema(n) { return { id: uid(), nombre: "Tema " + n, horaInicio: "", oradores: [] }; }
+  function defaultTema(n) { return { id: uid(), nombre: "Tema " + n, horaInicio: "", nInf: 0, nCierre: 0, oradores: [] }; }
+
+  // Tiempos por rol (minutos) y utilidades de rol. El rol sale de la posición respecto de las dos barras
+  // (los primeros nInf son miembros informantes, los últimos nCierre son cierres); se puede forzar por orador (rolManual).
+  var TIEMPOS_ROL = { informante: 20, orador: 10, cierre: 30 };
+  var ROL_LABEL = { informante: "Informante", orador: "Orador", cierre: "Cierre" };
+  var ROL_CICLO = ["orador", "informante", "cierre"];
+  var barraDrag = null;
+
+  function clampCortes(tema) {
+    var n = tema.oradores.length;
+    tema.nInf = Math.max(0, Math.min(parseInt(tema.nInf, 10) || 0, n));
+    tema.nCierre = Math.max(0, Math.min(parseInt(tema.nCierre, 10) || 0, n - tema.nInf));
+  }
+  function rolZona(tema, idx) {
+    if (idx < tema.nInf) return "informante";
+    if (idx >= tema.oradores.length - tema.nCierre) return "cierre";
+    return "orador";
+  }
+  function rolDe(tema, idx) { return tema.oradores[idx].rolManual || rolZona(tema, idx); }
+  function aplicarRoles(tema) {
+    clampCortes(tema);
+    tema.oradores.forEach(function (o, i) {
+      if (!o.minutosManual) o.minutos = TIEMPOS_ROL[rolDe(tema, i)];
+    });
+  }
   function getActiveTema() { return temas.filter(function (t) { return t.id === activeTemaId; })[0] || null; }
 
   function saveState() {
@@ -6260,6 +6291,13 @@ function irASanciones(expediente){
         var saved = JSON.parse(raw);
         if (saved && Array.isArray(saved.temas) && saved.temas.length) {
           temas = saved.temas;
+          temas.forEach(function (t) {
+            t.nInf = parseInt(t.nInf, 10) || 0;
+            t.nCierre = parseInt(t.nCierre, 10) || 0;
+            (t.oradores || []).forEach(function (o) {
+              if (o.minutosManual === undefined) o.minutosManual = (parseInt(o.minutos, 10) !== TIEMPOS_ROL.orador);
+            });
+          });
           activeTemaId = saved.activeTemaId;
           if (!getActiveTema()) activeTemaId = temas[0].id;
           return;
@@ -6313,11 +6351,31 @@ function irASanciones(expediente){
     if (!tema) return;
     horaInicioInput.value = tema.horaInicio || "";
 
+    aplicarRoles(tema);
     var startMin = parseHora(tema.horaInicio);
     var cursor = startMin;
     oradoresList.innerHTML = "";
 
-    tema.oradores.forEach(function (o, idx) {
+    function barraHtml(tipo) {
+      var arriba = tipo === "inf" ? "Miembros informantes (" + TIEMPOS_ROL.informante + " min)" : "Oradores (" + TIEMPOS_ROL.orador + " min)";
+      var abajo = tipo === "inf" ? "Oradores (" + TIEMPOS_ROL.orador + " min)" : "Cierres (" + TIEMPOS_ROL.cierre + " min)";
+      var el = document.createElement("div");
+      el.className = "orador-barra";
+      el.setAttribute("draggable", "true");
+      el.setAttribute("data-barra", tipo);
+      el.innerHTML = '<span class="orador-drag" title="Arrastrar la barra">⠿</span>' +
+        '<span class="orador-barra-txt">▲ ' + arriba + ' &nbsp;|&nbsp; ' + abajo + ' ▼</span>' +
+        '<button data-barra="' + tipo + '" data-barra-move="-1" title="Subir la barra una fila">▲</button>' +
+        '<button data-barra="' + tipo + '" data-barra-move="1" title="Bajar la barra una fila">▼</button>';
+      return el;
+    }
+
+    for (var idx = 0; idx <= tema.oradores.length; idx++) {
+      if (idx === tema.nInf) oradoresList.appendChild(barraHtml("inf"));
+      if (idx === tema.oradores.length - tema.nCierre) oradoresList.appendChild(barraHtml("cierre"));
+      if (idx === tema.oradores.length) break;
+      var o = tema.oradores[idx];
+      var rol = rolDe(tema, idx);
       var inicio = null, fin = null;
       if (o.estado !== "no_habla" && cursor !== null) {
         inicio = cursor;
@@ -6333,6 +6391,7 @@ function irASanciones(expediente){
         '<span class="orador-drag" title="Arrastrar para reordenar">⠿</span>' +
         '<span class="orador-orden">' + (idx + 1) + '</span>' +
         '<span class="orador-nombre"><div class="n">' + escapeHtml(o.senadorNombre) + '</div><div class="b">' + escapeHtml(o.bloque) + '</div></span>' +
+        '<button class="orador-rol rol-' + rol + '" data-idx="' + idx + '" data-action="rol" title="Cambiar el rol solo de este orador">' + ROL_LABEL[rol] + (o.rolManual ? ' *' : '') + '</button>' +
         '<span class="orador-minutos"><input type="number" min="1" max="120" value="' + o.minutos + '" data-idx="' + idx + '" class="orador-minutos-input"> min</span>' +
         '<span class="orador-horario">' + (inicio !== null ? formatHora(inicio) + '–' + formatHora(fin) : '—') + '</span>' +
         '<span class="orador-estado">' +
@@ -6342,7 +6401,7 @@ function irASanciones(expediente){
         '<button class="orador-remove" data-idx="' + idx + '" title="Quitar">🗑</button>';
 
       oradoresList.appendChild(row);
-    });
+    }
 
     horaFinEstimada.textContent = (startMin !== null && tema.oradores.length) ? formatHora(cursor) : "—";
   }
@@ -6354,8 +6413,11 @@ function irASanciones(expediente){
     var sen = SENATORS.filter(function (s) { return s.banca === banca; })[0];
     if (!sen) return;
     var minutos = parseInt(oradorMinutos.value, 10);
-    if (isNaN(minutos) || minutos < 1) minutos = 1;
-    tema.oradores.push({ senadorNombre: sen.nombre, bloque: sen.bloque, minutos: minutos, estado: "pendiente" });
+    if (isNaN(minutos) || minutos < 1) minutos = TIEMPOS_ROL.orador;
+    clampCortes(tema);
+    // Se agrega como orador común: antes de los cierres, después de los informantes.
+    tema.oradores.splice(tema.oradores.length - tema.nCierre, 0,
+      { senadorNombre: sen.nombre, bloque: sen.bloque, minutos: minutos, minutosManual: minutos !== TIEMPOS_ROL.orador, estado: "pendiente" });
     render();
     saveState();
   }
@@ -6375,9 +6437,27 @@ function irASanciones(expediente){
     if (!tema) return;
     var btn = e.target.closest("button");
     if (!btn) return;
+    if (btn.hasAttribute("data-barra-move")) {
+      var d = parseInt(btn.getAttribute("data-barra-move"), 10);
+      var n = tema.oradores.length;
+      clampCortes(tema);
+      if (btn.getAttribute("data-barra") === "inf") tema.nInf = Math.max(0, Math.min(tema.nInf + d, n - tema.nCierre));
+      else tema.nCierre = Math.max(0, Math.min(tema.nCierre - d, n - tema.nInf));
+      render();
+      saveState();
+      return;
+    }
     var idx = parseInt(btn.getAttribute("data-idx"), 10);
     if (btn.classList.contains("orador-remove")) {
+      clampCortes(tema);
+      if (idx < tema.nInf) tema.nInf--;
+      else if (idx >= tema.oradores.length - tema.nCierre) tema.nCierre--;
       tema.oradores.splice(idx, 1);
+    } else if (btn.getAttribute("data-action") === "rol") {
+      var oo = tema.oradores[idx];
+      if (!oo) return;
+      var next = ROL_CICLO[(ROL_CICLO.indexOf(rolDe(tema, idx)) + 1) % ROL_CICLO.length];
+      if (next === rolZona(tema, idx)) delete oo.rolManual; else oo.rolManual = next;
     } else {
       var action = btn.getAttribute("data-action");
       var o = tema.oradores[idx];
@@ -6393,14 +6473,62 @@ function irASanciones(expediente){
     var tema = getActiveTema();
     if (!tema) return;
     var idx = parseInt(e.target.getAttribute("data-idx"), 10);
+    var o = tema.oradores[idx];
+    if (!o) return;
     var v = parseInt(e.target.value, 10);
-    if (isNaN(v) || v < 1) v = 1;
-    tema.oradores[idx].minutos = v;
-    render();
+    // Mientras se escribe se admite el campo vacío o incompleto: no se vuelve a dibujar la lista ni se pierde el foco.
+    if (isNaN(v) || v < 1) return;
+    if (v > 120) v = 120;
+    o.minutos = v;
+    o.minutosManual = v !== TIEMPOS_ROL[rolDe(tema, idx)];
+    updateHorarios(tema);
     saveState();
   });
 
+  // Al salir del campo se restaura el último valor válido si quedó vacío o inválido.
+  oradoresList.addEventListener("focusout", function (e) {
+    if (!e.target.classList.contains("orador-minutos-input")) return;
+    var tema = getActiveTema();
+    if (!tema) return;
+    var o = tema.oradores[parseInt(e.target.getAttribute("data-idx"), 10)];
+    if (o) e.target.value = o.minutos;
+  });
+  oradoresList.addEventListener("focusin", function (e) {
+    if (e.target.classList.contains("orador-minutos-input")) e.target.select();
+  });
+  oradoresList.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && e.target.classList.contains("orador-minutos-input")) e.target.blur();
+  });
+
+  // Actualiza horarios y hora de fin sin redibujar la lista (para no sacar el foco del campo de minutos).
+  function updateHorarios(tema) {
+    var cursor = parseHora(tema.horaInicio);
+    var startMin = cursor;
+    var rows = oradoresList.querySelectorAll(".orador-row");
+    for (var i = 0; i < rows.length; i++) {
+      var o = tema.oradores[parseInt(rows[i].getAttribute("data-idx"), 10)];
+      var span = rows[i].querySelector(".orador-horario");
+      if (!o || !span) continue;
+      if (o.estado !== "no_habla" && cursor !== null) {
+        var fin = cursor + (parseInt(o.minutos, 10) || 0);
+        span.textContent = formatHora(cursor) + "–" + formatHora(fin);
+        cursor = fin;
+      } else {
+        span.textContent = "—";
+      }
+    }
+    horaFinEstimada.textContent = (startMin !== null && tema.oradores.length) ? formatHora(cursor) : "—";
+  }
+
   oradoresList.addEventListener("dragstart", function (e) {
+    var barra = e.target.closest(".orador-barra");
+    if (barra) {
+      barraDrag = barra.getAttribute("data-barra");
+      dragIndex = null;
+      e.dataTransfer.effectAllowed = "move";
+      try { e.dataTransfer.setData("text/plain", "barra"); } catch (err) {}
+      return;
+    }
     var row = e.target.closest(".orador-row");
     if (!row) return;
     dragIndex = parseInt(row.getAttribute("data-idx"), 10);
@@ -6408,6 +6536,7 @@ function irASanciones(expediente){
     row.classList.add("dragging");
   });
   oradoresList.addEventListener("dragend", function (e) {
+    barraDrag = null;
     var row = e.target.closest(".orador-row");
     if (row) row.classList.remove("dragging");
   });
@@ -6420,6 +6549,21 @@ function irASanciones(expediente){
   oradoresList.addEventListener("drop", function (e) {
     e.preventDefault();
     var row = e.target.closest(".orador-row");
+    if (barraDrag) {
+      var tm = getActiveTema();
+      if (tm && row) {
+        var rect = row.getBoundingClientRect();
+        var pos = parseInt(row.getAttribute("data-idx"), 10) + (e.clientY > rect.top + rect.height / 2 ? 1 : 0);
+        var total = tm.oradores.length;
+        clampCortes(tm);
+        if (barraDrag === "inf") tm.nInf = Math.max(0, Math.min(pos, total - tm.nCierre));
+        else tm.nCierre = total - Math.max(tm.nInf, Math.min(pos, total));
+        barraDrag = null;
+        render();
+        saveState();
+      }
+      return;
+    }
     if (!row || dragIndex === null) return;
     var dropIndex = parseInt(row.getAttribute("data-idx"), 10);
     if (dropIndex === dragIndex) return;
@@ -6555,9 +6699,9 @@ function irASanciones(expediente){
         var nombreRaw = texts[1], bloqueRaw = texts[2];
         var sen = findSenatorMatch(nombreRaw);
         if (sen) {
-          tema.oradores.push({ senadorNombre: sen.nombre, bloque: sen.bloque, minutos: 5, estado: "pendiente" });
+          tema.oradores.push({ senadorNombre: sen.nombre, bloque: sen.bloque, minutos: TIEMPOS_ROL.orador, minutosManual: false, estado: "pendiente" });
         } else {
-          tema.oradores.push({ senadorNombre: nombreRaw, bloque: bloqueRaw, minutos: 5, estado: "pendiente" });
+          tema.oradores.push({ senadorNombre: nombreRaw, bloque: bloqueRaw, minutos: TIEMPOS_ROL.orador, minutosManual: false, estado: "pendiente" });
           sinMatch++;
         }
       });
@@ -7338,7 +7482,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
       <div class="tiempos-add">
         <select id="oradorSelect" aria-label="Elegir senador"></select>
-        <input type="number" id="oradorMinutos" min="1" max="120" value="5" aria-label="Minutos de exposición">
+        <input type="number" id="oradorMinutos" min="1" max="120" value="10" aria-label="Minutos de exposición">
         <button id="addOradorBtn" class="btn-brass">Agregar orador</button>
       </div>
 
