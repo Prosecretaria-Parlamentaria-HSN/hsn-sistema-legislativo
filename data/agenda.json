@@ -11557,8 +11557,30 @@
       ],
       "expositores": null,
       "tipo": "senadores",
-      "boletin_id": 2600156,
-      "boletin_numero": "156/26"
+      "boletin_id": 2600157,
+      "boletin_numero": "157/26"
+    },
+    {
+      "seccion": "senadores",
+      "dia": "MARTES",
+      "fecha": "24/11",
+      "hora": "16:00",
+      "modalidad": "",
+      "comisiones": [
+        "BICAMERAL MIXTA REVISORA DE CUENTAS"
+      ],
+      "salon": "EVA PERÓN",
+      "salon_completo": "SALÓN EVA PERÓN",
+      "temario": [
+        {
+          "numero": "",
+          "extracto": "1. CONSIDERACIÓN DE DICTAMEN CONFORME ART. 5° LEY 23.847 (CUENTA DE INVERSIÓN 2024). 2. OV-525/26 , AUDITORÍA GENERAL DE LA NACIÓN: COMUNICA RESOLUCIÓN N° 213/26 QUE APRUEBA EL PROGRAMA DE ACCIÓN ANUAL CORRESPONDIENTE AL EJERCICIO 2027."
+        }
+      ],
+      "expositores": null,
+      "tipo": "bicameral",
+      "boletin_id": 2600157,
+      "boletin_numero": "157/26"
     }
   ]
 }
