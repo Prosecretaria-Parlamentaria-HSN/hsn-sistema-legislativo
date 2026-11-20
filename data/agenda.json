@@ -11557,8 +11557,8 @@
       ],
       "expositores": null,
       "tipo": "senadores",
-      "boletin_id": 2600157,
-      "boletin_numero": "157/26"
+      "boletin_id": 2600158,
+      "boletin_numero": "158/26"
     },
     {
       "seccion": "senadores",
@@ -11579,8 +11579,88 @@
       ],
       "expositores": null,
       "tipo": "bicameral",
-      "boletin_id": 2600157,
-      "boletin_numero": "157/26"
+      "boletin_id": 2600158,
+      "boletin_numero": "158/26"
+    },
+    {
+      "seccion": "senadores",
+      "dia": "MIÉRCOLES",
+      "fecha": "25/11",
+      "hora": "10:00",
+      "modalidad": "",
+      "comisiones": [
+        "SALUD",
+        "LEGISLACIÓN GENERAL",
+        "JUSTICIA Y ASUNTOS PENALES"
+      ],
+      "salon": "ILLIA",
+      "salon_completo": "SALÓN ILLIA",
+      "temario": [
+        {
+          "numero": "",
+          "extracto": "PROYECTOS DE LEY"
+        },
+        {
+          "numero": "CD-26/24",
+          "extracto": "PROYECTO DE LEY EN REVISIÓN DE PREVENCIÓN DE LA LUDOPATÍA Y REGULACIÓN DE JUEGOS DE AZAR Y APUESTAS EN LÍNEA."
+        },
+        {
+          "numero": "PE-185/26",
+          "extracto": "MENSAJE N° 179/26 Y PROYECTO DE LEY DE PREVENCIÓN DE LA LUDOPATÍA Y REGULACIÓN DE JUEGOS DE AZAR EN LÍNEA."
+        },
+        {
+          "numero": "S-1116/25",
+          "extracto": "CARAMBIA: PROYECTO DE LEY SOBRE MARCO REGULATORIO DE LOS JUEGOS DE APUESTAS EN LÍNEA Y PROHIBICIÓN DE SU PUBLICIDAD, PATROCINIO, PROMOCIÓN, AUSPICIO Y SPONSOREO PARA LA PREVENCIÓN DE LA CIBERLUDOPATÍA INFANTIL."
+        },
+        {
+          "numero": "S-1437/25",
+          "extracto": "CORA Y OTROS: PROYECTO DE LEY QUE CREA LA CAMPAÑA NACIONAL DE CONCIENTIZACIÓN SOBRE LUDOPATÍA EN EL ÁMBITO DEPORTIVO."
+        },
+        {
+          "numero": "S-203/26",
+          "extracto": "FERNÁNDEZ SAGASTI: REPRODUCE PROYECTO DE LEY DE MARCO REGULATORIO DE LOS JUEGOS DE AZAR, APUESTAS EN LÍNEA, PROHIBICIÓN DE SU PUBLICIDAD, PROMOCIÓN, PATROCINIO, SPONSOREO PARA LA PREVENCIÓN DE LA CIBERLUDOPATÍA. (REF. S-1300/24)."
+        },
+        {
+          "numero": "S-350/26",
+          "extracto": "KRONEBERGER: REPRODUCE PROYECTO DE LEY QUE REGULA LA PUBLICIDAD DE LOS JUEGOS DE AZAR ONLINE EN TODOS LOS MEDIOS DE COMUNICACIÓN. (REF. S-803/24)."
+        },
+        {
+          "numero": "S-446/26",
+          "extracto": "CORPACCI: REPRODUCE PROYECTO DE LEY SOBRE RÉGIMEN DE PREVENCIÓN, ASISTENCIA, PROTECCIÓN Y CONTROL DE LA CIBERLUDOPATÍA. (REF. S-1886/24)."
+        },
+        {
+          "numero": "S-471/26",
+          "extracto": "UÑAC: REPRODUCE PROYECTO DE LEY QUE CREA EL PROGRAMA NACIONAL DE EDUCACIÓN PARA LA PREVENCIÓN Y CONCIENTIZACIÓN DE LA CIBERLUDOPATÍA EN LAS NIÑAS, NIÑOS Y ADOLESCENTES. (REF. S-1860/24)."
+        },
+        {
+          "numero": "S-508/26",
+          "extracto": "AVILA: PROYECTO DE LEY SOBRE RÉGIMEN NACIONAL DE REGULACIÓN DE JUEGOS Y APUESTAS ONLINE."
+        },
+        {
+          "numero": "S-516/26",
+          "extracto": "AVILA: PROYECTO DE LEY QUE ESTABLECE UN PROGRAMA DE PREVENCIÓN DEL JUEGO POR PARTE DE MENORES DE EDAD A TRAVÉS DE LAS APUESTAS EN LÍNEA EN EL ÁMBITO EDUCATIVO."
+        },
+        {
+          "numero": "S-570/26",
+          "extracto": "ZAMORA: PROYECTO DE LEY DE PREVENCIÓN DE LA LUDOPATÍA INFANTIL."
+        },
+        {
+          "numero": "S-1219/26",
+          "extracto": "ÁLVAREZ RIVERO: PROYECTO DE LEY QUE CREA EL RÉGIMEN PARA LA REGULACIÓN DE LA PUBLICIDAD, PROMOCIÓN Y PATROCINIO DEL JUEGO DE APUESTAS EN LÍNEA."
+        },
+        {
+          "numero": "S-1502/26",
+          "extracto": "CAPITANICH: PROYECTO DE LEY QUE ESTABLECE UN MARCO DE PROMOCIÓN DEL JUEGO VIRTUAL RESPONSABLE."
+        },
+        {
+          "numero": "S-1541/26",
+          "extracto": "OLIVERA LUCERO: PROYECTO DE LEY QUE ESTABLECE UN RÉGIMEN FEDERAL DE TRANSPARENCIA Y PROTECCIÓN DE MENORES EN EL JUEGO Y APUESTAS ONLINE."
+        }
+      ],
+      "expositores": null,
+      "tipo": "senadores",
+      "boletin_id": 2600158,
+      "boletin_numero": "158/26"
     }
   ]
 }
