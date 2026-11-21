@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-20 19:24",
+ "generado": "2026-11-21 18:39",
  "pliegos": {
   "PE-103/26": {
    "archivo": "11/09/2026",
@@ -1423,7 +1423,12 @@
    "dado_cuenta": "16/07/2026",
    "dae": "23/26",
    "ingreso": "25/06/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "481"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1558,7 +1563,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "25/26",
    "ingreso": "17/07/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "482"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1567,7 +1577,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "25/26",
    "ingreso": "17/07/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "483"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1590,16 +1605,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "26/26",
    "ingreso": "03/08/2026",
-   "od": null,
-   "sancion": "",
-   "sancion_fecha": null
-  },
-  "PE-249/26": {
-   "archivo": null,
-   "dado_cuenta": "27/08/2026",
-   "dae": "26/26",
-   "ingreso": "03/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "484"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1622,7 +1633,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "26/26",
    "ingreso": "03/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "486"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1631,7 +1647,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "26/26",
    "ingreso": "03/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "487"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1640,7 +1661,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "26/26",
    "ingreso": "03/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "488"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1649,7 +1675,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "26/26",
    "ingreso": "03/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "489"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1658,7 +1689,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "26/26",
    "ingreso": "03/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "490"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1667,7 +1703,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "26/26",
    "ingreso": "03/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "491"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1676,7 +1717,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "26/26",
    "ingreso": "03/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "492"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1685,7 +1731,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "26/26",
    "ingreso": "03/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "493"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1694,7 +1745,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "26/26",
    "ingreso": "03/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "494"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1703,7 +1759,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "26/26",
    "ingreso": "03/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "495"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1726,7 +1787,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "26/26",
    "ingreso": "03/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "496"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1744,7 +1810,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "26/26",
    "ingreso": "03/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "497"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1753,7 +1824,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "27/26",
    "ingreso": "05/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "498"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1762,7 +1838,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "27/26",
    "ingreso": "05/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "499"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1771,7 +1852,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "27/26",
    "ingreso": "05/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "500"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1780,7 +1866,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "27/26",
    "ingreso": "05/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "501"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1789,7 +1880,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "27/26",
    "ingreso": "05/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "502"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1798,7 +1894,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "27/26",
    "ingreso": "05/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "503"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1807,7 +1908,12 @@
    "dado_cuenta": "27/08/2026",
    "dae": "27/26",
    "ingreso": "05/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "504"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1830,7 +1936,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "28/26",
    "ingreso": "27/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "505"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1839,7 +1950,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "28/26",
    "ingreso": "27/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "506"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1848,7 +1964,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "28/26",
    "ingreso": "27/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "507"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1871,7 +1992,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "29/26",
    "ingreso": "28/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "508"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1880,7 +2006,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "29/26",
    "ingreso": "28/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "509"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1889,7 +2020,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "29/26",
    "ingreso": "28/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "510"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1898,7 +2034,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "29/26",
    "ingreso": "28/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "511"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1907,7 +2048,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "29/26",
    "ingreso": "28/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "512"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1916,7 +2062,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "29/26",
    "ingreso": "28/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "513"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1925,7 +2076,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "29/26",
    "ingreso": "28/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "514"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1934,7 +2090,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "29/26",
    "ingreso": "28/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "515"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1957,7 +2118,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "29/26",
    "ingreso": "28/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "516"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1966,7 +2132,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "29/26",
    "ingreso": "28/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "517"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1975,7 +2146,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "29/26",
    "ingreso": "28/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "518"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -1984,7 +2160,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "29/26",
    "ingreso": "28/08/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "519"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -2016,7 +2197,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "30/26",
    "ingreso": "11/09/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "520"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -2025,7 +2211,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "30/26",
    "ingreso": "11/09/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "521"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -2034,7 +2225,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "30/26",
    "ingreso": "11/09/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "522"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -2043,7 +2239,12 @@
    "dado_cuenta": "17/09/2026",
    "dae": "30/26",
    "ingreso": "11/09/2026",
-   "od": null,
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "523"
+   },
    "sancion": "",
    "sancion_fecha": null
   },
@@ -2214,23 +2415,6 @@
     "provincia": "CABA",
     "rango": "Camarista / Vocal de Cámara",
     "url": "https://www.senado.gob.ar/parlamentario/comisiones/verExp/335.26/PE/AC"
-   },
-   "od": null,
-   "sancion": "",
-   "sancion_fecha": null
-  },
-  "PE-336/26": {
-   "archivo": null,
-   "dado_cuenta": "19/11/2026",
-   "dae": "33/26",
-   "ingreso": "29/10/2026",
-   "nuevo": {
-    "candidato": "CARLOS FEDERICO COCIANCICH",
-    "cargo": "JUEZ DE CAMARA DEL TRIBUNAL ORAL EN LO CRIMINAL Y CORRECCIONAL N° 19 DE LA CAPITAL FEDERAL",
-    "fuero": "Penal",
-    "provincia": "CABA",
-    "rango": "Camarista / Vocal de Cámara",
-    "url": "https://www.senado.gob.ar/parlamentario/comisiones/verExp/336.26/PE/AC"
    },
    "od": null,
    "sancion": "",
