@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-21 18:39",
+ "generado": "2026-11-22 18:50",
  "pliegos": {
   "PE-103/26": {
    "archivo": "11/09/2026",
@@ -1614,6 +1614,20 @@
    "sancion": "",
    "sancion_fecha": null
   },
+  "PE-249/26": {
+   "archivo": null,
+   "dado_cuenta": "27/08/2026",
+   "dae": "26/26",
+   "ingreso": "03/08/2026",
+   "od": {
+    "anio": "2026",
+    "estado": "PENDIENTE",
+    "fecha": "19/11/2026",
+    "numero": "485"
+   },
+   "sancion": "",
+   "sancion_fecha": null
+  },
   "PE-25/26": {
    "archivo": "16/06/2026",
    "dado_cuenta": "09/04/2026",
@@ -2415,6 +2429,23 @@
     "provincia": "CABA",
     "rango": "Camarista / Vocal de Cámara",
     "url": "https://www.senado.gob.ar/parlamentario/comisiones/verExp/335.26/PE/AC"
+   },
+   "od": null,
+   "sancion": "",
+   "sancion_fecha": null
+  },
+  "PE-336/26": {
+   "archivo": null,
+   "dado_cuenta": "19/11/2026",
+   "dae": "33/26",
+   "ingreso": "29/10/2026",
+   "nuevo": {
+    "candidato": "CARLOS FEDERICO COCIANCICH",
+    "cargo": "JUEZ DE CAMARA DEL TRIBUNAL ORAL EN LO CRIMINAL Y CORRECCIONAL N° 19 DE LA CAPITAL FEDERAL",
+    "fuero": "Penal",
+    "provincia": "CABA",
+    "rango": "Camarista / Vocal de Cámara",
+    "url": "https://www.senado.gob.ar/parlamentario/comisiones/verExp/336.26/PE/AC"
    },
    "od": null,
    "sancion": "",
