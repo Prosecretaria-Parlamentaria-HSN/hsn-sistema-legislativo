@@ -1,5 +1,12 @@
 [
  {
+  "id": 24653,
+  "url": "https://www.senado.gob.ar/prensa/24653/noticias",
+  "fecha": "2026-11-24",
+  "titulo": "LA ORQUESTA DEL CONGRESO PRESENTA APOLO REVELADO EN SU TEMPORADA OFICIAL",
+  "comisiones": []
+ },
+ {
   "id": 24651,
   "url": "https://www.senado.gob.ar/prensa/24651/noticias",
   "fecha": "2026-11-22",
@@ -624,13 +631,6 @@
   "url": "https://www.senado.gob.ar/prensa/24449/noticias",
   "fecha": "2026-10-01",
   "titulo": "VILLARRUEL Y SENADORES PARTICIPAN DEL XII FORO PARLAMENTARIO IBEROAMERICANO EN MADRID",
-  "comisiones": []
- },
- {
-  "id": 24447,
-  "url": "https://www.senado.gob.ar/prensa/24447/noticias",
-  "fecha": "2026-09-30",
-  "titulo": "NUEVO ESTRENO DE “TEMPLOS”: LA OBRA DEL PADRE MARIO PANTALEO",
   "comisiones": []
  }
 ]
