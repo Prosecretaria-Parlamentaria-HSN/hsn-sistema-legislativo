@@ -1,5 +1,12 @@
 [
  {
+  "id": 24656,
+  "url": "https://www.senado.gob.ar/prensa/24656/noticias",
+  "fecha": "2026-11-24",
+  "titulo": "EL SENADO RECIBIÓ A ESTUDIANTES SECUNDARIOS EN UNA JORNADA SOBRE LIDERAZGO Y PARTICIPACIÓN CIUDADANA",
+  "comisiones": []
+ },
+ {
   "id": 24654,
   "url": "https://www.senado.gob.ar/prensa/24654/noticias",
   "fecha": "2026-11-24",
@@ -627,13 +634,6 @@
   "url": "https://www.senado.gob.ar/prensa/24457/noticias",
   "fecha": "2026-10-02",
   "titulo": "EL CONGRESO SE ILUMINÓ DE AZUL EN HOMENAJE AL NACIMIENTO DE ÁNGEL VICENTE PEÑALOZA",
-  "comisiones": []
- },
- {
-  "id": 24454,
-  "url": "https://www.senado.gob.ar/prensa/24454/noticias",
-  "fecha": "2026-10-02",
-  "titulo": "VILLARRUEL CERRÓ EL XII FORO PARLAMENTARIO IBEROAMERICANO CON UN LLAMADO A PONER LA TECNOLOGÍA AL SERVICIO DE LAS PERSONAS Y EL TRABAJO",
   "comisiones": []
  }
 ]
