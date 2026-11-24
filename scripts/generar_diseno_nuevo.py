@@ -104,8 +104,11 @@ INICIO_HTML = """<div id="main-inicio" class="mtab-content">
     <form class="ini-search" onsubmit="return iniBuscar(event)">
       <input id="ini-q" type="search" placeholder="Expediente, senador, comisi&oacute;n o palabra del extracto&hellip;" aria-label="Buscar">
       <button type="submit">Buscar</button>
+      <button type="button" id="ini-sem-btn" class="ini-sem-btn" onclick="return semInicio()" title="Busca por el sentido de la frase, en todas las secciones">Buscar por tema</button>
     </form>
     <div id="ini-res" class="ini-res"></div>
+    <div id="ini-sem" class="ini-res"></div>
+    <div id="ini-chat" class="ini-chat"></div>
   </div>
   <div class="ini-wrap">
     <div id="ini-cards" class="ini-cards"></div>
@@ -367,6 +370,22 @@ body{background-color:#F4EFE6;background-image:
 .ini-search button{background:#0A3F7E;color:#fff;border:none;border-radius:10px;font-family:inherit;font-weight:700;font-size:15px;padding:12px 22px;cursor:pointer}
 .ini-res{max-width:720px;margin:14px auto 0;background:#fff;color:#0D1B2E;border-radius:12px;text-align:left;box-shadow:0 12px 30px rgba(0,0,0,.2)}
 .ini-res:empty{display:none}
+.ini-search .ini-sem-btn{background:none;color:#7A8CA5;white-space:nowrap;font-size:12px;font-weight:500;padding:6px 10px;box-shadow:none;border:none}.ini-search .ini-sem-btn:hover{color:#0A3F7E;text-decoration:underline}.ini-search .ini-sem-btn:disabled{opacity:.6;cursor:wait}
+.ini-resumen{padding:12px 18px;border-top:1px solid #E6ECF3;background:#F4F9FF}.ini-chat{max-width:720px;margin:14px auto 0;text-align:left}
+.gem-card{background:#fff;color:#0D1B2E;border-radius:12px;padding:14px 18px;box-shadow:0 12px 30px rgba(0,0,0,.2)}
+.gem-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.gem-t{font-weight:700;font-size:15px}.gem-s{font-size:12px;color:#55657A;margin-top:6px}
+.gem-row,.gem-row2{display:flex;gap:8px;align-items:center}.gem-row{margin-top:10px}
+.gem-row input,.gem-row2 select{flex:1;min-width:0;border:1px solid #D6E4F0;border-radius:8px;padding:9px 12px;font-family:inherit;font-size:14px}
+.gem-row2 select{flex:none;max-width:210px;font-size:12px;padding:5px 8px}.gem-row2 a{font-size:12px;color:#0A3F7E}
+.gem-row button{background:#0A3F7E;color:#fff;border:none;border-radius:8px;font-family:inherit;font-weight:700;font-size:14px;padding:9px 16px;cursor:pointer}.gem-row button:disabled{opacity:.6;cursor:wait}
+
+.gem-b{padding:9px 12px;border-radius:10px;font-size:14px;line-height:1.5;max-width:92%}
+.gem-u{background:#E1ECF9;align-self:flex-end}.gem-a{background:#F4F6FA;align-self:flex-start}.gem-err{background:#FDECEA;color:#B42318;align-self:flex-start}
+.gem-a a{color:#0A3F7E;font-weight:600}.gem-src{margin-top:8px;font-size:12px;color:#55657A}
+.ini-resumen ul{margin:0;padding-left:18px;font-size:14px;line-height:1.55}.ini-resumen a{color:#0A3F7E;font-weight:600}.ini-resumen-p{font-size:14.5px;line-height:1.6;color:#0D1B2E}
+.ini-ia{padding:10px 18px 12px}.ini-ia-btn{background:#0A3F7E;color:#fff;border:none;border-radius:10px;font-family:inherit;font-weight:700;font-size:13px;padding:9px 16px;cursor:pointer}.ini-ia-btn:disabled{opacity:.6;cursor:wait}
+.ini-ia-t{font-size:14.5px;line-height:1.55;color:#0D1B2E;margin-bottom:8px}.ini-ia-n{font-size:12px;color:#55657A;margin-bottom:10px}#ini-ia:empty{display:none}
 .ini-res-t{padding:12px 18px 8px;font-size:12px;color:#55657A;letter-spacing:.3px}
 .ini-res-r{display:flex;gap:14px;align-items:center;padding:11px 18px;border-top:1px solid #E6ECF3;text-decoration:none;color:#0D1B2E}
 .ini-res-r:hover{background:#F4F9FF}
