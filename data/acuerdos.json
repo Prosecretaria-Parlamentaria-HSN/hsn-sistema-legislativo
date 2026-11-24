@@ -5,8 +5,8 @@
     "caratula": "MENSAJE N° 317/26 QUE SOLICITA ACUERDO A FIN DE POSIBILITAR UN NUEVO NOMBRAMIENTO PARA DESIGNAR JUEZ DEL JUZGADO NACIONAL DE PRIMERA INSTANCIA EN LO CIVIL N°33 DE LA CAPITAL FEDERAL, AL DR. HORACIO ALEJANDRO LIBERTI.",
     "origen": "PE",
     "dae": 35,
-    "dado_cuenta": false,
-    "fecha_dado_cuenta": null,
+    "dado_cuenta": true,
+    "fecha_dado_cuenta": "19/11/2026",
     "aprobado": false,
     "fecha_aprobacion": null,
     "nro_od": null
