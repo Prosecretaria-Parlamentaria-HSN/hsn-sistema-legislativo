@@ -49,50 +49,9 @@
     {
       "num": "9",
       "titulo": "Órdenes del Día de ley",
-      "grupos": [
-        {
-          "titulo": "Prueba",
-          "cols": [
-            "od",
-            "exp",
-            "desc"
-          ],
-          "filas": [
-            {
-              "od": [],
-              "exp": [
-                {
-                  "t": "OV-420/26",
-                  "u": "https://www.senado.gob.ar/parlamentario/comisiones/verExp/420.26/OV/CV"
-                }
-              ],
-              "desc": "Solicita informe sobre la administracion, situacion patrimonial y ejecucion de recursos del sistema vial integrado (sisvial) desde el 10 de diciembre de 2023 hasta la actualidad."
-            },
-            {
-              "od": [],
-              "exp": [
-                {
-                  "t": "OV-416/26",
-                  "u": "https://www.senado.gob.ar/parlamentario/comisiones/verExp/416.26/OV/CV"
-                }
-              ],
-              "desc": "Expresa beneplácito por las modificaciones a la ley 27.453 -de integracion socio urbana de barrios populares-, a la ley 26.737 -tierras rurales-, y a la ley 26.815- de manejo del fuego-."
-            },
-            {
-              "od": [],
-              "exp": [
-                {
-                  "t": "OV-410/26",
-                  "u": "https://www.senado.gob.ar/parlamentario/comisiones/verExp/410.26/OV/CV"
-                }
-              ],
-              "desc": "Expresa preocupacion ante las demoras en el financiamiento y pago de prestaciones destinadas a personas con discapacidad."
-            }
-          ]
-        }
-      ]
+      "grupos": []
     }
   ],
-  "actualizado": "2026-11-24T13:07:17.559Z",
+  "actualizado": "2026-11-24T13:08:32.575Z",
   "actualizado_por": "Yo"
 }
