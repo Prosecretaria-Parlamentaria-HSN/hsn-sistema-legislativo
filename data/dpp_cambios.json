@@ -63,7 +63,8 @@
     "77/26": "21/10/2026",
     "75/26": "13/10/2026",
     "74/26": "07/10/2026",
-    "73/26": "29-09-2026"
+    "73/26": "29-09-2026",
+    "84/26": "25-11-2026"
   },
   "cambios": [
     {
@@ -4956,6 +4957,13 @@
       "comision": "De Seguridad Interior y Narcotráfico",
       "tipo": "remove",
       "senador": "PAGOTTO, Juan Carlos"
+    },
+    {
+      "dpp": "84/26",
+      "comision": "De Legislación General",
+      "tipo": "replace",
+      "senador": "GADANO, NATALIA ELENA",
+      "reemplaza": "CARAMBIA, José María"
     }
   ]
 }
