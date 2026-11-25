@@ -195,22 +195,6 @@
       "suspendida": false,
       "actualizado": "2026-10-26T13:25:33.891Z",
       "actualizado_por": "Mariano"
-    },
-    {
-      "fecha": "27/11",
-      "hora": "10:00",
-      "comisiones": [
-        "ACUERDOS"
-      ],
-      "hora_nueva": "10:01",
-      "salon_nuevo": null,
-      "tipo_nuevo": null,
-      "temario_extra": null,
-      "expositores_extra": null,
-      "nota": null,
-      "suspendida": false,
-      "actualizado": "2026-11-25T14:15:41.226Z",
-      "actualizado_por": "yo"
     }
   ]
 }
