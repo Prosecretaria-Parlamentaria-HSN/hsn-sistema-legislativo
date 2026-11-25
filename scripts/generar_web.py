@@ -9035,6 +9035,45 @@ def _acuerdos_para_dar_cuenta(proyectos):
     return out
 
 
+def _aplicar_dpp_pendiente(estado_com, com_norm, dpp_cambios):
+    """Cuando el roster sale del scrape del Senado, un cambio cargado a mano
+    (editor de comisiones: reemplazar / agregar / dar de baja) no se veía
+    hasta que el Senado actualizara su página. Acá se aplica por encima el
+    ÚLTIMO DPP de la comisión, pero solo lo que el Senado todavía no refleja:
+    si el senador nuevo ya figura (o el reemplazado ya no), no se toca nada,
+    así que cuando el Senado se ponga al día este paso queda sin efecto."""
+    propios = [c for c in dpp_cambios if _norm_com(c.get("comision", "")) == com_norm]
+    if not propios:
+        return estado_com
+    ultimo = propios[-1]["dpp"]
+    grupo = [c for c in propios if c["dpp"] == ultimo]
+    if any(c.get("tipo") == "rewrite" for c in grupo):
+        return estado_com
+    estado = [dict(e) for e in estado_com]
+
+    def buscar(nombre):
+        for i, e in enumerate(estado):
+            if nombre and _nombres_coinciden(nombre, e["nombre"]):
+                return i
+        return -1
+
+    for c in grupo:
+        sen = c.get("senador", "")
+        tipo = c.get("tipo")
+        if tipo == "replace":
+            i = buscar(c.get("reemplaza", ""))
+            if i >= 0 and buscar(sen) < 0:
+                estado[i] = {"nombre": sen, "dpp": c["dpp"], "rol": estado[i].get("rol") or "Vocal"}
+        elif tipo == "add":
+            if buscar(sen) < 0:
+                estado.append({"nombre": sen, "dpp": c["dpp"], "rol": "Vocal"})
+        elif tipo == "remove":
+            i = buscar(sen)
+            if i >= 0:
+                estado.pop(i)
+    return estado
+
+
 def construir_comisiones(proyectos):
     comisiones = _cargar("comisiones.json", [])
     agenda = _cargar("agenda.json", {})
@@ -9108,6 +9147,7 @@ def construir_comisiones(proyectos):
                         dpp_m = d["dpp"]
                         break
                 estado_com.append({"nombre": m["nombre"], "dpp": dpp_m, "rol": m.get("rol") or "Vocal"})
+            estado_com = _aplicar_dpp_pendiente(estado_com, com_norm, dpp_cambios)
         integrantes = []
         for e in estado_com:
             nom_norm = _norm_nombre(e["nombre"])
