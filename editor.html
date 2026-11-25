@@ -639,6 +639,9 @@ function actualizarDiff(){
   if(f.expositores_extra)rows.push('<div class="diff-row"><span class="k">expositores</span><span class="diff-new">+ texto agregado</span></div>');
   if(f.nota)rows.push('<div class="diff-row"><span class="k">nota</span><span class="diff-new">+ aclaración agregada</span></div>');
   if(f.suspendida)rows.push('<div class="diff-row"><span class="k">estado</span><span class="diff-new" style="color:var(--danger)">&rarr; suspendida</span></div>');
+  if(!rows.length && overridesIdx && overridesIdx[claveDe(r)]){
+    rows.push('<div class="diff-row"><span class="k">estado</span><span class="diff-new">&rarr; vuelve a lo publicado en el boletín (se quita la corrección guardada)</span></div>');
+  }
   document.getElementById('diff-list').innerHTML = rows.length ? rows.join('') : '<div class="diff-empty">Sin cambios todavía</div>';
   document.getElementById('btn-save').disabled = !rows.length;
 }
@@ -790,22 +793,27 @@ function guardar(){
       var nuevos = actual.overrides.filter(function(o){ return claveDe(o)!==clave; });
       var autor = localStorage.getItem(AUTOR_KEY) || prompt('¿Tu nombre? (para dejar registro de quién corrigió esto)') || 'Sin identificar';
       localStorage.setItem(AUTOR_KEY, autor);
-      nuevos.push({
-        fecha: r.fecha, hora: r.hora, comisiones: r.comisiones,
-        hora_nueva: f.hora_nueva, salon_nuevo: f.salon_nuevo, tipo_nuevo: f.tipo_nuevo,
-        temario_extra: f.temario_extra,
-        expositores_extra: f.expositores_extra, nota: f.nota,
-        suspendida: f.suspendida,
-        actualizado: new Date().toISOString(),
-        actualizado_por: autor
-      });
+      var hayCambio = !!((f.hora_nueva && f.hora_nueva!==r.hora) || (f.salon_nuevo && f.salon_nuevo!==r.salon) ||
+        (f.tipo_nuevo && f.tipo_nuevo!==(r.tipo||'senadores')) || f.temario_extra || f.expositores_extra || f.nota || f.suspendida);
+      // Si todo vuelve a lo publicado, se quita la corrección (no se guarda una vacía).
+      if(hayCambio){
+        nuevos.push({
+          fecha: r.fecha, hora: r.hora, comisiones: r.comisiones,
+          hora_nueva: f.hora_nueva, salon_nuevo: f.salon_nuevo, tipo_nuevo: f.tipo_nuevo,
+          temario_extra: f.temario_extra,
+          expositores_extra: f.expositores_extra, nota: f.nota,
+          suspendida: f.suspendida,
+          actualizado: new Date().toISOString(),
+          actualizado_por: autor
+        });
+      }
       actual.overrides = nuevos;
       var contenido = JSON.stringify(actual, null, 2) + '\n';
       var coms = (r.comisiones||[]).map(titleCase).join(' · ');
       return fetch(API_BASE + 'data/agenda_overrides.json', {
         method:'PUT', headers: Object.assign({'Content-Type':'application/json'}, headers),
         body: JSON.stringify({
-          message: 'Editor de agenda: ' + coms + ' (' + r.fecha + ' ' + r.hora + ')',
+          message: 'Editor de agenda: ' + (hayCambio ? '' : 'se quitó la corrección de ') + coms + ' (' + r.fecha + ' ' + r.hora + ')',
           content: b64EncodeUtf8(contenido),
           sha: file.sha,
           branch: 'main'
