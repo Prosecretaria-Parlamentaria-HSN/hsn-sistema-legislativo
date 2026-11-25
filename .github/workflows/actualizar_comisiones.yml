@@ -1,0 +1,75 @@
+name: Actualizar comisiones (cada hora)
+
+# Baja SOLO los integrantes y cargos de las comisiones desde el Senado y,
+# si algo cambió, vuelve a armar y publicar la página. Así un DPP nuevo se
+# refleja en pocas horas en vez de esperar a la corrida diaria de las 9:00.
+#
+# Corre de lunes a viernes, de 8:00 a 20:00 hora Argentina (UTC-3 => 11 a 23
+# UTC), un par de minutos pasada la hora para no chocar con otros procesos.
+# Si no hay cambios en data/comisiones.json no genera ni publica nada.
+on:
+  schedule:
+    - cron: "7 11-23 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: actualizar-sitio-horario
+  cancel-in-progress: false
+
+jobs:
+  comisiones:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Actualizar comisiones (integrantes y cargos, Senado)
+        continue-on-error: true
+        env:
+          ACTUALIZAR: "1"
+        run: python scripts/scraper_comisiones.py
+
+      - name: Detectar cambios
+        id: det
+        run: |
+          if git diff --quiet -- data/comisiones.json; then
+            echo "cambio=no" >> "$GITHUB_OUTPUT"
+            echo "El Senado no cambió ninguna comisión; nada que publicar."
+          else
+            echo "cambio=si" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Generar web
+        if: steps.det.outputs.cambio == 'si'
+        run: python scripts/generar_web.py
+
+      - name: Generar diseño nuevo
+        if: steps.det.outputs.cambio == 'si'
+        run: python scripts/generar_diseno_nuevo.py
+
+      - name: Commit y push
+        if: steps.det.outputs.cambio == 'si'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/comisiones.json index.html
+          if [ -f index_anterior.html ]; then git add index_anterior.html; fi
+          if git diff --cached --quiet; then
+            echo "Sin cambios; nada que commitear."
+          else
+            git commit -m "Comisiones actualizadas desde el Senado $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git pull --rebase -X theirs origin ${GITHUB_REF_NAME}
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi

@@ -1,0 +1,81 @@
+name: Actualizar agenda (cada hora)
+
+# Revisa si el Senado publicó un boletín de reuniones de comisión nuevo y, si
+# lo hay, lo lee (con OCR para la fecha/hora/salón), vuelve a armar la página
+# y la publica. Así la Agenda se actualiza en menos de una hora en vez de
+# esperar a las corridas de las 9:00 y las 22:00.
+#
+# Corre de lunes a viernes, de 8:00 a 20:00 hora Argentina (UTC-3 => 11 a 23
+# UTC), al minuto 37. Si no hay boletines nuevos no genera ni publica nada.
+# Comparte el grupo de "concurrency" con actualizar_comisiones.yml para que
+# nunca corran los dos a la vez (los dos publican index.html).
+on:
+  schedule:
+    - cron: "37 11-23 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: actualizar-sitio-horario
+  cancel-in-progress: false
+
+jobs:
+  agenda:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      # OCR para leer la fecha/hora/salón de los boletines (diseño gráfico).
+      - name: Instalar OCR (tesseract)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-spa
+
+      - name: Scraper de agenda (boletines)
+        continue-on-error: true
+        run: python scripts/scraper_agenda.py
+
+      - name: Detectar cambios
+        id: det
+        run: |
+          if [ -z "$(git status --porcelain -- data/)" ]; then
+            echo "cambio=no" >> "$GITHUB_OUTPUT"
+            echo "No hay boletines nuevos; nada que publicar."
+          else
+            echo "cambio=si" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Generar web
+        if: steps.det.outputs.cambio == 'si'
+        run: python scripts/generar_web.py
+
+      - name: Generar diseño nuevo
+        if: steps.det.outputs.cambio == 'si'
+        run: python scripts/generar_diseno_nuevo.py
+
+      - name: Commit y push
+        if: steps.det.outputs.cambio == 'si'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data index.html
+          if [ -f index_anterior.html ]; then git add index_anterior.html; fi
+          if git diff --cached --quiet; then
+            echo "Sin cambios; nada que commitear."
+          else
+            git commit -m "Agenda actualizada con boletines nuevos $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git pull --rebase -X theirs origin ${GITHUB_REF_NAME}
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
