@@ -9035,7 +9035,7 @@ def _acuerdos_para_dar_cuenta(proyectos):
     return out
 
 
-def _aplicar_dpp_pendiente(estado_com, com_norm, dpp_cambios):
+def _aplicar_dpp_pendiente(estado_com, com_norm, dpp_cambios, dpp_fechas=None, dias=14):
     """Cuando el roster sale del scrape del Senado, un cambio cargado a mano
     (editor de comisiones: reemplazar / agregar / dar de baja) no se veía
     hasta que el Senado actualizara su página. Acá se aplica por encima el
@@ -9046,6 +9046,16 @@ def _aplicar_dpp_pendiente(estado_com, com_norm, dpp_cambios):
     if not propios:
         return estado_com
     ultimo = propios[-1]["dpp"]
+    # Solo vale mientras el DPP es reciente: pasado ese plazo manda lo que
+    # diga el Senado (si después cambió de nuevo, no hay que pisarlo con un
+    # decreto viejo).
+    try:
+        import datetime as _dt
+        d, m, a = (dpp_fechas or {}).get(ultimo, "").split("/")
+        if (_dt.date.today() - _dt.date(int(a), int(m), int(d))).days > dias:
+            return estado_com
+    except Exception:
+        return estado_com
     grupo = [c for c in propios if c["dpp"] == ultimo]
     if any(c.get("tipo") == "rewrite" for c in grupo):
         return estado_com
@@ -9104,9 +9114,16 @@ def construir_comisiones(proyectos):
     # porque agenda.json trae nombres truncados/mayúsculas del boletín)
     ahora = datetime.now()
     proxima = {}
-    for r in reuniones:
-        fecha_dt = _parse_fecha_agenda(r.get("fecha", ""), r.get("boletin_numero", ""))
-        if not fecha_dt or fecha_dt <= ahora:
+    # Se usa la agenda YA corregida desde el editor (horario, salón, suspendida,
+    # temario extra, reuniones cargadas a mano), no el boletín crudo.
+    for r in construir_agenda(comisiones):
+        if r.get("suspendida"):
+            continue
+        try:
+            fecha_dt = datetime.fromisoformat(r.get("fecha_iso") or "")
+        except Exception:
+            continue
+        if fecha_dt <= ahora:
             continue
         for c_nombre in r.get("comisiones") or []:
             n_ag = _norm_com(c_nombre)
@@ -9147,7 +9164,7 @@ def construir_comisiones(proyectos):
                         dpp_m = d["dpp"]
                         break
                 estado_com.append({"nombre": m["nombre"], "dpp": dpp_m, "rol": m.get("rol") or "Vocal"})
-            estado_com = _aplicar_dpp_pendiente(estado_com, com_norm, dpp_cambios)
+            estado_com = _aplicar_dpp_pendiente(estado_com, com_norm, dpp_cambios, dpp_fechas)
         integrantes = []
         for e in estado_com:
             nom_norm = _norm_nombre(e["nombre"])
