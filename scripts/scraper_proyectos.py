@@ -638,10 +638,42 @@ def revisar_expedientes_abiertos(session, proyectos, acuerdos_por_clave):
         return True
 
     abiertos = [p for p in proyectos if esta_abierto(p) and p.get("url")]
-    abiertos.sort(key=lambda p: p.get("_ultima_revision") or "0000-00-00")
-    lote = abiertos[:LOTE_REVISION]
+
+    # Prioritarios: lo que puede cambiar de un día para el otro. Se revisan en
+    # CADA corrida (son unos pocos cientos); el resto sigue por turnos.
+    #  - acuerdos que todavía figuran "para dar cuenta"
+    #  - expedientes con orden del día de este año (od.json)
+    #  - expedientes ingresados en los últimos 30 días
+    en_od = set()
+    try:
+        with open(os.path.join(DATA_DIR, "od.json"), "r", encoding="utf-8") as f:
+            for o in json.load(f):
+                for e in o.get("expedientes", []):
+                    en_od.add((e.get("origen"), e.get("nro"), e.get("anio")))
+    except (OSError, ValueError):
+        pass
+    limite_reciente = datetime.now() - timedelta(days=30)
+
+    def _es_prioritario(p):
+        if p.get("tipo") == "AC":
+            a = acuerdos_por_clave.get((p["nro"], p["anio"]))
+            if a is None or not a.get("dado_cuenta"):
+                return True
+        if (p.get("origen"), p.get("nro"), p.get("anio")) in en_od:
+            return True
+        try:
+            return datetime.strptime(p.get("fecha") or "", "%d/%m/%Y") >= limite_reciente
+        except ValueError:
+            return False
+
+    prioritarios = [p for p in abiertos if _es_prioritario(p)]
+    resto = [p for p in abiertos if not _es_prioritario(p)]
+    resto.sort(key=lambda p: p.get("_ultima_revision") or "0000-00-00")
+    lote = prioritarios + resto[:LOTE_REVISION]
     if not lote:
         return 0
+    log.info(f"  → {len(prioritarios)} prioritarios (se revisan siempre) + "
+              f"{min(LOTE_REVISION, len(resto))} por turnos")
     log.info(f"  → revisando {len(lote)}/{len(abiertos)} expedientes abiertos "
               f"(trazabilidad: archivo/caducidad/sanción/dado cuenta)")
 
