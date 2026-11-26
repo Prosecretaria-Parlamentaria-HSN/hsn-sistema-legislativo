@@ -2451,6 +2451,44 @@
     ]
   },
   {
+    "numero": "505",
+    "periodo": 2026,
+    "origen": "Poder Ejecutivo",
+    "categoria": "Acuerdo",
+    "autor": null,
+    "descripcion": "Dictamen en el mensaje del Poder Ejecutivo Nacional, solicitando acuerdo con el fin de posibilitar la designación del Juez de Cámara del Tribunal Oral en lo Criminal y Correccional Nº 5 de la Capital Federal, doctor Juan Carlos Bernial. (PE-277/26)",
+    "expedientes": [
+      {
+        "codigo": "PE-277/26",
+        "url": "https://www.senado.gob.ar/parlamentario/comisiones/verExp/277.26/PE/AC"
+      }
+    ],
+    "comisionCabecera": "Acuerdos",
+    "fechaDictamen": "19/11/2026",
+    "odLink": "https://www.senado.gob.ar/parlamentario/parlamentaria/51853/downloadOrdenDia",
+    "comisiones": [
+      "Acuerdos",
+      "DE ACUERDOS"
+    ],
+    "tipoOD": "NORMAL",
+    "firmantesMayoria": [
+      "Maximiliano Abad",
+      "Sandra M. Mendoza",
+      "Carlos O. Arce",
+      "Beatriz L. Ávila",
+      "Patricia Bullrich",
+      "Agustín P. Coto",
+      "Carlos M. Espínola",
+      "Enzo P. Fullone",
+      "Mariana Juri",
+      "Juan C. Godoy",
+      "Enrique M. Goerling Lara",
+      "Carolina Losada",
+      "Nadia J. Márquez",
+      "Flavia G. Royón"
+    ]
+  },
+  {
     "numero": "504",
     "periodo": 2026,
     "origen": "Poder Ejecutivo",
