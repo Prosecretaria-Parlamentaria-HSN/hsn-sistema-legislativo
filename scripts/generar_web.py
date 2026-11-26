@@ -5853,7 +5853,20 @@ window.HSNShare = (function () {
       } catch (e) { /* ignorar */ }
     });
   }
-  return { build: build, read: read, key: key, copy: copy, fechaHora: fechaHora, mostrar: mostrar };
+  // Código fijo de 4 caracteres por senador (derivado del nombre): permite enlaces mucho más cortos.
+  var B64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+  function codigo(nombre) {
+    var k = key(nombre), h = 2166136261;
+    for (var i = 0; i < k.length; i++) { h ^= k.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+    return B64.charAt((h >>> 18) & 63) + B64.charAt((h >>> 12) & 63) + B64.charAt((h >>> 6) & 63) + B64.charAt(h & 63);
+  }
+  function buildRaw(kind, raw) { return baseUrl() + "#votacion/" + kind + "/" + raw; }
+  function readRaw(kind) {
+    var prefix = "#votacion/" + kind + "/";
+    return location.hash.indexOf(prefix) === 0 ? location.hash.slice(prefix.length) : null;
+  }
+  return { build: build, read: read, key: key, copy: copy, fechaHora: fechaHora, mostrar: mostrar,
+           codigo: codigo, buildRaw: buildRaw, readRaw: readRaw };
 })();
 
 (function () {
@@ -7682,19 +7695,64 @@ window.HSNShare = (function () {
   loadState();
 
   /* ── Compartir tema por enlace ── */
+  var CODIGO_SEN = {}, CODIGO_DUP = {};
+  SENATORS.forEach(function (s) {
+    var c = HSNShare.codigo(s.nombre);
+    if (CODIGO_SEN[c]) CODIGO_DUP[c] = true;
+    CODIGO_SEN[c] = s;
+  });
+  var ROL_CODIGO = { informante: "i", orador: "o", cierre: "c" };
+  var CODIGO_ROL = { i: "informante", o: "orador", c: "cierre" };
+
+  // Convierte el texto corto del enlace en el mismo objeto que usa el formato anterior.
+  function decodificarTemaCorto(raw) {
+    try {
+      var parts = raw.split(";");
+      if (parts.length < 5) return null;
+      var hora = parts[1];
+      var out = { n: decodeURIComponent(parts[0]), h: hora.length === 4 ? hora.slice(0, 2) + ":" + hora.slice(2) : "",
+        i: parts[2], c: parts[3], o: [], faltan: 0 };
+      (parts[4] ? parts[4].split(",") : []).slice(0, 200).forEach(function (tok) {
+        var sl = tok.indexOf("/");
+        if (sl < 2) return;
+        var head = tok.slice(0, sl), id = tok.slice(sl + 1), nombre, bloque = "";
+        if (id.charAt(0) === "~") {
+          var np = id.slice(1).split(":");
+          nombre = decodeURIComponent(np[0]);
+          bloque = decodeURIComponent(np[1] || "");
+        } else {
+          var sen = CODIGO_DUP[id] ? null : CODIGO_SEN[id];
+          if (!sen) { out.faltan++; return; }
+          nombre = sen.nombre;
+        }
+        var min = parseInt(head.slice(2), 10);
+        out.o.push([nombre, bloque, isNaN(min) ? TIEMPOS_ROL.orador : min, isNaN(min) ? 0 : 1,
+          CODIGO_ROL[head.charAt(0)] || "", head.charAt(1)]);
+      });
+      return out;
+    } catch (e) { return null; }
+  }
+
   var shareTemaBtn = document.getElementById("shareTemaBtn");
   shareTemaBtn.addEventListener("click", function () {
     var tema = getActiveTema();
     if (!tema) return;
     if (!tema.oradores.length) { importPdfStatus.textContent = "No hay oradores para compartir."; return; }
     aplicarRoles(tema);
-    var url = HSNShare.build("t", {
-      n: tema.nombre, h: tema.horaInicio || "", i: tema.nInf || 0, c: tema.nCierre || 0,
-      o: tema.oradores.map(function (o) {
-        return [o.senadorNombre, o.bloque, o.minutos, o.minutosManual ? 1 : 0, o.rolManual || "",
-          o.estado === "hablo" ? "h" : (o.estado === "no_habla" ? "n" : "p")];
-      })
+    // Formato corto: cada orador es ROL ESTADO [MINUTOS] / CÓDIGO. Los minutos solo viajan si se
+    // cambiaron a mano; los que no están en la lista de senadores viajan por nombre.
+    var tokens = tema.oradores.map(function (o) {
+      var sen = SENATORS.filter(function (x) { return x.nombre === o.senadorNombre; })[0];
+      var cod = sen ? HSNShare.codigo(sen.nombre) : null;
+      var id = (cod && !CODIGO_DUP[cod]) ? cod
+        : "~" + encodeURIComponent(o.senadorNombre) + ":" + encodeURIComponent(o.bloque || "");
+      return (o.rolManual ? ROL_CODIGO[o.rolManual] : "-") +
+        (o.estado === "hablo" ? "h" : (o.estado === "no_habla" ? "n" : "p")) +
+        (o.minutosManual ? o.minutos : "") + "/" + id;
     });
+    var raw = [encodeURIComponent(tema.nombre), (tema.horaInicio || "").split(":").join(""),
+      tema.nInf || 0, tema.nCierre || 0, tokens.join(",")].join(";");
+    var url = HSNShare.buildRaw("t2", raw);
     HSNShare.copy(url, function (ok) {
       importPdfStatus.textContent = ok
         ? "Enlace copiado. Pegalo en un mensaje: quien lo abra va a recibir este tema."
@@ -7702,7 +7760,8 @@ window.HSNShare = (function () {
     });
   });
 
-  var temaCompartido = HSNShare.read("t");
+  var rawCorto = HSNShare.readRaw("t2");
+  var temaCompartido = rawCorto ? decodificarTemaCorto(rawCorto) : HSNShare.read("t");
   var mensajeCompartido = "";
   if (temaCompartido && Array.isArray(temaCompartido.o)) {
     var tc = defaultTema(temas.length + 1);
@@ -7724,7 +7783,8 @@ window.HSNShare = (function () {
     temas.push(tc);
     activeTemaId = tc.id;
     saveState();
-    mensajeCompartido = "Tema compartido cargado y guardado en tu lista como “" + tc.nombre + "”.";
+    mensajeCompartido = "Tema compartido cargado y guardado en tu lista como “" + tc.nombre + "”." +
+      (temaCompartido.faltan ? " " + temaCompartido.faltan + " orador(es) no se pudieron identificar y no se cargaron." : "");
     HSNShare.mostrar("tiempos");
   }
 
