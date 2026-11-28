@@ -11699,6 +11699,28 @@
       "tipo": "senadores",
       "boletin_id": 2600161,
       "boletin_numero": "161/26"
+    },
+    {
+      "seccion": "senadores",
+      "dia": "MARTES",
+      "fecha": "01/12",
+      "hora": "14:00",
+      "modalidad": "",
+      "comisiones": [
+        "BICAMERAL DE REFORMA DEL ESTADO Y DEL SEGUIMIENTO DE LAS PRIVATIZACIONES (LEY 23.696)"
+      ],
+      "salon": "ILLIA",
+      "salon_completo": "SALÓN ILLIA",
+      "temario": [
+        {
+          "numero": "",
+          "extracto": "CONFECCIÓN DE LA RESOLUCIÓN N° 2/26, RESPECTO DE LOS PROCESOS DE PRIVATIZACIÓN Y CONCESIÓN DE NUCLEOELÉCTRICA ARGENTINA S.A. (NASA), INTERCARGO S.A.U., YACIMIENTOS CARBONÍFEROS RÍO TURBIO (YCRT), ENERGÍA ARGENTINA S.A. (ENARSA), AGUA Y SANEAMIENTOS ARGENTINOS S.A. (AYSA), LOS SISTEMAS HIDROELÉCTRICOS DIAMANTE Y LOS NIHUILES Y LA VÍA NAVEGABLE TRONCAL. (HIDROVÍA PARANÁ - PARAGUAY)."
+        }
+      ],
+      "expositores": null,
+      "tipo": "bicameral",
+      "boletin_id": 2600162,
+      "boletin_numero": "162/26"
     }
   ]
 }
